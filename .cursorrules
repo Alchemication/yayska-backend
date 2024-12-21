@@ -4,6 +4,7 @@
 - Prefer standard library modules over external packages when feasible.
 - Use type hints for all function parameters and return values.
 - Maintain docstrings following Google style format.
+- Use native types instead of Typing package if possible.
 
 # Package Management
 - Utilize 'uv' for managing project dependencies.
@@ -16,6 +17,8 @@
 - Implement all database schema changes using Alembic.
 - Use SQLAlchemy's declarative base for model definitions.
 - Include database indexes for frequently queried fields.
+- When changing database, if applicable update the model and schema as well.
+- When model is updated, prefer --autogenerate flag in migrations.
 
 # Testing Guidelines
 - Develop integration tests without mocking objects.

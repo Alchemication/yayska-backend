@@ -1,5 +1,5 @@
-from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import mapped_column
+from datetime import datetime
+from sqlalchemy import Column, Integer, String, DateTime, Boolean
 
 from app.database import Base
 
@@ -7,5 +7,11 @@ from app.database import Base
 class User(Base):
     __tablename__ = "users"
 
-    id = mapped_column(Integer, primary_key=True, index=True)
-    email = mapped_column(String, unique=True, index=True, nullable=False)
+    id = Column(Integer, primary_key=True, index=True)
+    email = Column(String, unique=True, index=True)
+    created_on = Column(DateTime, default=lambda: datetime.now())
+    deleted_on = Column(DateTime, nullable=True)
+
+    @property
+    def is_deleted(self) -> bool:
+        return self.deleted_on is not None

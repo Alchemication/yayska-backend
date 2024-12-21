@@ -1,6 +1,4 @@
-from typing import Any
-
-from pydantic import PostgresDsn, field_validator
+from pydantic import PostgresDsn
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
