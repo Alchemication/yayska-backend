@@ -1,0 +1,28 @@
+# Coding Standards
+- Adhere to PEP 8 guidelines for all Python code.
+- Use Black for code formatting to ensure consistency.
+- Prefer standard library modules over external packages when feasible.
+- Use type hints for all function parameters and return values.
+- Maintain docstrings following Google style format.
+
+# Package Management
+- Utilize 'uv' for managing project dependencies.
+- Keep pyproject.toml up to date.
+- Pin dependency versions for reproducible builds.
+
+# Database Interaction
+- Employ SQLAlchemy for database operations.
+- Name database tables in plural form when possible.
+- Implement all database schema changes using Alembic.
+- Use SQLAlchemy's declarative base for model definitions.
+- Include database indexes for frequently queried fields.
+
+# Testing Guidelines
+- Develop integration tests without mocking objects.
+- Use real databases and services for testing purposes.
+- Use pytest as the testing framework.
+
+# Security
+- Store sensitive configuration in environment variables.
+- Use parameterized queries to prevent SQL injection.
+- Implement proper input validation.
