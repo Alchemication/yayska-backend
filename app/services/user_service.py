@@ -1,13 +1,21 @@
-from datetime import datetime, timezone
-from sqlalchemy import select, delete
-from sqlalchemy.ext.asyncio import AsyncSession
-from typing import Optional
+from datetime import datetime
 
-from app.models.user_model import User
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+from passlib.context import CryptContext
+
+from app.models.user_model import UserModel
 from app.schemas.user_schema import UserCreate
 
 
-async def get_user(db: AsyncSession, user_id: int) -> Optional[User]:
+# Password hashing, keep it here to avoid recreating the context in each create_user function
+pwd_context = CryptContext(
+    schemes=["bcrypt"],
+    deprecated="auto",
+    bcrypt__rounds=12
+)
+
+async def get_user(db: AsyncSession, user_id: int) -> UserModel | None:
     """Get active user by ID.
     
     Args:
@@ -18,13 +26,13 @@ async def get_user(db: AsyncSession, user_id: int) -> Optional[User]:
         User object if found and active, None otherwise
     """
     result = await db.execute(
-        select(User)
-        .filter(User.id == user_id)
-        .filter(User.deleted_on.is_(None))
+        select(UserModel)
+        .filter(UserModel.id == user_id)
+        .filter(UserModel.deleted_on.is_(None))
     )
     return result.scalar_one_or_none()
 
-async def get_user_by_email(db: AsyncSession, email: str) -> Optional[User]:
+async def get_user_by_email(db: AsyncSession, email: str) -> UserModel | None:
     """Get active user by email.
     
     Args:
@@ -32,16 +40,31 @@ async def get_user_by_email(db: AsyncSession, email: str) -> Optional[User]:
         email: User's email address
         
     Returns:
-        User object if found and active, None otherwise
+        User object if found (active or inactive), None otherwise
     """
     result = await db.execute(
-        select(User)
-        .filter(User.email == email)
-        .filter(User.deleted_on.is_(None))
+        select(UserModel)
+        .filter(UserModel.email == email)
     )
     return result.scalar_one_or_none()
 
-async def get_users(db: AsyncSession, skip: int = 0, limit: int = 100) -> list[User]:
+async def get_user_by_username(db: AsyncSession, username: str) -> UserModel | None:
+    """Get active user by username.
+    
+    Args:
+        db: Database session
+        username: User's username
+        
+    Returns:
+        User object if found (active or inactive), None otherwise
+    """
+    result = await db.execute(
+        select(UserModel)
+        .filter(UserModel.username == username)
+    )
+    return result.scalar_one_or_none()
+
+async def get_users(db: AsyncSession, skip: int = 0, limit: int = 100) -> list[UserModel]:
     """Get list of active users with pagination.
     
     Args:
@@ -53,15 +76,15 @@ async def get_users(db: AsyncSession, skip: int = 0, limit: int = 100) -> list[U
         List of active User objects
     """
     result = await db.execute(
-        select(User)
-        .filter(User.deleted_on.is_(None))
+        select(UserModel)
+        .filter(UserModel.deleted_on.is_(None))
         .offset(skip)
         .limit(limit)
     )
     return result.scalars().all()
 
-async def create_user(db: AsyncSession, user: UserCreate) -> User:
-    """Create a new user in the database.
+async def create_user(db: AsyncSession, user: UserCreate) -> UserModel:
+    """Create a new user in the database with hashed password.
 
     Args:
         db: Database session for executing the transaction
@@ -69,17 +92,20 @@ async def create_user(db: AsyncSession, user: UserCreate) -> User:
 
     Returns:
         User: The newly created user object with populated database fields
-
-    Raises:
-        SQLAlchemyError: If there's an error during database transaction
     """
-    db_user = User(email=user.email)
+    db_user = UserModel(
+        email=user.email,
+        username=user.username,
+        password_hash=pwd_context.hash(user.password),
+        first_name=user.first_name,
+        last_name=user.last_name
+    )
     db.add(db_user)
     await db.commit()
     await db.refresh(db_user)
     return db_user
 
-async def delete_user(db: AsyncSession, user_id: int) -> Optional[User]:
+async def delete_user(db: AsyncSession, user_id: int) -> UserModel | None:
     """Soft delete a user by setting their deleted_on timestamp.
     
     Args:

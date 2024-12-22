@@ -25,7 +25,13 @@ if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 from app.database import Base
-from app.models.user_model import User
+from app.models.user_model import UserModel
+from app.models.education_level_model import EducationLevelModel
+from app.models.school_year_model import SchoolYearModel
+from app.models.subject_model import SubjectModel
+from app.models.strand_model import StrandModel
+from app.models.learning_outcome_model import LearningOutcomeModel
+from app.models.topic_model import TopicModel
 
 target_metadata = Base.metadata
 
