@@ -7,7 +7,7 @@ class Settings(BaseSettings):
 
     # API Settings
     API_V1_STR: str = "/api/v1"
-    PROJECT_NAME: str = "FastAPI Production"
+    PROJECT_NAME: str = "Yayska"
 
     # PostgreSQL Settings
     POSTGRES_SERVER: str
@@ -15,6 +15,9 @@ class Settings(BaseSettings):
     POSTGRES_PASSWORD: str
     POSTGRES_DB: str
     POSTGRES_PORT: str = "5432"
+
+    # Third Party Services
+    ANTHROPIC_API_KEY: str
 
     @property
     def DATABASE_URI(self) -> PostgresDsn:

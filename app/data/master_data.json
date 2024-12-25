@@ -1,0 +1,264 @@
+{
+    "education_levels": [
+        {
+            "level_id": 1,
+            "level_name": "Primary"
+        },
+        {
+            "level_id": 2,
+            "level_name": "Secondary"
+        }
+    ],
+    "school_years": [
+        {
+            "year_id": 1,
+            "level_id": 1,
+            "year_name": "Junior Infants",
+            "year_order": 1
+        },
+        {
+            "year_id": 2,
+            "level_id": 1,
+            "year_name": "Senior Infants",
+            "year_order": 2
+        },
+        {
+            "year_id": 3,
+            "level_id": 1,
+            "year_name": "First Class",
+            "year_order": 3
+        },
+        {
+            "year_id": 4,
+            "level_id": 1,
+            "year_name": "Second Class",
+            "year_order": 4
+        },
+        {
+            "year_id": 5,
+            "level_id": 1,
+            "year_name": "Third Class",
+            "year_order": 5
+        },
+        {
+            "year_id": 6,
+            "level_id": 1,
+            "year_name": "Fourth Class",
+            "year_order": 6
+        },
+        {
+            "year_id": 7,
+            "level_id": 1,
+            "year_name": "Fifth Class",
+            "year_order": 7
+        },
+        {
+            "year_id": 8,
+            "level_id": 1,
+            "year_name": "Sixth Class",
+            "year_order": 8
+        }
+    ],
+    "curriculum_areas": [
+        {
+            "area_id": 1,
+            "area_name": "Language"
+        },
+        {
+            "area_id": 2,
+            "area_name": "Mathematics"
+        },
+        {
+            "area_id": 3,
+            "area_name": "Social Environmental and Scientific Education (SESE)"
+        },
+        {
+            "area_id": 4,
+            "area_name": "Arts Education"
+        },
+        {
+            "area_id": 5,
+            "area_name": "Physical Education"
+        },
+        {
+            "area_id": 6,
+            "area_name": "Social Personal and Health Education (SPHE)"
+        }
+    ],
+    "subjects": [
+        {
+            "subject_id": 1,
+            "area_id": 2,
+            "subject_name": "Mathematics"
+        }
+    ],
+    "strands": [
+        {
+            "strand_id": 1,
+            "subject_id": 1,
+            "strand_name": "Number"
+        },
+        {
+            "strand_id": 2,
+            "subject_id": 1,
+            "strand_name": "Algebra"
+        },
+        {
+            "strand_id": 3,
+            "subject_id": 1,
+            "strand_name": "Shape and Space"
+        },
+        {
+            "strand_id": 4,
+            "subject_id": 1,
+            "strand_name": "Measures"
+        },
+        {
+            "strand_id": 5,
+            "subject_id": 1,
+            "strand_name": "Data"
+        }
+    ],
+    "strand_units": [
+        {
+            "unit_id": 1,
+            "strand_id": 1,
+            "unit_name": "Counting and numeration"
+        },
+        {
+            "unit_id": 2,
+            "strand_id": 1,
+            "unit_name": "Comparing and ordering"
+        },
+        {
+            "unit_id": 3,
+            "strand_id": 1,
+            "unit_name": "Place value"
+        },
+        {
+            "unit_id": 4,
+            "strand_id": 1,
+            "unit_name": "Operations - Addition"
+        },
+        {
+            "unit_id": 5,
+            "strand_id": 1,
+            "unit_name": "Operations - Subtraction"
+        },
+        {
+            "unit_id": 6,
+            "strand_id": 1,
+            "unit_name": "Operations - Multiplication"
+        },
+        {
+            "unit_id": 7,
+            "strand_id": 1,
+            "unit_name": "Operations - Division"
+        },
+        {
+            "unit_id": 8,
+            "strand_id": 1,
+            "unit_name": "Fractions"
+        },
+        {
+            "unit_id": 9,
+            "strand_id": 1,
+            "unit_name": "Decimals"
+        },
+        {
+            "unit_id": 10,
+            "strand_id": 1,
+            "unit_name": "Percentages"
+        },
+        {
+            "unit_id": 11,
+            "strand_id": 1,
+            "unit_name": "Number theory"
+        },
+        {
+            "unit_id": 12,
+            "strand_id": 2,
+            "unit_name": "Extending patterns"
+        },
+        {
+            "unit_id": 13,
+            "strand_id": 2,
+            "unit_name": "Number patterns and sequences"
+        },
+        {
+            "unit_id": 14,
+            "strand_id": 2,
+            "unit_name": "Number sentences and equations"
+        },
+        {
+            "unit_id": 15,
+            "strand_id": 3,
+            "unit_name": "2-D shapes"
+        },
+        {
+            "unit_id": 16,
+            "strand_id": 3,
+            "unit_name": "3-D shapes"
+        },
+        {
+            "unit_id": 17,
+            "strand_id": 3,
+            "unit_name": "Lines and angles"
+        },
+        {
+            "unit_id": 18,
+            "strand_id": 3,
+            "unit_name": "Symmetry"
+        },
+        {
+            "unit_id": 19,
+            "strand_id": 3,
+            "unit_name": "Position and direction"
+        },
+        {
+            "unit_id": 20,
+            "strand_id": 4,
+            "unit_name": "Length"
+        },
+        {
+            "unit_id": 21,
+            "strand_id": 4,
+            "unit_name": "Area"
+        },
+        {
+            "unit_id": 22,
+            "strand_id": 4,
+            "unit_name": "Weight"
+        },
+        {
+            "unit_id": 23,
+            "strand_id": 4,
+            "unit_name": "Capacity"
+        },
+        {
+            "unit_id": 24,
+            "strand_id": 4,
+            "unit_name": "Time"
+        },
+        {
+            "unit_id": 25,
+            "strand_id": 4,
+            "unit_name": "Money"
+        },
+        {
+            "unit_id": 26,
+            "strand_id": 5,
+            "unit_name": "Recognising and interpreting data"
+        },
+        {
+            "unit_id": 27,
+            "strand_id": 5,
+            "unit_name": "Representing and interpreting data"
+        },
+        {
+            "unit_id": 28,
+            "strand_id": 5,
+            "unit_name": "Chance"
+        }
+    ]
+}

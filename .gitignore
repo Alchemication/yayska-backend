@@ -32,3 +32,6 @@ wheels/
 *.h5
 *.pkl
 *.joblib
+
+# Exceptions to commit
+!app/data/master_data.json

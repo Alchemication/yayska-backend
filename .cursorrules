@@ -1,6 +1,5 @@
 # Coding Standards
-- Adhere to PEP 8 guidelines for all Python code.
-- Use Black for code formatting to ensure consistency.
+- Adhere to ruff guidelines for all Python code to ensure consistency.
 - Prefer standard library modules over external packages when feasible.
 - Use type hints for all function parameters and return values.
 - Maintain docstrings following Google style format.
@@ -12,19 +11,12 @@
 - Pin dependency versions for reproducible builds.
 
 # Database Interaction
-- Employ SQLAlchemy for database operations.
 - Name database tables in plural form when possible.
-- Implement all database schema changes using Alembic.
 - Use SQLAlchemy's declarative base for model definitions.
 - Include database indexes for frequently queried fields.
 - When adding a new table:
     - Ensure primary key field `id` is auto incrementing.
-    - Add new model (app/models), schema (app/schemas), ensure files are suffixed with the type, for example: user_model, user_schema, and classes contain Model suffix (do not forget the imports in models!)
-    - Ensure it has the created_on, updated_on (nullable) and deleted_on (nullable) fields.
-    - Ensure model is added to the alembic/env.py file to enable migrations.
-- When a model is updated, prefer --autogenerate flag in migrations, do not generate the migration file unless can not be generated automatically.
 - Migrations are created in the alembic folder.
-- By default, do not automatically generate a new endpoint or tests with Composer, unless explicitly asked.
 
 # Testing Guidelines
 - Develop integration tests without mocking objects.
