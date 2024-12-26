@@ -64,8 +64,11 @@ docker compose logs -f db
 # Apply all migrations
 alembic upgrade head
 
-# Initialize master data (subjects, schools, etc.)
-python -m app.scripts.init_master_data;
+# Import master data (subjects, schools, etc.)
+python -m app.scripts.import_master_data;
+
+# Import learning outcomes
+python -m app.scripts.import_learning_outcomes;
 ```
 
 #### Common Issues
@@ -121,3 +124,27 @@ from app.config import settings
 # Access settings
 print(settings.ANTHROPIC_API_KEY)
 ```
+
+## Database Schema Structure
+
+### Educational Progress Path
+```
+education_levels
+     └── school_years
+          └── learning_outcomes
+               └── concepts
+                    └── (quizzes & concept_metadata)
+```
+
+### Curriculum Structure Path
+```
+curriculum_areas
+     └── subjects
+          └── strands
+               └── strand_units
+                    └── learning_outcomes
+```
+
+## TODO
+
+- [ ] Add irish translations for all content

@@ -34,4 +34,4 @@ wheels/
 *.joblib
 
 # Exceptions to commit
-!app/data/master_data.json
+!app/data/*.json

@@ -1,4 +1,4 @@
-"""Script to initialize master data in the database.
+"""Script to import initial master data in the database.
 
 This script loads predefined master data from a JSON file into the database tables.
 It follows a specific order to maintain referential integrity and truncates existing

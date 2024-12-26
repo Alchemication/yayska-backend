@@ -1,0 +1,1654 @@
+[
+  {
+    "reasoning": "The learning outcomes for Extending Patterns in Mathematics will progressively develop students' ability to recognize, create, and analyze patterns from simple repetitive sequences to more complex algebraic relationships. The progression will focus on developing spatial, numerical, and logical reasoning skills that are fundamental to algebraic thinking.\n\nKey developmental considerations:\n- Junior and Senior Infants: Focus on basic pattern recognition and simple repetitive patterns\n- First and Second Class: Introduce more complex pattern creation and basic pattern rules\n- Third and Fourth Class: Develop skills in describing and extending patterns with increasing complexity\n- Fifth and Sixth Class: Introduce algebraic thinking and more abstract pattern relationships\n\nThe outcomes will build cognitive skills such as:\n- Visual pattern recognition\n- Sequential thinking\n- Logical reasoning\n- Abstract mathematical thinking\n- Pattern prediction and extension",
+    "learning_outcomes": [
+      {
+        "unit_id": 12,
+        "year_id": 1,
+        "description": "Identify and continue simple repeating patterns using concrete materials and visual representations",
+        "prerequisites": "Basic understanding of sorting and matching",
+        "complexity_level": 1
+      },
+      {
+        "unit_id": 12,
+        "year_id": 2,
+        "description": "Create and describe repeating patterns using color, shape, and size with increasing complexity",
+        "prerequisites": "Basic pattern recognition skills",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 12,
+        "year_id": 3,
+        "description": "Recognize and extend numerical patterns involving addition and subtraction within 20",
+        "prerequisites": "Understanding of basic number sequences",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 12,
+        "year_id": 4,
+        "description": "Analyze and predict the next terms in growing numerical and geometric patterns",
+        "prerequisites": "Ability to recognize pattern rules",
+        "complexity_level": 3
+      },
+      {
+        "unit_id": 12,
+        "year_id": 5,
+        "description": "Investigate and describe the underlying rules of complex numerical and geometric patterns",
+        "prerequisites": "Understanding of pattern extension and prediction",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 12,
+        "year_id": 6,
+        "description": "Generate and solve simple algebraic pattern problems using variables and unknown quantities",
+        "prerequisites": "Advanced pattern recognition and rule identification",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 12,
+        "year_id": 7,
+        "description": "Create and analyze complex recursive and linear patterns, explaining the relationship between terms",
+        "prerequisites": "Advanced understanding of pattern rules and algebraic thinking",
+        "complexity_level": 5
+      },
+      {
+        "unit_id": 12,
+        "year_id": 8,
+        "description": "Apply algebraic reasoning to solve multi-step pattern problems and generalize pattern rules using symbolic representations",
+        "prerequisites": "Complex pattern analysis and algebraic thinking skills",
+        "complexity_level": 5
+      }
+    ]
+  },
+  {
+    "reasoning": "The learning outcomes for Number Patterns and Sequences will progressively develop students' understanding of mathematical relationships, pattern recognition, and logical thinking. The progression will focus on increasing complexity, from simple visual and concrete patterns to more abstract and algebraic thinking. Each year will build upon the previous year's skills, introducing more sophisticated pattern identification, prediction, and manipulation techniques.",
+    "learning_outcomes": [
+      {
+        "unit_id": 13,
+        "year_id": 1,
+        "description": "Recognize and continue simple repeating patterns using concrete materials and visual representations",
+        "prerequisites": "Basic counting skills and understanding of sequence",
+        "complexity_level": 1
+      },
+      {
+        "unit_id": 13,
+        "year_id": 2,
+        "description": "Create and describe simple linear patterns involving 2-3 elements using colors, shapes, or objects",
+        "prerequisites": "Ability to recognize basic repeating patterns",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 13,
+        "year_id": 3,
+        "description": "Identify and extend number patterns involving addition and subtraction within 20",
+        "prerequisites": "Understanding of basic addition and subtraction",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 13,
+        "year_id": 4,
+        "description": "Recognize, describe, and generate numeric sequences with consistent intervals (skip counting by 2s, 3s, 5s, 10s)",
+        "prerequisites": "Basic multiplication concepts and number sense",
+        "complexity_level": 3
+      },
+      {
+        "unit_id": 13,
+        "year_id": 5,
+        "description": "Analyze and predict terms in increasing and decreasing numeric sequences using algebraic reasoning",
+        "prerequisites": "Understanding of multiplication and division",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 13,
+        "year_id": 6,
+        "description": "Create and solve problems involving complex numeric patterns and sequences with multiple operations",
+        "prerequisites": "Advanced understanding of arithmetic operations",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 13,
+        "year_id": 7,
+        "description": "Use algebraic notation to represent and generalize numeric patterns, identifying rules and relationships",
+        "prerequisites": "Complex pattern recognition and algebraic thinking",
+        "complexity_level": 5
+      },
+      {
+        "unit_id": 13,
+        "year_id": 8,
+        "description": "Develop and apply sophisticated strategies to analyze, predict, and generate complex numeric and geometric sequences",
+        "prerequisites": "Advanced algebraic reasoning and pattern manipulation skills",
+        "complexity_level": 5
+      }
+    ]
+  },
+  {
+    "reasoning": "The learning outcomes for Number sentences and equations will progressively develop students' understanding of algebraic thinking, starting with simple number relationships and gradually moving towards more complex equation solving. The progression will focus on building foundational skills, introducing symbolic representations, and developing problem-solving abilities across primary school years.",
+    "learning_outcomes": [
+      {
+        "unit_id": 14,
+        "year_id": 1,
+        "description": "Recognize and complete simple number patterns using concrete materials and visual representations",
+        "prerequisites": "Basic counting and number recognition skills",
+        "complexity_level": 1
+      },
+      {
+        "unit_id": 14,
+        "year_id": 2,
+        "description": "Create and describe simple number patterns involving addition and subtraction within 10",
+        "prerequisites": "Understanding of number patterns from Junior Infants",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 14,
+        "year_id": 3,
+        "description": "Use missing number symbols to represent unknown values in simple addition and subtraction number sentences",
+        "prerequisites": "Basic addition and subtraction skills",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 14,
+        "year_id": 4,
+        "description": "Solve simple number sentences with one unknown using mental strategies and basic algebraic reasoning",
+        "prerequisites": "Understanding of number sentences with missing symbols",
+        "complexity_level": 3
+      },
+      {
+        "unit_id": 14,
+        "year_id": 5,
+        "description": "Create and solve number sentences involving multiplication and division with one unknown",
+        "prerequisites": "Multiplication and division facts",
+        "complexity_level": 3
+      },
+      {
+        "unit_id": 14,
+        "year_id": 6,
+        "description": "Develop and solve two-step number sentences using variables and basic algebraic operations",
+        "prerequisites": "Understanding of single-step number sentences",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 14,
+        "year_id": 7,
+        "description": "Apply algebraic thinking to solve complex number sentences with multiple operations and variables",
+        "prerequisites": "Two-step number sentence solving skills",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 14,
+        "year_id": 8,
+        "description": "Analyze and solve multi-step algebraic equations, demonstrating advanced problem-solving and symbolic manipulation skills",
+        "prerequisites": "Complex algebraic reasoning from previous years",
+        "complexity_level": 5
+      }
+    ]
+  },
+  {
+    "reasoning": "The learning outcomes for the Chance strand in Mathematics will progressively develop students' understanding of probability, randomness, and basic statistical reasoning. The progression will focus on introducing age-appropriate concepts of likelihood, prediction, and simple probability experiences that build from concrete, observable experiences to more abstract reasoning.\n\nKey developmental considerations:\n- Junior and Senior Infants: Focus on concrete, sensory-based experiences with chance\n- First and Second Class: Introduce basic language of probability and simple experiments\n- Third and Fourth Class: Begin systematic exploration of probability concepts\n- Fifth and Sixth Class: Develop more sophisticated probabilistic thinking and data interpretation",
+    "learning_outcomes": [
+      {
+        "unit_id": 28,
+        "year_id": 1,
+        "description": "Explore and identify simple chance events through play-based activities using descriptive language like 'might happen', 'could happen', and 'unlikely'",
+        "prerequisites": "Basic understanding of everyday language",
+        "complexity_level": 1
+      },
+      {
+        "unit_id": 28,
+        "year_id": 2,
+        "description": "Recognize and describe the likelihood of simple events occurring using terms like 'certain', 'possible', and 'impossible'",
+        "prerequisites": "Basic language skills from Junior Infants",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 28,
+        "year_id": 3,
+        "description": "Conduct simple chance experiments using coins, dice, or spinners and record basic outcomes",
+        "prerequisites": "Understanding of basic probability language",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 28,
+        "year_id": 4,
+        "description": "Compare the probability of different events and represent simple probability using fraction-based language (e.g., 1 out of 2, 1 out of 6)",
+        "prerequisites": "Basic understanding of simple experiments and outcomes",
+        "complexity_level": 3
+      },
+      {
+        "unit_id": 28,
+        "year_id": 5,
+        "description": "Design and conduct probability experiments, predict outcomes, and explain the concept of fairness in chance events",
+        "prerequisites": "Experience with basic probability experiments",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 28,
+        "year_id": 6,
+        "description": "Analyze probability scenarios, calculate simple probability percentages, and interpret the likelihood of complex events",
+        "prerequisites": "Understanding of experimental probability and fractions",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 28,
+        "year_id": 7,
+        "description": "Apply probabilistic reasoning to real-world scenarios, understand theoretical and experimental probability, and critically evaluate chance events",
+        "prerequisites": "Advanced understanding of probability concepts",
+        "complexity_level": 5
+      },
+      {
+        "unit_id": 28,
+        "year_id": 8,
+        "description": "Develop complex probabilistic models, use advanced probability language, and apply statistical reasoning to make informed predictions and decisions",
+        "prerequisites": "Comprehensive understanding of probability concepts",
+        "complexity_level": 5
+      }
+    ]
+  },
+  {
+    "reasoning": "The learning outcomes for Data recognition and interpretation will progressively develop students' skills in understanding, collecting, organizing, and analyzing data. The progression will focus on increasing complexity of data representation, interpretation, and critical thinking skills appropriate to each developmental stage.\n\nKey developmental considerations:\n- Junior and Senior Infants: Basic recognition and sorting\n- First and Second Class: Simple data collection and representation\n- Third and Fourth Class: More complex data representation and basic interpretation\n- Fifth and Sixth Class: Advanced data analysis, multiple representations, and critical thinking about data",
+    "learning_outcomes": [
+      {
+        "unit_id": 26,
+        "year_id": 1,
+        "description": "Sort and categorize objects by a single observable attribute (color, shape, size)",
+        "prerequisites": "Basic understanding of basic attributes",
+        "complexity_level": 1
+      },
+      {
+        "unit_id": 26,
+        "year_id": 2,
+        "description": "Create and interpret simple pictographs using concrete objects or drawings",
+        "prerequisites": "Ability to sort and categorize objects",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 26,
+        "year_id": 3,
+        "description": "Collect and record data using tally charts and simple bar graphs",
+        "prerequisites": "Understanding of basic data representation",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 26,
+        "year_id": 4,
+        "description": "Read and interpret bar graphs and pictographs, answering simple questions about the data",
+        "prerequisites": "Experience with creating basic graphs",
+        "complexity_level": 3
+      },
+      {
+        "unit_id": 26,
+        "year_id": 5,
+        "description": "Create and interpret line graphs and more complex bar graphs with multiple categories",
+        "prerequisites": "Understanding of basic graph types and data representation",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 26,
+        "year_id": 6,
+        "description": "Analyze and compare different graphical representations of the same data set, discussing strengths and limitations",
+        "prerequisites": "Experience with multiple graph types",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 26,
+        "year_id": 7,
+        "description": "Design and conduct surveys, create comprehensive data displays, and draw evidence-based conclusions",
+        "prerequisites": "Advanced data collection and representation skills",
+        "complexity_level": 5
+      },
+      {
+        "unit_id": 26,
+        "year_id": 8,
+        "description": "Critically evaluate data sources, interpret complex statistical representations, and make predictive inferences",
+        "prerequisites": "Advanced data analysis and interpretation skills",
+        "complexity_level": 5
+      }
+    ]
+  },
+  {
+    "reasoning": "The learning outcomes for Data representation and interpretation will progressively develop students' skills in collecting, organizing, and analyzing data. The progression will focus on increasing complexity of data handling, from simple sorting and counting in early years to more sophisticated graphing and statistical reasoning in later years. The outcomes will build mathematical literacy, critical thinking, and data interpretation skills appropriate to each developmental stage.",
+    "learning_outcomes": [
+      {
+        "unit_id": 27,
+        "year_id": 1,
+        "description": "Sort and classify objects by a single attribute (color, shape, or size) and create simple pictorial representations",
+        "prerequisites": "Basic understanding of sorting and matching",
+        "complexity_level": 1
+      },
+      {
+        "unit_id": 27,
+        "year_id": 2,
+        "description": "Collect and record simple data using tally marks and create basic pictographs with concrete materials",
+        "prerequisites": "Ability to sort and classify objects",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 27,
+        "year_id": 3,
+        "description": "Create and interpret simple bar graphs and pictographs using whole numbers, and discuss basic data patterns",
+        "prerequisites": "Understanding of tally marks and basic data collection",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 27,
+        "year_id": 4,
+        "description": "Collect, organize, and represent data using bar graphs and simple tables, and draw basic conclusions from the data",
+        "prerequisites": "Experience with creating pictographs and bar graphs",
+        "complexity_level": 3
+      },
+      {
+        "unit_id": 27,
+        "year_id": 5,
+        "description": "Create and interpret line graphs and more complex bar graphs, calculate and use mode, median, and range in data sets",
+        "prerequisites": "Understanding of basic graph creation and data representation",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 27,
+        "year_id": 6,
+        "description": "Design and conduct surveys, create sophisticated data displays including pie charts, and analyze data using multiple statistical measures",
+        "prerequisites": "Experience with line graphs and basic statistical concepts",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 27,
+        "year_id": 7,
+        "description": "Interpret complex data sets, create advanced statistical representations, and use probability concepts to analyze data trends",
+        "prerequisites": "Advanced understanding of graphing and statistical methods",
+        "complexity_level": 5
+      },
+      {
+        "unit_id": 27,
+        "year_id": 8,
+        "description": "Critically analyze multi-variable data sets, create comprehensive data reports, and use advanced statistical reasoning to draw nuanced conclusions",
+        "prerequisites": "Comprehensive knowledge of data representation and statistical analysis",
+        "complexity_level": 5
+      }
+    ]
+  },
+  {
+    "reasoning": "The learning outcomes for the Area strand will progressively develop students' understanding of spatial measurement, starting from basic recognition and comparison in early years to more complex calculation and problem-solving in later years. The progression will focus on developing spatial reasoning, measurement skills, and mathematical thinking related to area.\n\nKey developmental considerations:\n- Early years (Infants): Introduce basic spatial concepts through concrete, hands-on experiences\n- Lower primary (1st-2nd): Begin comparing and estimating areas using non-standard units\n- Middle primary (3rd-4th): Introduce standard units and basic area calculations\n- Upper primary (5th-6th): Develop more advanced area calculation skills and problem-solving strategies",
+    "learning_outcomes": [
+      {
+        "unit_id": 21,
+        "year_id": 1,
+        "description": "Recognize and compare the size of simple shapes using direct comparison",
+        "prerequisites": "Basic understanding of big and small",
+        "complexity_level": 1
+      },
+      {
+        "unit_id": 21,
+        "year_id": 2,
+        "description": "Use non-standard units to estimate and measure the area of simple flat surfaces",
+        "prerequisites": "Ability to compare sizes and use basic measuring tools",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 21,
+        "year_id": 3,
+        "description": "Measure and compare areas of regular shapes using non-standard and simple standard units (e.g., square tiles)",
+        "prerequisites": "Understanding of measurement and basic shape recognition",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 21,
+        "year_id": 4,
+        "description": "Calculate the area of rectangles and squares using standard units (cm\u00b2) and understand the relationship between length and width",
+        "prerequisites": "Basic multiplication skills and understanding of rectangular shapes",
+        "complexity_level": 3
+      },
+      {
+        "unit_id": 21,
+        "year_id": 5,
+        "description": "Calculate the area of more complex regular shapes, including triangles and parallelograms using standard formulas",
+        "prerequisites": "Ability to calculate area of rectangles and basic algebraic understanding",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 21,
+        "year_id": 6,
+        "description": "Solve multi-step area problems involving irregular shapes, combining different geometric shapes, and real-world applications",
+        "prerequisites": "Advanced area calculation skills and geometric reasoning",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 21,
+        "year_id": 7,
+        "description": "Apply area calculation skills to complex geometric problems, including composite shapes and contextual mathematical challenges",
+        "prerequisites": "Comprehensive understanding of area calculation and geometric principles",
+        "complexity_level": 5
+      },
+      {
+        "unit_id": 21,
+        "year_id": 8,
+        "description": "Demonstrate advanced problem-solving skills in area calculation, including complex geometric shapes, scale drawings, and mathematical reasoning",
+        "prerequisites": "Comprehensive geometric and algebraic skills",
+        "complexity_level": 5
+      }
+    ]
+  },
+  {
+    "reasoning": "The learning outcomes for Capacity in Mathematics will progressively develop students' understanding of volume, measurement, and comparative skills. The progression will focus on moving from concrete, sensory experiences in early years to more abstract and precise measurements in later years. The outcomes will build spatial awareness, measurement skills, and mathematical reasoning related to capacity.\n\nKey developmental considerations:\n- Junior and Senior Infants: Sensory exploration and basic comparative skills\n- First and Second Class: Introduction to standard and non-standard units\n- Third and Fourth Class: More precise measurements and conversions\n- Fifth and Sixth Class: Complex problem-solving and real-world applications of capacity measurement",
+    "learning_outcomes": [
+      {
+        "unit_id": 23,
+        "year_id": 1,
+        "description": "Explore and compare the capacity of different containers using direct comparison and non-standard units",
+        "prerequisites": "Basic understanding of more/less concepts",
+        "complexity_level": 1
+      },
+      {
+        "unit_id": 23,
+        "year_id": 2,
+        "description": "Estimate and measure capacity using non-standard units like cups, spoons, and simple containers",
+        "prerequisites": "Ability to compare container sizes",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 23,
+        "year_id": 3,
+        "description": "Measure and record capacity using standard units (millilitres) and perform simple additions and subtractions",
+        "prerequisites": "Understanding of non-standard measurement",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 23,
+        "year_id": 4,
+        "description": "Convert between millilitres and litres, and solve simple word problems involving capacity",
+        "prerequisites": "Basic millilitre measurements",
+        "complexity_level": 3
+      },
+      {
+        "unit_id": 23,
+        "year_id": 5,
+        "description": "Perform complex conversions between millilitres and litres, and solve multi-step capacity problems",
+        "prerequisites": "Understanding of metric conversions",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 23,
+        "year_id": 6,
+        "description": "Apply capacity measurements to real-world contexts, including cooking recipes and scientific measurements",
+        "prerequisites": "Advanced metric conversion skills",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 23,
+        "year_id": 7,
+        "description": "Analyze and interpret capacity data, create capacity-related graphs, and solve complex measurement problems",
+        "prerequisites": "Comprehensive understanding of metric measurements",
+        "complexity_level": 5
+      },
+      {
+        "unit_id": 23,
+        "year_id": 8,
+        "description": "Demonstrate advanced problem-solving skills using capacity measurements in interdisciplinary contexts",
+        "prerequisites": "Advanced mathematical reasoning and measurement skills",
+        "complexity_level": 5
+      }
+    ]
+  },
+  {
+    "reasoning": "The learning outcomes for Length will progressively develop students' understanding of measurement, starting from basic comparison and non-standard units to more precise measurements using standard units. The progression will focus on developing spatial awareness, estimation skills, and accurate measurement techniques appropriate to each developmental stage.\n\nKey developmental considerations:\n- Junior and Senior Infants: Foundational perceptual skills\n- First and Second Class: Introduction to basic measurement concepts\n- Third and Fourth Class: More precise measurements and unit conversions\n- Fifth and Sixth Class: Advanced measurement, problem-solving, and real-world applications",
+    "learning_outcomes": [
+      {
+        "unit_id": 20,
+        "year_id": 1,
+        "description": "Compare and describe lengths of objects using comparative language like 'longer', 'shorter', and 'same length'",
+        "prerequisites": "Basic understanding of spatial relationships",
+        "complexity_level": 1
+      },
+      {
+        "unit_id": 20,
+        "year_id": 2,
+        "description": "Use non-standard units (like paper clips or pencils) to measure and compare the length of different objects",
+        "prerequisites": "Ability to align objects and count",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 20,
+        "year_id": 3,
+        "description": "Measure and record lengths using standard units (centimetres) with increasing accuracy",
+        "prerequisites": "Understanding of non-standard measurement",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 20,
+        "year_id": 4,
+        "description": "Estimate and measure lengths in centimetres and metres, understanding the relationship between these units",
+        "prerequisites": "Basic measurement skills with centimetres",
+        "complexity_level": 3
+      },
+      {
+        "unit_id": 20,
+        "year_id": 5,
+        "description": "Convert between centimetres and metres, and solve simple measurement problems involving length",
+        "prerequisites": "Understanding of metric units and basic conversions",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 20,
+        "year_id": 6,
+        "description": "Use millimetres in precise measurements and perform complex conversions between millimetres, centimetres, and metres",
+        "prerequisites": "Advanced understanding of metric length units",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 20,
+        "year_id": 7,
+        "description": "Apply measurement skills to real-world contexts, including perimeter calculations and scale drawings",
+        "prerequisites": "Comprehensive understanding of length measurements and conversions",
+        "complexity_level": 5
+      },
+      {
+        "unit_id": 20,
+        "year_id": 8,
+        "description": "Solve complex measurement problems involving length, including multi-step calculations and contextual applications",
+        "prerequisites": "Advanced measurement and conversion skills",
+        "complexity_level": 5
+      }
+    ]
+  },
+  {
+    "reasoning": "The learning outcomes for the Money strand will progressively develop students' understanding of currency, value, calculation, and financial literacy. The progression will focus on:\n1. Recognition and identification of coins and notes\n2. Understanding the value of money\n3. Basic monetary calculations\n4. Practical money management skills\n5. Increasing complexity of financial reasoning\n\nThe outcomes will build mathematical skills while also introducing practical life skills, ensuring that students develop both conceptual understanding and real-world application of monetary concepts.",
+    "learning_outcomes": [
+      {
+        "unit_id": 25,
+        "year_id": 1,
+        "description": "Recognize and name Irish coins and notes, identifying their basic visual characteristics",
+        "prerequisites": "Basic counting skills",
+        "complexity_level": 1
+      },
+      {
+        "unit_id": 25,
+        "year_id": 2,
+        "description": "Identify the value of different coins and perform simple matching of coin values",
+        "prerequisites": "Ability to recognize coins from Junior Infants",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 25,
+        "year_id": 3,
+        "description": "Add and subtract small monetary amounts using coins up to \u20ac2, demonstrating understanding of basic money calculations",
+        "prerequisites": "Knowledge of coin values from Senior Infants",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 25,
+        "year_id": 4,
+        "description": "Calculate change from simple purchases using amounts up to \u20ac10, rounding to nearest euro",
+        "prerequisites": "Basic addition and subtraction skills with money",
+        "complexity_level": 3
+      },
+      {
+        "unit_id": 25,
+        "year_id": 5,
+        "description": "Solve multi-step money problems involving addition, subtraction, and simple percentage calculations",
+        "prerequisites": "Understanding of monetary calculations from previous years",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 25,
+        "year_id": 6,
+        "description": "Develop and explain budgeting strategies, calculating total costs, discounts, and comparing prices",
+        "prerequisites": "Advanced money calculation skills",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 25,
+        "year_id": 7,
+        "description": "Apply complex financial reasoning to real-world scenarios, including understanding of saving, simple interest, and cost comparisons",
+        "prerequisites": "Comprehensive money management skills",
+        "complexity_level": 5
+      },
+      {
+        "unit_id": 25,
+        "year_id": 8,
+        "description": "Analyze and present financial scenarios, demonstrating advanced understanding of monetary concepts, budgeting, and financial decision-making",
+        "prerequisites": "Advanced financial reasoning skills from previous years",
+        "complexity_level": 5
+      }
+    ]
+  },
+  {
+    "reasoning": "The learning outcomes for the Time strand will progressively develop students' understanding of time concepts, moving from basic temporal awareness to more complex time-related skills. The progression will focus on:\n1. Developing initial time awareness and vocabulary\n2. Understanding time measurement tools and units\n3. Reading and interpreting time in various formats\n4. Solving time-related problems\n5. Applying time concepts to real-world situations\n\nThe outcomes will build complexity incrementally, ensuring age-appropriate cognitive development and mathematical understanding.",
+    "learning_outcomes": [
+      {
+        "unit_id": 24,
+        "year_id": 1,
+        "description": "Recognize and use basic time-related vocabulary such as 'morning', 'afternoon', 'evening', and 'night'",
+        "prerequisites": "None",
+        "complexity_level": 1
+      },
+      {
+        "unit_id": 24,
+        "year_id": 2,
+        "description": "Sequence daily events in order and understand simple concepts of before and after",
+        "prerequisites": "Basic time-related vocabulary",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 24,
+        "year_id": 3,
+        "description": "Read and write time to the hour and half-hour on analog and digital clocks",
+        "prerequisites": "Understanding of sequential time and basic clock structure",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 24,
+        "year_id": 4,
+        "description": "Read and write time to the quarter-hour on analog and digital clocks, and understand the relationship between hours and minutes",
+        "prerequisites": "Ability to read time to the hour and half-hour",
+        "complexity_level": 3
+      },
+      {
+        "unit_id": 24,
+        "year_id": 5,
+        "description": "Calculate duration of time intervals, convert between hours, minutes, and seconds, and solve simple time-related word problems",
+        "prerequisites": "Ability to read time to the quarter-hour",
+        "complexity_level": 3
+      },
+      {
+        "unit_id": 24,
+        "year_id": 6,
+        "description": "Use 24-hour clock notation, calculate time differences, and solve complex time-related problems involving multiple time zones or elapsed time",
+        "prerequisites": "Understanding of time intervals and conversions",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 24,
+        "year_id": 7,
+        "description": "Apply time concepts to real-world scenarios, including scheduling, time management, and interpreting time-based data and graphs",
+        "prerequisites": "Comprehensive understanding of time measurement and calculations",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 24,
+        "year_id": 8,
+        "description": "Demonstrate advanced understanding of time concepts, including calculating time across international date lines, understanding leap years, and solving complex multi-step time-related problems",
+        "prerequisites": "Advanced time calculation and application skills",
+        "complexity_level": 5
+      }
+    ]
+  },
+  {
+    "reasoning": "The learning outcomes for Weight in Mathematics will progressively develop students' understanding of measurement, from basic sensory experiences in early years to more precise and abstract measurements in later primary years. The progression will focus on developing conceptual understanding, practical skills, and problem-solving abilities related to weight measurement.\n\nKey developmental considerations:\n- Junior and Senior Infants: Sensory exploration and basic comparative skills\n- First and Second Class: Introduction to standard units and basic measurement tools\n- Third and Fourth Class: More precise measurements and simple calculations\n- Fifth and Sixth Class: Advanced understanding, complex problem-solving, and real-world applications",
+    "learning_outcomes": [
+      {
+        "unit_id": 22,
+        "year_id": 1,
+        "description": "Explore and compare the weight of different objects using non-standard language like 'heavy' and 'light'",
+        "prerequisites": "Basic sensory awareness",
+        "complexity_level": 1
+      },
+      {
+        "unit_id": 22,
+        "year_id": 2,
+        "description": "Compare and order objects by weight using simple balance scales and descriptive terms",
+        "prerequisites": "Basic weight comparison skills",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 22,
+        "year_id": 3,
+        "description": "Measure and record weights using standard units (grams) and simple weighing instruments",
+        "prerequisites": "Understanding of basic weight comparisons",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 22,
+        "year_id": 4,
+        "description": "Estimate, measure, and record weights of objects using grams and kilograms with increasing accuracy",
+        "prerequisites": "Basic measurement skills with grams",
+        "complexity_level": 3
+      },
+      {
+        "unit_id": 22,
+        "year_id": 5,
+        "description": "Perform simple weight conversions between grams and kilograms and solve practical measurement problems",
+        "prerequisites": "Accurate measurement skills and understanding of units",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 22,
+        "year_id": 6,
+        "description": "Apply weight measurement skills to real-world contexts, including multi-step problem-solving involving different units",
+        "prerequisites": "Confident weight measurement and conversion skills",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 22,
+        "year_id": 7,
+        "description": "Analyze and interpret weight-related data, perform complex conversions, and solve sophisticated measurement problems",
+        "prerequisites": "Advanced understanding of weight measurement principles",
+        "complexity_level": 5
+      },
+      {
+        "unit_id": 22,
+        "year_id": 8,
+        "description": "Demonstrate comprehensive understanding of weight measurement, including advanced problem-solving, metric conversions, and application in scientific and practical contexts",
+        "prerequisites": "Mastery of weight measurement concepts and skills",
+        "complexity_level": 5
+      }
+    ]
+  },
+  {
+    "reasoning": "The learning outcomes for Comparing and Ordering in Mathematics will progressively develop students' understanding of numerical relationships, moving from basic comparison skills to more complex numerical reasoning. The progression will focus on developing mathematical language, conceptual understanding, and the ability to manipulate and compare numbers with increasing sophistication across primary school years.",
+    "learning_outcomes": [
+      {
+        "unit_id": 2,
+        "year_id": 1,
+        "description": "Identify and compare small quantities using concrete materials, recognizing which group has more, less, or the same number of objects",
+        "prerequisites": "Basic understanding of counting",
+        "complexity_level": 1
+      },
+      {
+        "unit_id": 2,
+        "year_id": 2,
+        "description": "Compare and order numbers up to 20, using comparative language such as 'greater than', 'less than', and 'equal to'",
+        "prerequisites": "Ability to count to 20 and recognize number symbols",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 2,
+        "year_id": 3,
+        "description": "Order and compare whole numbers up to 100, using number lines and place value understanding",
+        "prerequisites": "Knowledge of numbers up to 50 and basic place value concepts",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 2,
+        "year_id": 4,
+        "description": "Compare and order whole numbers up to 1000, using place value and understanding of magnitude",
+        "prerequisites": "Solid understanding of place value to 100 and number comparison strategies",
+        "complexity_level": 3
+      },
+      {
+        "unit_id": 2,
+        "year_id": 5,
+        "description": "Compare, order, and represent whole numbers up to 10,000, using multiple strategies including number lines, place value, and symbolic notation",
+        "prerequisites": "Confident understanding of place value to 1000 and number comparison techniques",
+        "complexity_level": 3
+      },
+      {
+        "unit_id": 2,
+        "year_id": 6,
+        "description": "Compare and order whole numbers, decimals, and simple fractions, demonstrating understanding of relative magnitude and advanced comparison strategies",
+        "prerequisites": "Ability to work with whole numbers up to 10,000 and basic fraction concepts",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 2,
+        "year_id": 7,
+        "description": "Compare, order, and interpret whole numbers, decimals, and fractions using multiple representations and advanced mathematical reasoning",
+        "prerequisites": "Comprehensive understanding of number systems and comparison techniques",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 2,
+        "year_id": 8,
+        "description": "Critically compare and order complex number types including whole numbers, decimals, fractions, and percentages, applying sophisticated mathematical reasoning and problem-solving strategies",
+        "prerequisites": "Advanced understanding of number systems and comparative techniques",
+        "complexity_level": 5
+      }
+    ]
+  },
+  {
+    "reasoning": "The learning outcomes for Counting and Numeration will progressively develop mathematical understanding from concrete to more abstract representations, building foundational numeracy skills. The progression will focus on developing number sense, understanding place value, and expanding counting capabilities across different contexts and number ranges.",
+    "learning_outcomes": [
+      {
+        "unit_id": 1,
+        "year_id": 1,
+        "description": "Recognize and count numbers from 0-10 using concrete materials and visual representations",
+        "prerequisites": "Basic understanding of numbers as quantities",
+        "complexity_level": 1
+      },
+      {
+        "unit_id": 1,
+        "year_id": 2,
+        "description": "Count forward and backward within 20, and recognize number patterns up to 20",
+        "prerequisites": "Ability to count numbers 0-10",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 1,
+        "year_id": 3,
+        "description": "Count, read, and write numbers up to 100, understanding place value of tens and ones",
+        "prerequisites": "Counting skills up to 20",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 1,
+        "year_id": 4,
+        "description": "Count, read, and write numbers up to 200, demonstrating understanding of place value and number relationships",
+        "prerequisites": "Counting skills up to 100",
+        "complexity_level": 3
+      },
+      {
+        "unit_id": 1,
+        "year_id": 5,
+        "description": "Count, read, and write numbers up to 1,000, explaining place value of hundreds, tens, and ones",
+        "prerequisites": "Understanding of place value up to 200",
+        "complexity_level": 3
+      },
+      {
+        "unit_id": 1,
+        "year_id": 6,
+        "description": "Count, read, and write numbers up to 10,000, understanding complex place value and number relationships",
+        "prerequisites": "Counting skills up to 1,000",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 1,
+        "year_id": 7,
+        "description": "Count, read, and write numbers up to 100,000, interpreting and representing large numbers in various contexts",
+        "prerequisites": "Understanding of place value up to 10,000",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 1,
+        "year_id": 8,
+        "description": "Count, read, and write numbers up to 1,000,000, demonstrating advanced understanding of place value and number systems",
+        "prerequisites": "Counting skills up to 100,000",
+        "complexity_level": 5
+      }
+    ]
+  },
+  {
+    "reasoning": "Decimals are an advanced mathematical concept that requires a gradual, scaffolded approach. The learning progression will focus on developing understanding from concrete to abstract representations, ensuring students build conceptual knowledge incrementally. The outcomes will move from basic recognition and representation to more complex operations and applications of decimals across different contexts.",
+    "learning_outcomes": [
+      {
+        "unit_id": 9,
+        "year_id": 5,
+        "description": "Recognize and represent decimals to one decimal place in practical contexts, such as measuring length or weight",
+        "prerequisites": "Strong understanding of whole numbers and basic fractions",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 9,
+        "year_id": 6,
+        "description": "Compare and order decimals to two decimal places, understanding their relative magnitude",
+        "prerequisites": "Ability to recognize and represent decimals to one decimal place",
+        "complexity_level": 3
+      },
+      {
+        "unit_id": 9,
+        "year_id": 7,
+        "description": "Perform addition and subtraction of decimals to two decimal places, with and without digital tools",
+        "prerequisites": "Understanding of decimal place value and comparison",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 9,
+        "year_id": 8,
+        "description": "Multiply and divide decimals by whole numbers and simple decimal factors, applying strategies for estimation and checking results",
+        "prerequisites": "Proficiency in addition and subtraction of decimals",
+        "complexity_level": 5
+      }
+    ]
+  },
+  {
+    "reasoning": "The learning outcomes for Fractions will be designed to progressively build mathematical understanding from concrete to more abstract representations, ensuring age-appropriate complexity and scaffolded learning across primary school years. The progression will focus on developing fraction concepts from simple sharing and recognition to more complex operations and understanding.",
+    "learning_outcomes": [
+      {
+        "unit_id": 8,
+        "year_id": 1,
+        "description": "Recognize and demonstrate simple equal sharing of objects into two or four equal parts",
+        "prerequisites": "Basic counting skills and understanding of whole objects",
+        "complexity_level": 1
+      },
+      {
+        "unit_id": 8,
+        "year_id": 2,
+        "description": "Identify and name halves and quarters in practical contexts using concrete materials",
+        "prerequisites": "Ability to recognize equal and unequal parts",
+        "complexity_level": 1
+      },
+      {
+        "unit_id": 8,
+        "year_id": 3,
+        "description": "Represent halves, quarters, and thirds using visual models and simple fraction notation",
+        "prerequisites": "Understanding of equal parts and basic fraction recognition",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 8,
+        "year_id": 4,
+        "description": "Compare and order simple fractions with like denominators, understanding fractions as parts of a whole",
+        "prerequisites": "Ability to represent fractions visually and understand fraction notation",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 8,
+        "year_id": 5,
+        "description": "Add and subtract simple fractions with like denominators, and recognize equivalent fractions",
+        "prerequisites": "Understanding of fraction representation and comparison",
+        "complexity_level": 3
+      },
+      {
+        "unit_id": 8,
+        "year_id": 6,
+        "description": "Perform addition and subtraction of fractions with different denominators using common multiples",
+        "prerequisites": "Skills in finding equivalent fractions and basic fraction operations",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 8,
+        "year_id": 7,
+        "description": "Multiply and divide fractions by whole numbers, and solve multi-step fraction word problems",
+        "prerequisites": "Advanced fraction manipulation and understanding of fraction operations",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 8,
+        "year_id": 8,
+        "description": "Apply complex fraction operations including multiplication and division of fractions, and solve real-world mathematical problems involving fractions",
+        "prerequisites": "Comprehensive understanding of fraction concepts and operations",
+        "complexity_level": 5
+      }
+    ]
+  },
+  {
+    "reasoning": "The learning outcomes for Number Theory will progressively develop students' understanding of number concepts, relationships, and properties. The progression will focus on building foundational mathematical thinking, moving from concrete to more abstract representations of numbers, and developing increasingly sophisticated number sense across primary school years.\n\nKey developmental considerations:\n- Junior and Senior Infants: Focus on basic number recognition and counting\n- First and Second Class: Introduction to place value and basic number relationships\n- Third and Fourth Class: More complex number operations and understanding of number properties\n- Fifth and Sixth Class: Advanced number theory concepts, including factors, multiples, and more sophisticated number relationships",
+    "learning_outcomes": [
+      {
+        "unit_id": 11,
+        "year_id": 1,
+        "description": "Recognize and count numbers from 0 to 10 using concrete materials and visual representations",
+        "prerequisites": "Basic understanding of counting",
+        "complexity_level": 1
+      },
+      {
+        "unit_id": 11,
+        "year_id": 2,
+        "description": "Identify and represent numbers up to 20, understanding one-to-one correspondence and basic number relationships",
+        "prerequisites": "Ability to count to 10",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 11,
+        "year_id": 3,
+        "description": "Understand place value for two-digit numbers and represent numbers using tens and ones",
+        "prerequisites": "Basic number recognition and counting skills",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 11,
+        "year_id": 4,
+        "description": "Explore number patterns, recognize even and odd numbers, and understand basic number properties",
+        "prerequisites": "Understanding of place value and basic number relationships",
+        "complexity_level": 3
+      },
+      {
+        "unit_id": 11,
+        "year_id": 5,
+        "description": "Identify and explain factors and multiples of numbers up to 100, and understand prime and composite numbers",
+        "prerequisites": "Knowledge of number patterns and basic multiplication",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 11,
+        "year_id": 6,
+        "description": "Apply understanding of factors, multiples, and prime numbers to solve complex number problems and investigate number relationships",
+        "prerequisites": "Understanding of factors and multiples",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 11,
+        "year_id": 7,
+        "description": "Explore advanced number theory concepts including divisibility rules, prime factorization, and complex number patterns",
+        "prerequisites": "Comprehensive understanding of factors and multiples",
+        "complexity_level": 5
+      },
+      {
+        "unit_id": 11,
+        "year_id": 8,
+        "description": "Analyze and solve complex number theory problems, demonstrating deep understanding of number relationships, properties, and advanced mathematical reasoning",
+        "prerequisites": "Advanced number theory knowledge from previous years",
+        "complexity_level": 5
+      }
+    ]
+  },
+  {
+    "reasoning": "The learning outcomes for Addition operations will progressively develop students' understanding of number manipulation, starting from basic counting and combining small numbers to more complex multi-digit addition with regrouping and problem-solving strategies. The progression will focus on developing computational skills, number sense, and mathematical reasoning appropriate to each developmental stage.",
+    "learning_outcomes": [
+      {
+        "unit_id": 4,
+        "year_id": 1,
+        "description": "Combine small groups of objects by counting and adding numbers up to 5",
+        "prerequisites": "Basic understanding of counting individual objects",
+        "complexity_level": 1
+      },
+      {
+        "unit_id": 4,
+        "year_id": 2,
+        "description": "Add single-digit numbers within 10 using concrete materials and visual representations",
+        "prerequisites": "Ability to count objects and recognize number symbols",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 4,
+        "year_id": 3,
+        "description": "Perform addition of two-digit numbers without regrouping, using mental strategies and written methods",
+        "prerequisites": "Understanding of place value and single-digit addition",
+        "complexity_level": 3
+      },
+      {
+        "unit_id": 4,
+        "year_id": 4,
+        "description": "Add two-digit numbers with regrouping, explaining the process of carrying over",
+        "prerequisites": "Proficiency in adding single-digit and two-digit numbers without regrouping",
+        "complexity_level": 3
+      },
+      {
+        "unit_id": 4,
+        "year_id": 5,
+        "description": "Add three-digit numbers with and without regrouping, using efficient mental and written strategies",
+        "prerequisites": "Confident manipulation of two-digit addition with regrouping",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 4,
+        "year_id": 6,
+        "description": "Solve multi-step addition problems involving whole numbers, decimals, and money calculations",
+        "prerequisites": "Solid understanding of multi-digit addition and decimal place value",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 4,
+        "year_id": 7,
+        "description": "Apply addition strategies to solve complex real-world mathematical problems involving multiple steps and different number representations",
+        "prerequisites": "Advanced understanding of addition across whole numbers and decimals",
+        "complexity_level": 5
+      },
+      {
+        "unit_id": 4,
+        "year_id": 8,
+        "description": "Demonstrate advanced addition skills including working with large numbers, algebraic expressions, and applying addition in complex problem-solving contexts",
+        "prerequisites": "Comprehensive understanding of addition principles and strategies",
+        "complexity_level": 5
+      }
+    ]
+  },
+  {
+    "reasoning": "The learning outcomes for Division will progressively develop from basic sharing and grouping concepts to more complex division strategies, reflecting the cognitive development and mathematical understanding of students across primary school years. The progression will focus on building conceptual understanding, moving from concrete to abstract representations, and developing computational fluency with division.",
+    "learning_outcomes": [
+      {
+        "unit_id": 7,
+        "year_id": 1,
+        "description": "Explore simple sharing of objects equally into groups through play-based activities",
+        "prerequisites": "Basic counting skills and understanding of whole numbers",
+        "complexity_level": 1
+      },
+      {
+        "unit_id": 7,
+        "year_id": 2,
+        "description": "Demonstrate equal sharing of small sets of objects into groups of 2 or 3",
+        "prerequisites": "Ability to count and recognize small quantities",
+        "complexity_level": 1
+      },
+      {
+        "unit_id": 7,
+        "year_id": 3,
+        "description": "Understand division as fair sharing and grouping, using concrete materials to divide numbers up to 20",
+        "prerequisites": "Basic addition and subtraction skills, understanding of whole numbers",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 7,
+        "year_id": 4,
+        "description": "Perform division of two-digit numbers by single-digit divisors with and without remainders",
+        "prerequisites": "Multiplication tables up to 5, understanding of division concept",
+        "complexity_level": 3
+      },
+      {
+        "unit_id": 7,
+        "year_id": 5,
+        "description": "Apply division strategies for two and three-digit numbers, including interpreting and solving word problems involving division",
+        "prerequisites": "Multiplication tables up to 12, understanding of division with remainders",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 7,
+        "year_id": 6,
+        "description": "Solve complex division problems involving multi-digit numbers, decimals, and develop efficient mental division strategies",
+        "prerequisites": "Advanced multiplication skills, understanding of division algorithms",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 7,
+        "year_id": 7,
+        "description": "Demonstrate advanced division skills including long division, division of decimals, and application in real-world mathematical contexts",
+        "prerequisites": "Comprehensive understanding of division algorithms and decimal operations",
+        "complexity_level": 5
+      },
+      {
+        "unit_id": 7,
+        "year_id": 8,
+        "description": "Apply sophisticated division strategies to solve complex mathematical problems, including multi-step division and contextual applications",
+        "prerequisites": "Advanced understanding of division, decimals, and algebraic thinking",
+        "complexity_level": 5
+      }
+    ]
+  },
+  {
+    "reasoning": "The learning outcomes for Multiplication will progressively develop from basic conceptual understanding to more complex multiplicative reasoning. The progression will focus on building multiplicative thinking, understanding the relationship between repeated addition and multiplication, and developing fluency with multiplication facts and strategies.\n\nKey developmental considerations:\n- Junior and Senior Infants: Foundational understanding of grouping and equal sets\n- First and Second Class: Introduction to multiplication as repeated addition\n- Third and Fourth Class: Developing multiplication facts and mental strategies\n- Fifth and Sixth Class: Advanced multiplication, including multi-digit numbers and problem-solving",
+    "learning_outcomes": [
+      {
+        "unit_id": 6,
+        "year_id": 1,
+        "description": "Recognize and create equal groups of objects through simple sorting and sharing activities",
+        "prerequisites": "Basic counting skills and understanding of one-to-one correspondence",
+        "complexity_level": 1
+      },
+      {
+        "unit_id": 6,
+        "year_id": 2,
+        "description": "Understand multiplication as repeated addition of equal groups up to 5",
+        "prerequisites": "Ability to count and group objects",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 6,
+        "year_id": 3,
+        "description": "Recall and use multiplication facts for the 2, 5, and 10 times tables",
+        "prerequisites": "Understanding of multiplication as repeated addition",
+        "complexity_level": 3
+      },
+      {
+        "unit_id": 6,
+        "year_id": 4,
+        "description": "Multiply single-digit and two-digit numbers by 2, 3, 4, 5, and 10 using mental and written strategies",
+        "prerequisites": "Multiplication facts for 2, 5, and 10 times tables",
+        "complexity_level": 3
+      },
+      {
+        "unit_id": 6,
+        "year_id": 5,
+        "description": "Multiply multi-digit numbers by single-digit numbers using efficient written methods and develop strategies for mental multiplication",
+        "prerequisites": "Understanding of place value and multiplication facts",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 6,
+        "year_id": 6,
+        "description": "Apply multiplication skills to solve complex multi-step word problems involving whole numbers and decimal numbers",
+        "prerequisites": "Proficiency with multi-digit multiplication and problem-solving strategies",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 6,
+        "year_id": 7,
+        "description": "Use multiplication of fractions and decimals in contextual problem-solving situations",
+        "prerequisites": "Understanding of fraction and decimal concepts",
+        "complexity_level": 5
+      },
+      {
+        "unit_id": 6,
+        "year_id": 8,
+        "description": "Demonstrate advanced multiplicative reasoning by solving complex real-world problems involving proportional thinking and scaling",
+        "prerequisites": "Comprehensive understanding of multiplication across different number types",
+        "complexity_level": 5
+      }
+    ]
+  },
+  {
+    "reasoning": "The learning outcomes for subtraction will progressively develop from basic concrete understanding to more complex abstract operations. The progression will focus on:\n1. Initial concept of taking away\n2. Developing mental subtraction strategies\n3. Handling larger numbers\n4. Introducing regrouping and borrowing\n5. Applying subtraction in real-world contexts\n\nThe outcomes will build mathematical thinking, problem-solving skills, and computational fluency while ensuring age-appropriate complexity and cognitive development.",
+    "learning_outcomes": [
+      {
+        "unit_id": 5,
+        "year_id": 1,
+        "description": "Recognize and demonstrate subtraction as 'taking away' using concrete materials and visual representations",
+        "prerequisites": "Basic counting skills, understanding of numbers 0-10",
+        "complexity_level": 1
+      },
+      {
+        "unit_id": 5,
+        "year_id": 2,
+        "description": "Subtract single-digit numbers within 10 using manipulatives and begin simple mental subtraction strategies",
+        "prerequisites": "Understanding of subtraction as taking away, familiarity with numbers 0-10",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 5,
+        "year_id": 3,
+        "description": "Subtract two-digit numbers with and without regrouping, using concrete and pictorial methods",
+        "prerequisites": "Basic subtraction skills, understanding of place value to 99",
+        "complexity_level": 3
+      },
+      {
+        "unit_id": 5,
+        "year_id": 4,
+        "description": "Perform subtraction of two and three-digit numbers with regrouping, developing efficient mental and written strategies",
+        "prerequisites": "Subtraction skills with two-digit numbers, understanding of place value",
+        "complexity_level": 3
+      },
+      {
+        "unit_id": 5,
+        "year_id": 5,
+        "description": "Solve complex subtraction problems involving multi-digit numbers, decimals, and apply subtraction in real-world mathematical contexts",
+        "prerequisites": "Confident subtraction skills, understanding of place value to thousands",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 5,
+        "year_id": 6,
+        "description": "Demonstrate advanced subtraction skills including multi-step problems, estimation, and applying subtraction across different mathematical scenarios",
+        "prerequisites": "Comprehensive understanding of subtraction with whole numbers and decimals",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 5,
+        "year_id": 7,
+        "description": "Apply sophisticated subtraction strategies to solve complex mathematical problems involving whole numbers, decimals, and algebraic contexts",
+        "prerequisites": "Advanced understanding of number operations and mathematical reasoning",
+        "complexity_level": 5
+      },
+      {
+        "unit_id": 5,
+        "year_id": 8,
+        "description": "Critically analyze and solve advanced multi-step subtraction problems, demonstrating flexible mathematical thinking and strategic problem-solving",
+        "prerequisites": "Comprehensive mathematical skills across number operations",
+        "complexity_level": 5
+      }
+    ]
+  },
+  {
+    "reasoning": "Percentages are an advanced mathematical concept that requires foundational understanding of fractions, decimals, and proportional reasoning. The progression of learning outcomes will reflect the gradual complexity of understanding percentages, starting with basic conceptual understanding and moving towards more sophisticated applications.\n\nThe learning outcomes are designed to:\n1. Introduce the concept of percentages gradually\n2. Build on prior knowledge of fractions and division\n3. Develop practical application skills\n4. Increase cognitive complexity with age\n5. Align with cognitive development stages of primary school students\n\nKey developmental considerations:\n- Early years focus on conceptual understanding\n- Middle primary years introduce basic calculations\n- Later primary years emphasize real-world applications and more complex percentage problems",
+    "learning_outcomes": [
+      {
+        "unit_id": 10,
+        "year_id": 5,
+        "description": "Understand the basic concept of percentage as 'out of 100' and recognize percentage symbols and notation",
+        "prerequisites": "Basic understanding of fractions and division",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 10,
+        "year_id": 6,
+        "description": "Calculate simple percentages of whole numbers and recognize common percentages (50%, 25%, 10%) in practical contexts",
+        "prerequisites": "Understanding of percentage as a concept, basic multiplication skills",
+        "complexity_level": 3
+      },
+      {
+        "unit_id": 10,
+        "year_id": 7,
+        "description": "Convert between fractions, decimals, and percentages, and solve multi-step percentage problems involving discounts and increases",
+        "prerequisites": "Knowledge of fraction and decimal representations, multiplication and division skills",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 10,
+        "year_id": 8,
+        "description": "Apply percentage calculations to real-world scenarios including financial contexts, such as calculating profit, interest, and percentage change",
+        "prerequisites": "Advanced percentage conversion and calculation skills",
+        "complexity_level": 5
+      }
+    ]
+  },
+  {
+    "reasoning": "Place value is a fundamental mathematical concept that develops progressively through primary education. The learning outcomes are designed to build complexity and understanding incrementally, starting with basic number recognition and gradually advancing to more sophisticated manipulation of multi-digit numbers. The progression reflects cognitive development stages and increasing mathematical abstraction.\n\nKey developmental considerations:\n- Junior and Senior Infants focus on foundational number sense\n- Early primary years (1st-2nd) introduce place value concepts concretely\n- Middle primary (3rd-4th) expand to larger numbers and more complex representations\n- Senior primary (5th-6th) develop advanced place value understanding and strategic manipulation",
+    "learning_outcomes": [
+      {
+        "unit_id": 3,
+        "year_id": 1,
+        "description": "Recognize and count numbers from 0-10 sequentially",
+        "prerequisites": "Basic number recognition",
+        "complexity_level": 1
+      },
+      {
+        "unit_id": 3,
+        "year_id": 2,
+        "description": "Understand and represent numbers up to 20 using concrete materials to show tens and ones",
+        "prerequisites": "Ability to count to 10",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 3,
+        "year_id": 3,
+        "description": "Read, write, and represent numbers up to 100, demonstrating understanding of tens and ones",
+        "prerequisites": "Basic number representation skills",
+        "complexity_level": 3
+      },
+      {
+        "unit_id": 3,
+        "year_id": 4,
+        "description": "Compare and order numbers up to 999, explaining the value of each digit in a three-digit number",
+        "prerequisites": "Understanding of two-digit number place value",
+        "complexity_level": 3
+      },
+      {
+        "unit_id": 3,
+        "year_id": 5,
+        "description": "Understand and explain place value for numbers up to 10,000, including thousands, hundreds, tens, and ones",
+        "prerequisites": "Proficiency with three-digit number place value",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 3,
+        "year_id": 6,
+        "description": "Interpret and manipulate numbers up to 100,000, demonstrating advanced understanding of place value relationships",
+        "prerequisites": "Comprehensive understanding of four-digit number place value",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 3,
+        "year_id": 7,
+        "description": "Apply place value understanding to solve complex mathematical problems involving decimals and large numbers",
+        "prerequisites": "Advanced place value knowledge for whole numbers",
+        "complexity_level": 5
+      },
+      {
+        "unit_id": 3,
+        "year_id": 8,
+        "description": "Critically analyze and solve multi-step problems using advanced place value concepts, including scientific notation",
+        "prerequisites": "Comprehensive understanding of whole number and decimal place value",
+        "complexity_level": 5
+      }
+    ]
+  },
+  {
+    "reasoning": "The learning outcomes for 2-D shapes will progressively develop spatial reasoning, shape recognition, and geometric understanding from Junior Infants through Sixth Class. The progression will focus on increasing complexity of shape identification, properties, classification, and application, aligning with children's cognitive development and mathematical reasoning skills.\n\nKey developmental considerations:\n- Junior and Senior Infants: Basic shape recognition and naming\n- First and Second Class: Exploring shape properties and simple classifications\n- Third and Fourth Class: More advanced shape analysis and geometric relationships\n- Fifth and Sixth Class: Complex geometric reasoning and practical applications",
+    "learning_outcomes": [
+      {
+        "unit_id": 15,
+        "year_id": 1,
+        "description": "Identify and name basic 2-D shapes (circle, square, triangle, rectangle) in the environment",
+        "prerequisites": "None",
+        "complexity_level": 1
+      },
+      {
+        "unit_id": 15,
+        "year_id": 2,
+        "description": "Recognize and draw basic 2-D shapes, describing their simple characteristics (number of sides, corners)",
+        "prerequisites": "Ability to identify basic shapes",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 15,
+        "year_id": 3,
+        "description": "Compare and sort 2-D shapes based on their properties (number of sides, symmetry, angles)",
+        "prerequisites": "Understanding of basic shape characteristics",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 15,
+        "year_id": 4,
+        "description": "Classify 2-D shapes into groups and explain the reasoning for their classification",
+        "prerequisites": "Ability to identify shape properties",
+        "complexity_level": 3
+      },
+      {
+        "unit_id": 15,
+        "year_id": 5,
+        "description": "Investigate and describe the properties of regular and irregular 2-D shapes, including parallel and perpendicular lines",
+        "prerequisites": "Understanding of shape classification",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 15,
+        "year_id": 6,
+        "description": "Analyze and construct 2-D shapes with specific geometric properties, using mathematical reasoning and drawing tools",
+        "prerequisites": "Advanced understanding of shape properties",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 15,
+        "year_id": 7,
+        "description": "Apply knowledge of 2-D shapes to solve complex geometric problems and create mathematical models",
+        "prerequisites": "Comprehensive understanding of shape characteristics and relationships",
+        "complexity_level": 5
+      },
+      {
+        "unit_id": 15,
+        "year_id": 8,
+        "description": "Demonstrate advanced geometric reasoning by exploring transformations, symmetry, and complex relationships between 2-D shapes",
+        "prerequisites": "Comprehensive geometric knowledge from previous years",
+        "complexity_level": 5
+      }
+    ]
+  },
+  {
+    "reasoning": "The learning outcomes for 3-D shapes will progressively develop spatial awareness, shape recognition, and geometric reasoning skills across primary school years. The progression will focus on:\n1. Initial shape recognition and basic exploration in early years\n2. Developing vocabulary and classification skills\n3. Understanding properties of 3-D shapes\n4. Advanced geometric reasoning and problem-solving in later years\n\nThe outcomes will build complexity, moving from simple identification to more sophisticated spatial reasoning and mathematical thinking about three-dimensional objects.",
+    "learning_outcomes": [
+      {
+        "unit_id": 16,
+        "year_id": 1,
+        "description": "Identify and name basic 3-D shapes like sphere, cube, and cylinder in the environment",
+        "prerequisites": "Basic visual recognition skills",
+        "complexity_level": 1
+      },
+      {
+        "unit_id": 16,
+        "year_id": 2,
+        "description": "Sort and group 3-D shapes based on simple observable characteristics like round or flat surfaces",
+        "prerequisites": "Ability to identify basic 3-D shapes",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 16,
+        "year_id": 3,
+        "description": "Describe the properties of 3-D shapes including number of faces, edges, and vertices for common shapes like cube and cuboid",
+        "prerequisites": "Basic shape recognition and sorting skills",
+        "complexity_level": 3
+      },
+      {
+        "unit_id": 16,
+        "year_id": 4,
+        "description": "Compare and contrast different 3-D shapes, explaining their geometric properties and how they differ from 2-D shapes",
+        "prerequisites": "Understanding of basic 3-D shape properties",
+        "complexity_level": 3
+      },
+      {
+        "unit_id": 16,
+        "year_id": 5,
+        "description": "Construct and draw nets for simple 3-D shapes, understanding how 2-D representations can create 3-D objects",
+        "prerequisites": "Knowledge of shape properties and spatial relationships",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 16,
+        "year_id": 6,
+        "description": "Analyze and calculate surface area and volume of rectangular prisms and other regular 3-D shapes",
+        "prerequisites": "Understanding of shape properties and basic measurement",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 16,
+        "year_id": 7,
+        "description": "Apply geometric reasoning to solve complex problems involving 3-D shapes, including transformations and symmetry",
+        "prerequisites": "Advanced understanding of 3-D shape properties",
+        "complexity_level": 5
+      },
+      {
+        "unit_id": 16,
+        "year_id": 8,
+        "description": "Investigate and explain relationships between different 3-D shapes, demonstrating advanced spatial reasoning and mathematical thinking",
+        "prerequisites": "Comprehensive knowledge of 3-D geometric concepts",
+        "complexity_level": 5
+      }
+    ]
+  },
+  {
+    "reasoning": "The learning outcomes for Lines and Angles will progressively develop spatial reasoning, geometric understanding, and measurement skills across primary school years. The progression will focus on:\n1. Initial recognition and basic identification in Junior and Senior Infants\n2. Developing understanding of line types and basic angle concepts in early primary years\n3. Introducing more complex angle measurements and geometric relationships in middle primary\n4. Advanced geometric reasoning and precise angle calculations in senior primary years\n\nThe outcomes will build complexity, moving from concrete, visual experiences to more abstract mathematical thinking about lines and angles.",
+    "learning_outcomes": [
+      {
+        "unit_id": 17,
+        "year_id": 1,
+        "description": "Recognize and point out straight and curved lines in the immediate environment",
+        "prerequisites": "Basic visual perception skills",
+        "complexity_level": 1
+      },
+      {
+        "unit_id": 17,
+        "year_id": 2,
+        "description": "Identify and draw different types of lines (horizontal, vertical, diagonal) using drawing tools",
+        "prerequisites": "Basic line recognition from Junior Infants",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 17,
+        "year_id": 3,
+        "description": "Understand and demonstrate the difference between parallel and intersecting lines using geometric shapes",
+        "prerequisites": "Ability to draw and recognize basic line types",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 17,
+        "year_id": 4,
+        "description": "Recognize and classify right angles, identifying them in everyday objects and simple geometric shapes",
+        "prerequisites": "Understanding of line types and basic spatial relationships",
+        "complexity_level": 3
+      },
+      {
+        "unit_id": 17,
+        "year_id": 5,
+        "description": "Estimate and measure angles using a protractor, distinguishing between acute, right, and obtuse angles",
+        "prerequisites": "Familiarity with right angles and basic geometric shapes",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 17,
+        "year_id": 6,
+        "description": "Calculate and construct angles, understanding the relationship between adjacent and vertically opposite angles",
+        "prerequisites": "Ability to measure angles with a protractor",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 17,
+        "year_id": 7,
+        "description": "Analyze and solve complex geometric problems involving angle relationships in polygons and triangles",
+        "prerequisites": "Advanced understanding of angle measurement and properties",
+        "complexity_level": 5
+      },
+      {
+        "unit_id": 17,
+        "year_id": 8,
+        "description": "Apply advanced geometric reasoning to solve real-world problems involving angle calculations and transformations",
+        "prerequisites": "Comprehensive understanding of angle properties and geometric relationships",
+        "complexity_level": 5
+      }
+    ]
+  },
+  {
+    "reasoning": "The learning outcomes for Position and Direction in Mathematics will progressively develop spatial awareness, directional language, and navigational skills. The progression will focus on increasing complexity of spatial understanding, from basic positional concepts to more advanced navigational and coordinate-based skills. The outcomes will build spatial reasoning, geometric thinking, and practical application of directional knowledge.",
+    "learning_outcomes": [
+      {
+        "unit_id": 19,
+        "year_id": 1,
+        "description": "Identify and describe basic position words such as 'on', 'under', 'beside', 'between', and 'next to' using concrete objects and personal positioning",
+        "prerequisites": "None",
+        "complexity_level": 1
+      },
+      {
+        "unit_id": 19,
+        "year_id": 2,
+        "description": "Use directional language to describe movement and position, including 'left', 'right', 'forward', and 'backward' in simple spatial contexts",
+        "prerequisites": "Basic understanding of positional vocabulary",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 19,
+        "year_id": 3,
+        "description": "Follow and give simple directional instructions using cardinal directions (north, south, east, west) in classroom and playground settings",
+        "prerequisites": "Understanding of basic directional language",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 19,
+        "year_id": 4,
+        "description": "Create and interpret simple maps with basic symbols, demonstrating understanding of relative position and directional orientation",
+        "prerequisites": "Knowledge of cardinal directions and positional vocabulary",
+        "complexity_level": 3
+      },
+      {
+        "unit_id": 19,
+        "year_id": 5,
+        "description": "Use grid references and coordinate systems to describe and locate positions on simple maps and grids",
+        "prerequisites": "Understanding of map symbols and directional concepts",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 19,
+        "year_id": 6,
+        "description": "Apply geometric transformations like translation, rotation, and reflection to understand and describe position and movement",
+        "prerequisites": "Knowledge of coordinate systems and spatial relationships",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 19,
+        "year_id": 7,
+        "description": "Solve complex navigational problems using advanced coordinate geometry, including scale, proportion, and multi-step directional challenges",
+        "prerequisites": "Advanced understanding of coordinate systems and transformations",
+        "complexity_level": 5
+      },
+      {
+        "unit_id": 19,
+        "year_id": 8,
+        "description": "Analyze and interpret complex spatial scenarios, using advanced coordinate geometry to solve real-world positioning and navigation problems",
+        "prerequisites": "Comprehensive understanding of spatial reasoning and coordinate systems",
+        "complexity_level": 5
+      }
+    ]
+  },
+  {
+    "reasoning": "The learning outcomes for Symmetry will progress from basic visual recognition and exploration in early years to more complex understanding and application of symmetry principles in later primary years. The progression will focus on developing spatial awareness, geometric reasoning, and the ability to identify, create, and manipulate symmetrical shapes and patterns.\n\nKey developmental considerations:\n- Junior and Senior Infants: Sensory exploration and basic visual recognition\n- First and Second Class: Hands-on identification and simple symmetry creation\n- Third and Fourth Class: More advanced symmetry concepts and mathematical reasoning\n- Fifth and Sixth Class: Complex symmetry applications and transformational understanding",
+    "learning_outcomes": [
+      {
+        "unit_id": 18,
+        "year_id": 1,
+        "description": "Recognize and explore simple symmetrical shapes through visual and tactile experiences",
+        "prerequisites": "None",
+        "complexity_level": 1
+      },
+      {
+        "unit_id": 18,
+        "year_id": 2,
+        "description": "Identify lines of symmetry in basic shapes and everyday objects through guided activities",
+        "prerequisites": "Basic shape recognition",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 18,
+        "year_id": 3,
+        "description": "Create and draw symmetrical patterns and shapes using folding, cutting, and drawing techniques",
+        "prerequisites": "Understanding of basic symmetry concepts",
+        "complexity_level": 2
+      },
+      {
+        "unit_id": 18,
+        "year_id": 4,
+        "description": "Explore and describe different types of symmetry (line and rotational) in geometric shapes and patterns",
+        "prerequisites": "Ability to identify lines of symmetry",
+        "complexity_level": 3
+      },
+      {
+        "unit_id": 18,
+        "year_id": 5,
+        "description": "Analyze and construct symmetrical designs using mathematical tools and precise measurements",
+        "prerequisites": "Understanding of line and rotational symmetry",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 18,
+        "year_id": 6,
+        "description": "Apply symmetry principles to solve complex geometric problems and create intricate symmetrical designs",
+        "prerequisites": "Advanced understanding of symmetry types and properties",
+        "complexity_level": 4
+      },
+      {
+        "unit_id": 18,
+        "year_id": 7,
+        "description": "Investigate and explain advanced symmetry concepts, including transformational symmetry and symmetry in nature and art",
+        "prerequisites": "Comprehensive knowledge of symmetry principles",
+        "complexity_level": 5
+      },
+      {
+        "unit_id": 18,
+        "year_id": 8,
+        "description": "Demonstrate sophisticated understanding of symmetry by creating complex mathematical and artistic symmetrical representations",
+        "prerequisites": "Advanced symmetry knowledge and skills",
+        "complexity_level": 5
+      }
+    ]
+  }
+]

@@ -3,7 +3,7 @@
 - Prefer standard library modules over external packages when feasible.
 - Use type hints for all function parameters and return values.
 - Maintain docstrings following Google style format.
-- Use native types instead of Typing package if possible.
+- Use native types instead of Typing package if possible (for example, use `list` instead of `List`, etc.).
 
 # Package Management
 - Utilize 'uv' for managing project dependencies (use `uv add <package>` to add a new dependency).

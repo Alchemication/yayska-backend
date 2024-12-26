@@ -21,69 +21,71 @@ def upgrade() -> None:
     # Define SQL statements as individual commands
     statements = [
         """CREATE TABLE education_levels (
-            level_id SERIAL PRIMARY KEY,
+            id SERIAL PRIMARY KEY,
             level_name VARCHAR(50)  -- Primary, Secondary
         )""",
-        """CREATE TABLE school_years (
-            year_id SERIAL PRIMARY KEY,
-            level_id INT,
-            year_name VARCHAR(50),  -- Junior Infants, Senior Infants, First Class, etc.
-            year_order INT,         -- For proper sorting
-            FOREIGN KEY (level_id) REFERENCES education_levels(level_id)
-        )""",
         """CREATE TABLE curriculum_areas (
-            area_id SERIAL PRIMARY KEY,
+            id SERIAL PRIMARY KEY,
             area_name VARCHAR(100)  -- Language, Mathematics, SESE, Arts, etc.
         )""",
         """CREATE TABLE subjects (
-            subject_id SERIAL PRIMARY KEY,
+            id SERIAL PRIMARY KEY,
             area_id INT,
             subject_name VARCHAR(100),  -- Mathematics, English, Irish, etc.
-            FOREIGN KEY (area_id) REFERENCES curriculum_areas(area_id)
+            FOREIGN KEY (area_id) REFERENCES curriculum_areas(id)
         )""",
         """CREATE TABLE strands (
-            strand_id SERIAL PRIMARY KEY,
+            id SERIAL PRIMARY KEY,
             subject_id INT,
             strand_name VARCHAR(200),  -- Numbers, Algebra, etc.
-            FOREIGN KEY (subject_id) REFERENCES subjects(subject_id)
+            FOREIGN KEY (subject_id) REFERENCES subjects(id)
         )""",
         """CREATE TABLE strand_units (
-            unit_id SERIAL PRIMARY KEY,
+            id SERIAL PRIMARY KEY,
             strand_id INT,
             unit_name VARCHAR(200),  -- Counting and numeration, etc.
-            FOREIGN KEY (strand_id) REFERENCES strands(strand_id)
+            FOREIGN KEY (strand_id) REFERENCES strands(id)
+        )""",
+        """CREATE TABLE school_years (
+            id SERIAL PRIMARY KEY,
+            level_id INT,
+            year_name VARCHAR(50),  -- Junior Infants, Senior Infants, First Class, etc.
+            year_order INT,         -- For proper sorting
+            FOREIGN KEY (level_id) REFERENCES education_levels(id)
         )""",
         """CREATE TABLE learning_outcomes (
-            outcome_id SERIAL PRIMARY KEY,
+            id SERIAL PRIMARY KEY,
             unit_id INT,
             year_id INT,
             outcome_description TEXT,
-            FOREIGN KEY (unit_id) REFERENCES strand_units(unit_id),
-            FOREIGN KEY (year_id) REFERENCES school_years(year_id)
+            prerequisite_knowledge TEXT,
+            complexity_level INT,
+            FOREIGN KEY (unit_id) REFERENCES strand_units(id),
+            FOREIGN KEY (year_id) REFERENCES school_years(id)
         )""",
         """CREATE TABLE concepts (
-            concept_id SERIAL PRIMARY KEY,
+            id SERIAL PRIMARY KEY,
             outcome_id INT,
             concept_name VARCHAR(200),
             concept_description TEXT,
             difficulty_level INT,
-            FOREIGN KEY (outcome_id) REFERENCES learning_outcomes(outcome_id)
+            FOREIGN KEY (outcome_id) REFERENCES learning_outcomes(id)
         )""",
         """CREATE TABLE quizzes (
-            quiz_id SERIAL PRIMARY KEY,
+            id SERIAL PRIMARY KEY,
             concept_id INT,
             quiz_type VARCHAR(50),
             difficulty_level INT,
-            FOREIGN KEY (concept_id) REFERENCES concepts(concept_id)
+            FOREIGN KEY (concept_id) REFERENCES concepts(id)
         )""",
         """CREATE TABLE concept_metadata (
-            metadata_id SERIAL PRIMARY KEY,
+            id SERIAL PRIMARY KEY,
             concept_id INT,
             real_world_application TEXT,
             common_misconceptions TEXT,
             teaching_tips TEXT,
             parent_guidance TEXT,
-            FOREIGN KEY (concept_id) REFERENCES concepts(concept_id)
+            FOREIGN KEY (concept_id) REFERENCES concepts(id)
         )""",
     ]
 
