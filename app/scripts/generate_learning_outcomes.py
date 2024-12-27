@@ -1,6 +1,8 @@
 """Script to generate learning outcomes in the database.
 
 This script generates learning outcomes for each year level and unit in the curriculum.
+
+Ideally this could be developed as a batch job to save on costs.
 """
 
 import json
@@ -14,6 +16,7 @@ from langchain.prompts import ChatPromptTemplate
 from langchain_anthropic import ChatAnthropic
 from langchain_community.cache import SQLiteCache
 from sqlalchemy import create_engine, text
+from tqdm import tqdm
 
 from app.config import settings
 from app.prompts.learning_outcomes import (
@@ -75,7 +78,7 @@ def generate_learning_outcomes(data: dict[str, Any]) -> list[LearningOutcomesRes
         data: Dictionary containing the curriculum data
     """
     # chunk data into smaller pieces
-    chunk_size = 10
+    chunk_size = 5
     chunks = [data[i : i + chunk_size] for i in range(0, len(data), chunk_size)]
 
     # set up cache
@@ -85,7 +88,7 @@ def generate_learning_outcomes(data: dict[str, Any]) -> list[LearningOutcomesRes
 
     # set up LLM
     llm = ChatAnthropic(
-        model="claude-3-5-haiku-20241022",
+        model=settings.ANTHROPIC_CLAUDE_3_5_SONNET,
         api_key=settings.ANTHROPIC_API_KEY,
         temperature=0.1,
         max_tokens=4096,
@@ -102,7 +105,7 @@ def generate_learning_outcomes(data: dict[str, Any]) -> list[LearningOutcomesRes
 
     # generate learning outcomes
     learning_outcomes = []
-    for chunk in chunks:
+    for chunk in tqdm(chunks):
         responses = chain.batch(chunk, config={"max_concurrency": 50})
         learning_outcomes.extend(responses)
 

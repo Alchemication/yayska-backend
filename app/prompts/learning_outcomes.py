@@ -20,7 +20,7 @@ class LearningOutcomesResponse(BaseModel):
 
     reasoning: str = Field(
         ...,
-        description="Explanation of progression logic and developmental considerations",
+        description="Concise explanation of progression logic and developmental considerations",
     )
     learning_outcomes: list[LearningOutcome] = Field(
         ..., description="List of learning outcomes"
@@ -40,12 +40,24 @@ Provide your response in JSON format with reasoning and structured learning outc
 
 user_prompt = """
 Generate learning outcomes for:
-Education Level: Primary
-Curriculum Area: {area_name}
-Subject: {subject_name}
-Strand: {strand_name}
-Strand Unit: {unit_name}
-Strand Unit ID: {unit_id}
+- Education Level: Primary
+- Curriculum Area: {area_name}
+- Subject: {subject_name}
+- Strand: {strand_name}
+- Strand Unit: {unit_name}
+- Strand Unit ID: {unit_id}
+
+These learning outcomes will be used by an AI tutor to:
+- Assess student understanding
+- Track progress
+- Identify gaps in knowledge
+- Provide targeted practice
+
+Therefore, each learning outcome should be:
+- Clearly measurable through digital assessment
+- Specific enough for automated evaluation
+- Have clear success criteria
+- Testable through various question types (multiple choice, numerical input, etc.)
 
 Available School Years:
 {{

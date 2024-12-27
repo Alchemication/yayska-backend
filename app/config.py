@@ -19,6 +19,10 @@ class Settings(BaseSettings):
     # Third Party Services
     ANTHROPIC_API_KEY: str
 
+    # Model Names
+    ANTHROPIC_CLAUDE_3_5_HAIKU: str = "claude-3-5-haiku-20241022"
+    ANTHROPIC_CLAUDE_3_5_SONNET: str = "claude-3-5-sonnet-20241022"
+
     @property
     def DATABASE_URI(self) -> PostgresDsn:
         """Builds database URI dynamically."""
