@@ -17,6 +17,7 @@ wheels/
 
 # Misc
 .DS_Store
+.cache
 
 # Data files
 *.db

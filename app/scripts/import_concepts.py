@@ -8,7 +8,7 @@ data before loading new data.
 import json
 import logging
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 from sqlalchemy import create_engine, text
 from sqlalchemy.exc import SQLAlchemyError
@@ -20,11 +20,11 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-def load_json_data() -> Dict[str, Any]:
+def load_json_data() -> list[dict[str, Any]]:
     """Load concepts from JSON file.
 
     Returns:
-        Dict[str, Any]: Dictionary containing the concepts data
+        list[dict[str, Any]]: List of dictionaries containing the concepts data
     """
     json_path = Path(__file__).parents[2] / "app" / "data" / "concepts.json"
     try:
@@ -47,22 +47,24 @@ def truncate_tables(engine: Any) -> None:
     with engine.begin() as conn:
         try:
             # First truncate dependent tables if they exist
-            conn.execute(text("TRUNCATE TABLE concept_metadata CASCADE"))
-            conn.execute(text("TRUNCATE TABLE quizzes CASCADE"))
+            conn.execute(
+                text("TRUNCATE TABLE concept_metadata RESTART IDENTITY CASCADE")
+            )
+            conn.execute(text("TRUNCATE TABLE quizzes RESTART IDENTITY CASCADE"))
             # Then truncate concepts table
-            conn.execute(text("TRUNCATE TABLE concepts CASCADE"))
+            conn.execute(text("TRUNCATE TABLE concepts RESTART IDENTITY CASCADE"))
             logger.info("Truncated concepts and related tables")
         except SQLAlchemyError as e:
             logger.error("Error truncating tables: %s", str(e))
             raise
 
 
-def insert_concepts(engine: Any, data: Dict[str, Any]) -> None:
+def insert_concepts(engine: Any, data: list[dict[str, Any]]) -> None:
     """Insert concepts into the database.
 
     Args:
         engine: SQLAlchemy engine instance
-        data: Dictionary containing the concepts data
+        data: List of dictionaries containing the concepts data
     """
     insert_query = """
         INSERT INTO concepts 
@@ -72,8 +74,8 @@ def insert_concepts(engine: Any, data: Dict[str, Any]) -> None:
     """
 
     with engine.begin() as conn:
-        for section in data:
-            concepts = section.get("concepts", [])
+        for record in data:
+            concepts = record.get("concepts", [])
             for concept in concepts:
                 try:
                     conn.execute(
@@ -84,11 +86,6 @@ def insert_concepts(engine: Any, data: Dict[str, Any]) -> None:
                             "concept_description": concept["concept_description"],
                             "difficulty_level": concept["complexity_level"],
                         },
-                    )
-                    logger.info(
-                        "Inserted concept: %s for learning outcome %s",
-                        concept["concept_name"],
-                        concept["learning_outcome_id"],
                     )
                 except SQLAlchemyError as e:
                     logger.error(

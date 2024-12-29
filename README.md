@@ -64,11 +64,11 @@ docker compose logs -f db
 # Apply all migrations
 alembic upgrade head
 
-# Import master data (subjects, schools, etc.)
+# Import initial curriculum data (subjects, schools, concepts, etc.)
 python -m app.scripts.import_master_data;
-
-# Import learning outcomes
 python -m app.scripts.import_learning_outcomes;
+python -m app.scripts.import_concepts;
+python -m app.scripts.import_concept_metadata;
 ```
 
 #### Common Issues
@@ -145,6 +145,47 @@ curriculum_areas
                     └── learning_outcomes
 ```
 
+## Concept Metadata
+
+The concept metadata helps parents understand mathematical topics by covering:
+
+1. **Importance & Application**
+   - Why this matters in real life
+   - How it helps with future learning
+
+2. **Difficulty Level**
+   - How many children typically find it challenging (out of 10)
+   - Common stumbling blocks
+   - Reassuring guidance for parents
+
+3. **Parent's Quick Guide**
+   - Key points to understand
+   - Common misunderstandings to watch for
+   - Practical teaching tips
+
+4. **Real-World Connection**
+   - Everyday examples
+   - Practice ideas at home
+
+5. **Learning Journey**
+   - What needs to be learned first
+   - Signs that show understanding
+
+6. **Time Investment**
+   - How long it typically takes to learn
+   - Recommended practice schedule
+   - Guidance for different learning speeds
+
+7. **Assessment Options**
+   - Best ways to check understanding
+   - Types of practice questions that work well
+
+8. **Irish Language Support**
+   - Key mathematical terms in Irish
+   - Common classroom phrases
+   - Help with pronunciation
+
 ## TODO
 
-- [ ] Add irish translations for all content
+- [ ] Generate assessments for concepts
+- [ ] Create DB structure for events
