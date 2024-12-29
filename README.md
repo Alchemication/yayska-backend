@@ -1,5 +1,17 @@
 # Yayska Backend
 
+## What is this?
+
+### Summary
+
+AI-Powered Irish Educational Curriculum Management & Assessment API
+
+### Description
+
+A FastAPI-based backend service that manages educational curriculum data, student progress tracking, and assessment generation. The system organizes educational content hierarchically from education levels down to individual concepts, with comprehensive metadata support for mathematical topics. Built with PostgreSQL for data persistence, it provides APIs to handle curriculum structure, learning outcomes, and concept-based assessments.
+
+Currently (in early MVP) focused on mathematics education and Irish language integration. It will be expanded to include other subjects and languages in the near future.
+
 ## Development Setup
 
 ### 1. Environment Setup
@@ -147,7 +159,7 @@ curriculum_areas
 
 ## Concept Metadata
 
-The concept metadata helps parents understand mathematical topics by covering:
+The concept metadata helps parents understand educational topics by covering:
 
 1. **Importance & Application**
    - Why this matters in real life
@@ -181,8 +193,8 @@ The concept metadata helps parents understand mathematical topics by covering:
    - Types of practice questions that work well
 
 8. **Irish Language Support**
-   - Key mathematical terms in Irish
-   - Common classroom phrases
+   - Key educational terms in Irish
+   - Common educational phrases
    - Help with pronunciation
 
 ## TODO
