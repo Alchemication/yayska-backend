@@ -12,6 +12,14 @@ A FastAPI-based backend service that manages educational curriculum data, studen
 
 Currently (in early MVP) focused on mathematics education and Irish language integration. It will be expanded to include other subjects and languages in the near future.
 
+### Why Yayska name?
+
+So "Yayska" is a play on words combining:
+
+- "Yay" - expressing joy and celebration of learning achievements
+- The Irish word "éasca" (easy) - the app makes learning more accessible and manageable
+- Ska - brings some Polish flair to the name, as the founder could even be Polish ¯\_(ツ)_/¯
+
 ## Development Setup
 
 ### 1. Environment Setup
