@@ -1,9 +1,13 @@
+# General
+- This is yayska backend project. Yayska is an AI-powered educational platform for Irish primary school children.
+- This is a FastAPI project.
+
 # Coding Standards
 - Adhere to ruff guidelines for all Python code to ensure consistency.
 - Prefer standard library modules over external packages when feasible.
 - Use type hints for all function parameters and return values.
 - Maintain docstrings following Google style format.
-- Use native types instead of Typing package if possible (for example, use `list` instead of `List`, etc.).
+- Use native types instead of `typing` package if possible (for example, use `list` instead of `List`, etc.).
 
 # Package Management
 - Utilize 'uv' for managing project dependencies (use `uv add <package>` to add a new dependency).
@@ -17,6 +21,15 @@
 - When adding a new table:
     - Ensure primary key field `id` is auto incrementing.
 - Migrations are created in the alembic folder.
+
+# Endpoint creation
+- Create a new router file in the `app/api/v1/endpoints` folder.
+- Add the new endpoint to the `app/api/v1/router.py` file.
+- Create a service file in the `app/services` folder and leverage it to handle business logic and SQL.
+- Inside the service, use raw SQL queries to interact with the database (we don't want to use ORM for this).
+- Use `async` and `await` keywords for all database operations.
+- Endpoint inputs and responses schemas should be created in the `app/schemas` folder.
+- The database access is handled in the `app/database.py` file.
 
 # Testing Guidelines
 - Develop integration tests without mocking objects.

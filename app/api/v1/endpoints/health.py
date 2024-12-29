@@ -16,7 +16,7 @@ async def health_check(session: AsyncSession = Depends(get_db)) -> HealthCheck:
     try:
         # Test database connection
         result = await session.execute(text("SELECT 1"))
-        result.scalar()  # Get the value without awaiting
+        result.scalar()
         db_status = "healthy"
     except Exception as e:
         print(f"Database connection failed: {e}")
@@ -25,4 +25,4 @@ async def health_check(session: AsyncSession = Depends(get_db)) -> HealthCheck:
     return HealthCheck(
         status="healthy",
         database_status=db_status,
-    ) 
+    )

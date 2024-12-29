@@ -1,16 +1,20 @@
 # Yayska Backend
 
-## What is this?
+## What is Yayska?
 
 ### Summary
 
-AI-Powered Irish Educational Curriculum Management & Assessment API
+Yayska:
 
-### Description
+- Empowers parents to navigate the Irish educational curriculum by providing AI-driven insights and personalized guidance for their children's learning journey.
+- Simplifies complex educational concepts into practical, actionable steps while focusing exclusively on the Irish education system.
+- Creates joyful learning experiences through interactive assessments and celebration of achievements, making education more engaging for both parents and children.
 
-A FastAPI-based backend service that manages educational curriculum data, student progress tracking, and assessment generation. The system organizes educational content hierarchically from education levels down to individual concepts, with comprehensive metadata support for mathematical topics. Built with PostgreSQL for data persistence, it provides APIs to handle curriculum structure, learning outcomes, and concept-based assessments.
+### Yayska Backend
 
-Currently (in early MVP) focused on mathematics education and Irish language integration. It will be expanded to include other subjects and languages in the near future.
+It's a FastAPI-based backend service that manages educational curriculum data, student progress tracking, and assessment generation. The system organizes educational content hierarchically from education levels down to individual concepts, with comprehensive metadata support for educational topics. Built with PostgreSQL for data persistence, it provides APIs to handle curriculum structure, learning outcomes, and concept-based assessments.
+
+Currently (in early MVP) focused on mathematics education in primary school with Irish language integration. It will be expanded to include other subjects and languages in the near future.
 
 ### Why Yayska name?
 
