@@ -1,23 +1,31 @@
+# Use the official Python 3.11 slim image as the base
 FROM python:3.11-slim
 
+# Install necessary system dependencies
+RUN apt-get update && \
+    apt-get install -y curl && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install uv by copying it from its official Docker image
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
+
+# Set environment variables for uv
+ENV UV_SYSTEM_PYTHON=1
+
+# Set the working directory
 WORKDIR /app
 
-# Install build dependencies
-RUN apt-get update && apt-get install -y \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
+# Copy the pyproject.toml and uv.lock files into the container
+COPY pyproject.toml uv.lock ./
 
-# Install uv using the official installation method
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+# Install Python dependencies using uv
+RUN uv sync --frozen
 
-# Copy dependency files
-COPY pyproject.toml .
+# Copy the application code into the container
+COPY app/ ./app
 
-# Install dependencies using uv
-RUN /root/.cargo/bin/uv pip install -r pyproject.toml
+# Expose the port your application runs on
+EXPOSE 8000
 
-# Copy the rest of the application
-COPY . .
-
-# Run migrations and start the application
-CMD alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port $PORT
+# Set the entry point to run your application with Uvicorn
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

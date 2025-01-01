@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: fastapi-app
+    env: docker
+    region: frankfurt # or choose another region
+    plan: free
+    healthCheckPath: /docs # assuming you have FastAPI docs enabled
+    envVars:
+      - key: POSTGRES_USER
+        sync: false
+      - key: POSTGRES_PASSWORD
+        sync: false
+      - key: POSTGRES_DB
+        sync: false
+      - key: POSTGRES_SERVER
+        fromService:
+          type: postgres
+          name: postgres-db
+          property: host
+      - key: POSTGRES_PORT
+        value: 5432
+
+  - type: postgres
+    name: postgres-db
+    region: frankfurt
+    plan: free
+    ipAllowList: [] # optional if you want to restrict access
