@@ -22,13 +22,14 @@ So "Yayska" is a play on words combining:
 
 - "Yay" - expressing joy and celebration of learning achievements
 - The Irish word "éasca" (easy) - the app makes learning more accessible and manageable
-- Ska - brings some Polish flair to the name, as the founder could even be Polish ¯\_(ツ)_/¯
+- Ska - brings some Polish flair to the name, as the founder could even be Polish ¯\_(ツ)\_/¯
 
 ## Development Setup
 
 ### 1. Environment Setup
 
 First, create and activate a virtual environment:
+
 ```bash
 python -m venv .venv
 source .venv/bin/activate  # On Unix/macOS
@@ -48,20 +49,12 @@ uv pip install --editable ".[dev]"
 
 ### 3. Configure Environment Variables
 
-Create a `.env` file in the project root:
-
-```bash
-# Database Configuration
-POSTGRES_SERVER=localhost
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=postgres  # Change in production
-POSTGRES_DB=yayska
-POSTGRES_PORT=5432
-```
+Copy existing `.env.example` as `.env` file into the project root and update with your own values where needed.
 
 ### 4. Database Setup
 
 #### Start Local Database
+
 ```bash
 # Start PostgreSQL container
 docker compose up -d
@@ -71,6 +64,7 @@ docker compose ps
 ```
 
 #### Database Management
+
 ```bash
 # Stop and remove containers
 docker compose down
@@ -96,6 +90,7 @@ python -m app.scripts.import_concept_metadata;
 ```
 
 #### Common Issues
+
 - If port 5432 is already in use, modify the port mapping in `docker-compose.yml`
 - Ensure Docker is running before executing compose commands
 - For permission issues, try running commands with sudo (Linux/macOS)
@@ -109,6 +104,7 @@ alembic revision -m "raw_sql_changes"
 ```
 
 Example raw SQL migration:
+
 ```python
 def upgrade() -> None:
     op.execute("""
@@ -142,6 +138,7 @@ uvicorn app.main:app --reload
 To add new .env variables, add them also to the `Settings` class in `app/config.py`.
 
 Then, read the config in your code:
+
 ```python
 from app.config import settings
 
@@ -152,6 +149,7 @@ print(settings.ANTHROPIC_API_KEY)
 ## Database Schema Structure
 
 ### Educational Progress Path
+
 ```
 education_levels
      └── school_years
@@ -161,6 +159,7 @@ education_levels
 ```
 
 ### Curriculum Structure Path
+
 ```
 curriculum_areas
      └── subjects
@@ -174,33 +173,40 @@ curriculum_areas
 The concept metadata helps parents understand educational topics by covering:
 
 1. **Importance & Application**
+
    - Why this matters in real life
    - How it helps with future learning
 
 2. **Difficulty Level**
+
    - How many children typically find it challenging (out of 10)
    - Common stumbling blocks
    - Reassuring guidance for parents
 
 3. **Parent's Quick Guide**
+
    - Key points to understand
    - Common misunderstandings to watch for
    - Practical teaching tips
 
 4. **Real-World Connection**
+
    - Everyday examples
    - Practice ideas at home
 
 5. **Learning Journey**
+
    - What needs to be learned first
    - Signs that show understanding
 
 6. **Time Investment**
+
    - How long it typically takes to learn
    - Recommended practice schedule
    - Guidance for different learning speeds
 
 7. **Assessment Options**
+
    - Best ways to check understanding
    - Types of practice questions that work well
 

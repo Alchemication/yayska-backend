@@ -5,9 +5,13 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
 
+    # App Settings
+    DEBUG: bool = False  # Default to False if not set
+
     # API Settings
     API_V1_STR: str = "/api/v1"
     PROJECT_NAME: str = "Yayska"
+    SECRET_KEY: str
 
     # PostgreSQL Settings
     POSTGRES_SERVER: str
