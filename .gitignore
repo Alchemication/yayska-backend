@@ -36,3 +36,4 @@ wheels/
 
 # Exceptions to commit
 !app/data/*.json
+!vercel.json
