@@ -12,6 +12,7 @@ from typing import Any, Dict
 
 from sqlalchemy import create_engine, text
 from sqlalchemy.exc import SQLAlchemyError
+from tqdm import tqdm
 
 from app.config import settings
 
@@ -46,7 +47,9 @@ def truncate_tables(engine: Any) -> None:
     """
     with engine.begin() as conn:
         try:
-            conn.execute(text("TRUNCATE TABLE learning_outcomes CASCADE"))
+            conn.execute(
+                text("TRUNCATE TABLE learning_outcomes RESTART IDENTITY CASCADE")
+            )
             logger.info("Truncated learning outcomes table")
         except SQLAlchemyError as e:
             logger.error("Error truncating learning outcomes table: %s", str(e))
@@ -67,7 +70,7 @@ def insert_data(engine: Any, data: Dict[str, Any]) -> None:
             (:unit_id, :year_id, :outcome_description, :prerequisite_knowledge, :complexity_level)
     """
     with engine.begin() as conn:
-        for strand_unit_outcomes in data:
+        for strand_unit_outcomes in tqdm(data, desc="Inserting learning outcomes"):
             for outcome_data in strand_unit_outcomes["learning_outcomes"]:
                 try:
                     conn.execute(
@@ -79,10 +82,6 @@ def insert_data(engine: Any, data: Dict[str, Any]) -> None:
                             "prerequisite_knowledge": outcome_data["prerequisites"],
                             "complexity_level": outcome_data["complexity_level"],
                         },
-                    )
-                    logger.info(
-                        "Inserted learning outcome for unit: %s",
-                        outcome_data["unit_id"],
                     )
                 except SQLAlchemyError as e:
                     logger.error("Error inserting learning outcome: %s", str(e))
@@ -102,8 +101,10 @@ def get_sync_database_url() -> str:
 def main() -> None:
     """Main function to execute the data loading process."""
     try:
-        # Create database engine with synchronous URL
-        engine = create_engine(get_sync_database_url())
+        # Create database engine with synchronous URL and SSL if needed
+        engine = create_engine(
+            get_sync_database_url(), connect_args=settings.get_sync_db_connect_args
+        )
 
         # Load JSON data
         logger.info("Loading master data from JSON file...")

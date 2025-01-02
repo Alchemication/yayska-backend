@@ -65,7 +65,7 @@ def truncate_tables(engine: Any) -> None:
         # Truncate tables in reverse order
         for table in reversed(TABLES_LOAD_ORDER):
             try:
-                conn.execute(text(f"TRUNCATE TABLE {table} CASCADE"))
+                conn.execute(text(f"TRUNCATE TABLE {table} RESTART IDENTITY CASCADE"))
                 logger.info("Truncated table: %s", table)
             except SQLAlchemyError as e:
                 logger.error("Error truncating table %s: %s", table, str(e))
@@ -109,7 +109,6 @@ def insert_data(engine: Any, data: Dict[str, Any]) -> None:
 
                 try:
                     conn.execute(text(insert_query), param_dict)
-                    logger.info("Inserted row %d into table: %s", idx + 1, table)
                 except SQLAlchemyError as e:
                     logger.error("Error inserting data into %s: %s", table, str(e))
                     raise
@@ -128,8 +127,10 @@ def get_sync_database_url() -> str:
 def main() -> None:
     """Main function to execute the data loading process."""
     try:
-        # Create database engine with synchronous URL
-        engine = create_engine(get_sync_database_url())
+        # Create database engine with synchronous URL and SSL if needed
+        engine = create_engine(
+            get_sync_database_url(), connect_args=settings.get_sync_db_connect_args
+        )
 
         # Load JSON data
         logger.info("Loading master data from JSON file...")

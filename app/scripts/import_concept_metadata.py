@@ -10,6 +10,7 @@ from typing import Any
 
 from sqlalchemy import create_engine, text
 from sqlalchemy.exc import SQLAlchemyError
+from tqdm import tqdm
 
 from app.config import settings
 
@@ -87,7 +88,7 @@ def insert_concept_metadata(engine: Any, data: list[dict[str, Any]]) -> None:
     """
 
     with engine.begin() as conn:
-        for record in data:
+        for record in tqdm(data, desc="Inserting concept metadata"):
             try:
                 conn.execute(
                     text(insert_query),
@@ -133,8 +134,10 @@ def get_sync_database_url() -> str:
 def main() -> None:
     """Main function to execute the data loading process."""
     try:
-        # Create database engine with synchronous URL
-        engine = create_engine(get_sync_database_url())
+        # Create database engine with synchronous URL and SSL if needed
+        engine = create_engine(
+            get_sync_database_url(), connect_args=settings.get_sync_db_connect_args
+        )
 
         # Load JSON data
         logger.info("Loading concept metadata data from JSON file...")

@@ -82,11 +82,18 @@ docker compose logs -f db
 # Apply all migrations
 alembic upgrade head
 
-# Import initial curriculum data (subjects, schools, concepts, etc.)
-python -m app.scripts.import_master_data;
-python -m app.scripts.import_learning_outcomes;
-python -m app.scripts.import_concepts;
-python -m app.scripts.import_concept_metadata;
+# Import initial curriculum data
+python -m app.scripts.import_master_data
+
+# (Optionally generate) and import further curriculum data
+# python -m app.scripts.generate_learning_outcomes
+python -m app.scripts.import_learning_outcomes
+
+# python -m app.scripts.generate_concepts
+python -m app.scripts.import_concepts
+
+# python -m app.scripts.generate_concept_metadata
+python -m app.scripts.import_concept_metadata
 ```
 
 #### Common Issues
