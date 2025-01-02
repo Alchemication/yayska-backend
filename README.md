@@ -118,6 +118,13 @@ def downgrade() -> None:
 
 ### Managing Migrations
 
+First, use `ENVIRONMENT` variable in `.env` file to specify the environment you want to work in:
+
+- `local` - for local development
+- `prod` - for production DB
+
+For `prod` environment, you need to have all `POSTGRES_` variables set in `.env` file, which point to the production DB.
+
 ```bash
 # Apply all pending migrations
 alembic upgrade head

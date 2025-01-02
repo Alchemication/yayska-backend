@@ -2,7 +2,9 @@ import asyncio
 import importlib
 import os
 import pkgutil
+import ssl
 from logging.config import fileConfig
+from pathlib import Path
 
 from dotenv import load_dotenv
 from sqlalchemy import pool
@@ -18,22 +20,45 @@ for _, name, _ in pkgutil.iter_modules(models_pkg.__path__):
     if name.endswith("_model"):
         importlib.import_module(f"app.models.{name}")
 
-# Load environment variables from .env
-load_dotenv()
+# Clear any existing env vars that might interfere
+env_vars_to_clear = [
+    "POSTGRES_SERVER",
+    "POSTGRES_USER",
+    "POSTGRES_PASSWORD",
+    "POSTGRES_DB",
+    "POSTGRES_PORT",
+]
 
-# this is the Alembic Config object, which provides
-# access to the values within the .ini file in use.
+for var in env_vars_to_clear:
+    if var in os.environ:
+        del os.environ[var]
+
+# Load environment variables based on ENVIRONMENT
+
+env_file = Path(".env")
+load_dotenv(env_file, override=True)
+ENV = os.getenv("ENVIRONMENT", "local")
+
+# this is the Alembic Config object
 config = context.config
 
-# Construct the database URL (note the postgresql+asyncpg://)
+# Construct the database URL
 database_url = f"postgresql+asyncpg://{os.getenv('POSTGRES_USER')}:{os.getenv('POSTGRES_PASSWORD')}@{os.getenv('POSTGRES_SERVER')}:{os.getenv('POSTGRES_PORT')}/{os.getenv('POSTGRES_DB')}"
-
 config.set_main_option("sqlalchemy.url", database_url)
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 target_metadata = Base.metadata
+
+
+def get_connect_args():
+    if ENV == "prod":
+        ssl_context = ssl.create_default_context()
+        ssl_context.check_hostname = False
+        ssl_context.verify_mode = ssl.CERT_NONE
+        return {"ssl": ssl_context}
+    return {}
 
 
 def do_run_migrations(connection: Connection) -> None:
@@ -47,9 +72,11 @@ async def run_async_migrations() -> None:
     """In this scenario we need to create an Engine
     and associate a connection with the context.
     """
+    configuration = config.get_section(config.config_ini_section, {})
+    configuration["connect_args"] = get_connect_args()
 
     connectable = async_engine_from_config(
-        config.get_section(config.config_ini_section, {}),
+        configuration,
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
     )
@@ -63,11 +90,14 @@ async def run_async_migrations() -> None:
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode."""
     url = config.get_main_option("sqlalchemy.url")
+
+    # Include connect_args in offline mode too
     context.configure(
         url=url,
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
+        connect_args=get_connect_args(),
     )
 
     with context.begin_transaction():
