@@ -26,7 +26,7 @@ async def get_education_levels(db: AsyncSession = Depends(get_db)):
             error=str(e),
             error_type=type(e).__name__,
         )
-        if "connection" in str(e).lower():
+        if isinstance(e, ConnectionError) or "connection" in str(e).lower():
             raise HTTPException(
                 status_code=503,
                 detail="Database connection error. Please try again later.",
