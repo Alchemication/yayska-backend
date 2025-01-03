@@ -1,4 +1,5 @@
 import socket
+import ssl
 
 import structlog
 from pydantic import PostgresDsn
@@ -40,13 +41,16 @@ class Settings(BaseSettings):
 
     @property
     def get_db_connect_args(self) -> dict:
-        """Get database connection arguments based on environment."""
+        """Get database connection arguments based on environment (for async)."""
+        connect_args = {"timeout": 10.0}  # Base timeout for all environments
+
         if self.ENVIRONMENT == "prod":
-            return {
-                "timeout": 10.0,
-                "ssl": True,
-            }
-        return {"timeout": 10.0}
+            ssl_context = ssl.create_default_context()
+            ssl_context.check_hostname = False
+            ssl_context.verify_mode = ssl.CERT_NONE
+            connect_args.update({"ssl": ssl_context})
+
+        return connect_args
 
     @property
     def get_sync_db_connect_args(self) -> dict:
