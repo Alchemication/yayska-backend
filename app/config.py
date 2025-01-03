@@ -1,7 +1,6 @@
 import socket
 
 import structlog
-from pydantic import PostgresDsn
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 logger = structlog.get_logger()
@@ -61,18 +60,22 @@ class Settings(BaseSettings):
         return self.POSTGRES_SERVER
 
     @property
-    def DATABASE_URI(self) -> PostgresDsn:
+    def DATABASE_URI(self) -> str:
         """Builds database URI dynamically."""
-        resolved_host = self._resolve_db_host()
-
-        return PostgresDsn.build(
-            scheme="postgresql+asyncpg",
-            username=self.POSTGRES_USER,
-            password=self.POSTGRES_PASSWORD,
-            host=resolved_host,
-            port=int(self.POSTGRES_PORT),
-            path=self.POSTGRES_DB,
-        )
+        if self.ENVIRONMENT == "prod":
+            # For production, use the full connection string format
+            endpoint_id = self.POSTGRES_SERVER.split(".")[0]
+            return (
+                f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@"
+                f"{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
+                f"?options=-c%20endpoint={endpoint_id}"
+            )
+        else:
+            # For local development
+            return (
+                f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@"
+                f"{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
+            )
 
     # Optional: Add a method to load .env file only in local development
     @classmethod
