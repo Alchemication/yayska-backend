@@ -21,8 +21,6 @@ for var in env_vars_to_clear:
     if var in os.environ:
         del os.environ[var]
 
-# Load environment variables based on ENVIRONMENT
-
 env_file = Path(".env")
 load_dotenv(env_file, override=True)
 ENV = os.getenv("ENVIRONMENT", "local")

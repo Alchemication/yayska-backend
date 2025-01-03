@@ -14,8 +14,8 @@ load_dotenv()
 
 logger = structlog.get_logger()
 
-# Define allowed origins based on DEBUG setting
-CORS_ORIGINS = ["*"] if settings.DEBUG else ["https://yayska-frontend.vercel.app"]
+# Define allowed origins
+CORS_ORIGINS = ["http://localhost:3000", "https://yayska-frontend.vercel.app"]
 
 
 @asynccontextmanager
