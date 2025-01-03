@@ -1,8 +1,6 @@
 import structlog
-from asyncpg.exceptions import PostgresConnectionError
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from sqlalchemy import text
-from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
@@ -14,33 +12,14 @@ router = APIRouter()
 
 @router.get("/education-levels")
 async def get_education_levels(db: AsyncSession = Depends(get_db)):
-    try:
-        query = text("""
-            SELECT id, level_name
-            FROM education_levels
-            ORDER BY id
-        """)
-        result = await db.execute(query)
-        return {"education_levels": [dict(row) for row in result.mappings()]}
-    except (SQLAlchemyError, PostgresConnectionError) as e:
-        logger.error(
-            "Database error",
-            error=str(e),
-            error_type=type(e).__name__,
-        )
-        raise HTTPException(
-            status_code=503, detail="Database connection error. Please try again later."
-        )
-    except Exception as e:
-        logger.error(
-            "Unexpected error",
-            error=str(e),
-            error_type=type(e).__name__,
-        )
-        raise HTTPException(
-            status_code=500,
-            detail="An unexpected error occurred. Please try again later.",
-        )
+    """Get education levels."""
+    query = text("""
+        SELECT id, level_name
+        FROM education_levels
+        ORDER BY id
+    """)
+    result = await db.execute(query)
+    return {"education_levels": [dict(row) for row in result.mappings()]}
 
 
 @router.get("/education-levels/{level_id}/years")
