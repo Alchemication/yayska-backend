@@ -74,6 +74,12 @@ class Settings(BaseSettings):
             path=self.POSTGRES_DB,
         )
 
+    @property
+    def SYNC_DATABASE_URI(self) -> str:
+        """Builds synchronous database URI."""
+        resolved_host = self._resolve_db_host()
+        return f"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{resolved_host}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
+
     # Optional: Add a method to load .env file only in local development
     @classmethod
     def load_from_env_file(cls):
