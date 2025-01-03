@@ -10,10 +10,7 @@ from app.config import settings
 engine = create_async_engine(
     str(settings.DATABASE_URI),
     echo=settings.ENVIRONMENT == "local",
-    connect_args={
-        **settings.get_db_connect_args,
-        "timeout": 10.0,  # Connection timeout in seconds
-    },
+    connect_args=settings.get_db_connect_args,
     # Remove pool settings for serverless environment
     # pool_size=5,
     # max_overflow=10,

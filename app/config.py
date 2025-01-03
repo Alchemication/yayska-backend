@@ -1,6 +1,5 @@
 import socket
 import ssl
-from functools import lru_cache
 
 import structlog
 from pydantic import PostgresDsn
@@ -43,12 +42,15 @@ class Settings(BaseSettings):
     @property
     def get_db_connect_args(self) -> dict:
         """Get database connection arguments based on environment (for async)."""
+        connect_args = {"timeout": 10.0}  # Base timeout for all environments
+
         if self.ENVIRONMENT == "prod":
             ssl_context = ssl.create_default_context()
             ssl_context.check_hostname = False
             ssl_context.verify_mode = ssl.CERT_NONE
-            return {"ssl": ssl_context}
-        return {}
+            connect_args.update({"ssl": ssl_context})
+
+        return connect_args
 
     @property
     def get_sync_db_connect_args(self) -> dict:
@@ -57,25 +59,25 @@ class Settings(BaseSettings):
             return {"sslmode": "require"}
         return {}
 
-    @lru_cache()
     def _resolve_db_host(self) -> str:
         """Resolve database hostname to IP address."""
         if self.ENVIRONMENT == "prod":
             try:
                 return socket.gethostbyname(self.POSTGRES_SERVER)
             except Exception as e:
-                logger.error(f"Failed to resolve database hostname: {str(e)}")
+                print(f"DNS resolution failed: {e}")
                 return self.POSTGRES_SERVER
         return self.POSTGRES_SERVER
 
     @property
     def DATABASE_URI(self) -> PostgresDsn:
         """Builds database URI dynamically."""
+        resolved_host = self._resolve_db_host()
         return PostgresDsn.build(
             scheme="postgresql+asyncpg",
             username=self.POSTGRES_USER,
             password=self.POSTGRES_PASSWORD,
-            host=self._resolve_db_host(),  # Use resolved IP
+            host=resolved_host,
             port=int(self.POSTGRES_PORT),
             path=self.POSTGRES_DB,
         )
