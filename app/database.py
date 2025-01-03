@@ -23,7 +23,21 @@ def get_connect_args():
         ssl_context = ssl.create_default_context()
         ssl_context.check_hostname = False
         ssl_context.verify_mode = ssl.CERT_NONE
-        connect_args["ssl"] = ssl_context
+        connect_args.update(
+            {
+                "ssl": ssl_context,
+                "server_settings": {
+                    "application_name": "fastapi_app",
+                    "client_encoding": "utf8",
+                },
+            }
+        )
+
+        # Add Neon-specific parameters
+        if settings.NEON_ENDPOINT_ID:
+            connect_args["server_settings"]["neon.endpoint_id"] = (
+                settings.NEON_ENDPOINT_ID
+            )
 
     return connect_args
 

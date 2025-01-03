@@ -63,12 +63,10 @@ class Settings(BaseSettings):
     def DATABASE_URI(self) -> str:
         """Builds database URI dynamically."""
         if self.ENVIRONMENT == "prod":
-            # For production, use the full connection string format
-            endpoint_id = self.POSTGRES_SERVER.split(".")[0]
+            # For production, use the full connection string format without options
             return (
                 f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@"
                 f"{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
-                f"?options=-c%20endpoint={endpoint_id}"
             )
         else:
             # For local development
@@ -76,6 +74,13 @@ class Settings(BaseSettings):
                 f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@"
                 f"{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
             )
+
+    @property
+    def NEON_ENDPOINT_ID(self) -> str:
+        """Extract Neon endpoint ID from server name."""
+        if self.ENVIRONMENT == "prod":
+            return self.POSTGRES_SERVER.split(".")[0]
+        return ""
 
     # Optional: Add a method to load .env file only in local development
     @classmethod
