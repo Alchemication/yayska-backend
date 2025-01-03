@@ -2,17 +2,20 @@ from collections.abc import AsyncGenerator
 
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.pool import NullPool
 
 from app.config import settings
 
 # Create engine with appropriate configuration
 engine = create_async_engine(
-    str(settings.DATABASE_URI),  # Convert PostgresDsn to string
-    echo=settings.ENVIRONMENT == "local",  # Enable SQL echo only in local
+    str(settings.DATABASE_URI),
+    echo=settings.ENVIRONMENT == "local",
     connect_args=settings.get_db_connect_args,
-    pool_size=5,
-    max_overflow=10,
-    pool_timeout=30,
+    # Remove pool settings for serverless environment
+    # pool_size=5,
+    # max_overflow=10,
+    # pool_timeout=30,
+    poolclass=NullPool,  # Use NullPool for serverless
     pool_pre_ping=True,
 )
 
