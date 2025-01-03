@@ -29,11 +29,11 @@ engine = create_async_engine(
     poolclass=NullPool,
     connect_args={
         "ssl": get_ssl_context(),
-        "timeout": 30,  # Increased timeout
+        "timeout": 30,
         "command_timeout": 30,
         "server_settings": {
-            "statement_timeout": "30000",  # 30 seconds
-            "idle_in_transaction_session_timeout": "30000",  # 30 seconds
+            "statement_timeout": "30000",
+            "idle_in_transaction_session_timeout": "30000",
         },
     },
 )
@@ -50,24 +50,22 @@ class Base(DeclarativeBase):
 
 
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
-    retries = 3
-    retry_delay = 1  # seconds
-
-    for attempt in range(retries):
+    for attempt in range(3):  # 3 retries
         try:
             session = AsyncSessionLocal()
             try:
                 yield session
                 await session.commit()
-            except Exception:
+            except Exception as e:
                 await session.rollback()
+                logger.error(f"Database error during transaction: {str(e)}")
                 raise
             finally:
                 await session.close()
             break  # Success, exit the retry loop
         except Exception as e:
             logger.error(f"Database connection attempt {attempt + 1} failed: {str(e)}")
-            if attempt == retries - 1:  # Last attempt
+            if attempt == 2:  # Last attempt
                 logger.error("All database connection attempts failed")
                 raise
-            await asyncio.sleep(retry_delay)  # Wait before retrying
+            await asyncio.sleep(1)  # Wait 1 second before retrying
