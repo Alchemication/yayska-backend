@@ -1,7 +1,12 @@
+import socket
 import ssl
+from functools import lru_cache
 
+import structlog
 from pydantic import PostgresDsn
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+logger = structlog.get_logger()
 
 
 class Settings(BaseSettings):
@@ -52,6 +57,17 @@ class Settings(BaseSettings):
             return {"sslmode": "require"}
         return {}
 
+    @lru_cache()
+    def _resolve_db_host(self) -> str:
+        """Resolve database hostname to IP address."""
+        if self.ENVIRONMENT == "prod":
+            try:
+                return socket.gethostbyname(self.POSTGRES_SERVER)
+            except Exception as e:
+                logger.error(f"Failed to resolve database hostname: {str(e)}")
+                return self.POSTGRES_SERVER
+        return self.POSTGRES_SERVER
+
     @property
     def DATABASE_URI(self) -> PostgresDsn:
         """Builds database URI dynamically."""
@@ -59,7 +75,7 @@ class Settings(BaseSettings):
             scheme="postgresql+asyncpg",
             username=self.POSTGRES_USER,
             password=self.POSTGRES_PASSWORD,
-            host=self.POSTGRES_SERVER,
+            host=self._resolve_db_host(),  # Use resolved IP
             port=int(self.POSTGRES_PORT),
             path=self.POSTGRES_DB,
         )

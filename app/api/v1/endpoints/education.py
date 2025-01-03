@@ -1,12 +1,11 @@
-import logging
-
+import structlog
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
 
-logger = logging.getLogger(__name__)
+logger = structlog.get_logger()
 
 router = APIRouter()
 
@@ -22,7 +21,10 @@ async def get_education_levels(db: AsyncSession = Depends(get_db)):
         result = await db.execute(query)
         return {"education_levels": [dict(row) for row in result.mappings()]}
     except Exception as e:
-        logger.error(f"Database connection error: {str(e)}", exc_info=True)
+        logger.error(
+            "Database connection error",
+            error=str(e),
+        )
         raise HTTPException(
             status_code=503, detail="Database connection error. Please try again later."
         )
