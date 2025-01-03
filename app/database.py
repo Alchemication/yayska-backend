@@ -12,14 +12,31 @@ from app.config import settings
 logger = logging.getLogger(__name__)
 
 
-def get_ssl_context():
-    """Create SSL context for database connection"""
+def get_connect_args():
+    """Get connection arguments including Neon.tech specific settings"""
+    connect_args = {
+        "timeout": 30,
+        "command_timeout": 30,
+    }
+
     if settings.ENVIRONMENT == "prod":
+        # Create SSL context
         ssl_context = ssl.create_default_context()
         ssl_context.check_hostname = False
         ssl_context.verify_mode = ssl.CERT_NONE
-        return ssl_context
-    return None
+
+        connect_args.update(
+            {
+                "ssl": ssl_context,
+                "server_settings": {
+                    "endpoint": settings.POSTGRES_SERVER.split(".")[
+                        0
+                    ]  # Extract endpoint ID
+                },
+            }
+        )
+
+    return connect_args
 
 
 # Create engine with specific configuration for serverless
@@ -27,11 +44,7 @@ engine = create_async_engine(
     str(settings.DATABASE_URI),
     echo=settings.ENVIRONMENT == "local",
     poolclass=NullPool,
-    connect_args={
-        "ssl": get_ssl_context(),
-        "timeout": 30,
-        "command_timeout": 30,
-    },
+    connect_args=get_connect_args(),
 )
 
 AsyncSessionLocal = async_sessionmaker(

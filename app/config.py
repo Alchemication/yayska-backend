@@ -65,17 +65,6 @@ class Settings(BaseSettings):
         """Builds database URI dynamically."""
         resolved_host = self._resolve_db_host()
 
-        # Extract endpoint ID from the host (first part of the Neon domain)
-        endpoint_id = (
-            self.POSTGRES_SERVER.split(".")[0] if self.ENVIRONMENT == "prod" else None
-        )
-
-        query_params = {}
-        if self.ENVIRONMENT == "prod":
-            query_params["options"] = f"endpoint={endpoint_id}"
-
-        query_string = "&".join(f"{k}={v}" for k, v in query_params.items())
-
         return PostgresDsn.build(
             scheme="postgresql+asyncpg",
             username=self.POSTGRES_USER,
@@ -83,7 +72,6 @@ class Settings(BaseSettings):
             host=resolved_host,
             port=int(self.POSTGRES_PORT),
             path=self.POSTGRES_DB,
-            query=query_string if query_params else None,
         )
 
     # Optional: Add a method to load .env file only in local development
