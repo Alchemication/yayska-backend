@@ -42,7 +42,6 @@ class Base(DeclarativeBase):
     pass
 
 
-# Dependency
 # Dependency with retries
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
     for attempt in range(3):  # Try 3 times
