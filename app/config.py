@@ -1,36 +1,16 @@
-import os
 import ssl
-from pathlib import Path
 
 from pydantic import PostgresDsn
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-# Clear any existing env vars before loading new ones
-env_vars_to_clear = [
-    "POSTGRES_SERVER",
-    "POSTGRES_USER",
-    "POSTGRES_PASSWORD",
-    "POSTGRES_DB",
-    "POSTGRES_PORT",
-    "ENVIRONMENT",
-]
-
-for var in env_vars_to_clear:
-    if var in os.environ:
-        del os.environ[var]
-
-# Load environment file with override
-ENV = os.getenv("ENVIRONMENT", "local")
-env_file = Path(".env")
-if env_file.exists():
-    from dotenv import load_dotenv
-
-    load_dotenv(env_file, override=True)
-
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file=".env", env_file_encoding="utf-8", case_sensitive=True, extra="ignore"
+        case_sensitive=True,
+        extra="ignore",
+        # Remove env_file configuration so it only uses environment variables
+        # env_file=".env",
+        # env_file_encoding="utf-8",
     )
 
     # App Settings
@@ -84,6 +64,21 @@ class Settings(BaseSettings):
             path=self.POSTGRES_DB,
         )
 
+    # Optional: Add a method to load .env file only in local development
+    @classmethod
+    def load_from_env_file(cls):
+        """Load settings from .env file in local development."""
+        import os
+        from pathlib import Path
 
-# Force settings reload by creating a new instance
-settings = Settings()
+        from dotenv import load_dotenv
+
+        if os.getenv("ENVIRONMENT") != "prod":
+            env_file = Path(".env")
+            if env_file.exists():
+                load_dotenv(env_file, override=True)
+        return cls()
+
+
+# Use the conditional loading
+settings = Settings.load_from_env_file()
