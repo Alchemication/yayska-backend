@@ -64,6 +64,8 @@ class Settings(BaseSettings):
     def DATABASE_URI(self) -> PostgresDsn:
         """Builds database URI dynamically."""
         resolved_host = self._resolve_db_host()
+        query = "sslmode=require" if self.ENVIRONMENT == "prod" else ""
+
         return PostgresDsn.build(
             scheme="postgresql+asyncpg",
             username=self.POSTGRES_USER,
@@ -71,6 +73,7 @@ class Settings(BaseSettings):
             host=resolved_host,
             port=int(self.POSTGRES_PORT),
             path=self.POSTGRES_DB,
+            query=query,
         )
 
     # Optional: Add a method to load .env file only in local development
