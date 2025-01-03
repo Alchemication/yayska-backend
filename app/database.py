@@ -12,8 +12,7 @@ engine = create_async_engine(
     echo=settings.ENVIRONMENT == "local",
     connect_args={
         **settings.get_db_connect_args,
-        "command_timeout": 5,  # 5 seconds timeout
-        "statement_timeout": 10000,  # 10 seconds timeout
+        "timeout": 10.0,  # Connection timeout in seconds
     },
     # Remove pool settings for serverless environment
     # pool_size=5,
