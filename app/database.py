@@ -3,6 +3,7 @@ import ssl
 from typing import AsyncGenerator
 
 import asyncpg
+from sqlalchemy import text  # Add this import
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.pool import NullPool
@@ -61,8 +62,8 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
         try:
             async with AsyncSessionLocal() as session:
                 try:
-                    # Test the connection with a simple query
-                    await session.execute("SELECT 1")
+                    # Test the connection with a simple query using text()
+                    await session.execute(text("SELECT 1"))
                     yield session
                     await session.commit()
                     break
