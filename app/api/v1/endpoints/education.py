@@ -1,6 +1,8 @@
 import structlog
+from asyncpg.exceptions import PostgresConnectionError
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import text
+from sqlalchemy.exc import OperationalError, SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
@@ -20,19 +22,24 @@ async def get_education_levels(db: AsyncSession = Depends(get_db)):
         """)
         result = await db.execute(query)
         return {"education_levels": [dict(row) for row in result.mappings()]}
-    except Exception as e:
+    except (SQLAlchemyError, PostgresConnectionError, OperationalError) as e:
         logger.error(
             "Database error",
             error=str(e),
             error_type=type(e).__name__,
         )
-        if isinstance(e, ConnectionError) or "connection" in str(e).lower():
-            raise HTTPException(
-                status_code=503,
-                detail="Database connection error. Please try again later.",
-            )
         raise HTTPException(
-            status_code=500, detail="An error occurred while processing your request."
+            status_code=503, detail="Database connection error. Please try again later."
+        )
+    except Exception as e:
+        logger.error(
+            "Unexpected error",
+            error=str(e),
+            error_type=type(e).__name__,
+        )
+        raise HTTPException(
+            status_code=500,
+            detail="An unexpected error occurred. Please try again later.",
         )
 
 

@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import ssl
 from typing import AsyncGenerator
@@ -28,7 +29,12 @@ engine = create_async_engine(
     poolclass=NullPool,
     connect_args={
         "ssl": get_ssl_context(),
-        "timeout": 10,
+        "timeout": 30,  # Increased timeout
+        "command_timeout": 30,
+        "server_settings": {
+            "statement_timeout": "30000",  # 30 seconds
+            "idle_in_transaction_session_timeout": "30000",  # 30 seconds
+        },
     },
 )
 
@@ -44,13 +50,24 @@ class Base(DeclarativeBase):
 
 
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
-    session = AsyncSessionLocal()
-    try:
-        yield session
-        await session.commit()
-    except Exception as e:
-        await session.rollback()
-        logger.error(f"Database error: {str(e)}")
-        raise
-    finally:
-        await session.close()
+    retries = 3
+    retry_delay = 1  # seconds
+
+    for attempt in range(retries):
+        try:
+            session = AsyncSessionLocal()
+            try:
+                yield session
+                await session.commit()
+            except Exception:
+                await session.rollback()
+                raise
+            finally:
+                await session.close()
+            break  # Success, exit the retry loop
+        except Exception as e:
+            logger.error(f"Database connection attempt {attempt + 1} failed: {str(e)}")
+            if attempt == retries - 1:  # Last attempt
+                logger.error("All database connection attempts failed")
+                raise
+            await asyncio.sleep(retry_delay)  # Wait before retrying

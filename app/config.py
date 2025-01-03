@@ -64,6 +64,18 @@ class Settings(BaseSettings):
     def DATABASE_URI(self) -> PostgresDsn:
         """Builds database URI dynamically."""
         resolved_host = self._resolve_db_host()
+        query = {
+            "prepared_statement_cache_size": "0",  # Disable prepared statement cache
+            "pool_pre_ping": "true",
+        }
+        if self.ENVIRONMENT == "prod":
+            query.update(
+                {
+                    "application_name": "fastapi_app",
+                }
+            )
+
+        query_string = "&".join(f"{k}={v}" for k, v in query.items())
 
         return PostgresDsn.build(
             scheme="postgresql+asyncpg",
@@ -72,6 +84,7 @@ class Settings(BaseSettings):
             host=resolved_host,
             port=int(self.POSTGRES_PORT),
             path=self.POSTGRES_DB,
+            query=query_string,
         )
 
     # Optional: Add a method to load .env file only in local development
