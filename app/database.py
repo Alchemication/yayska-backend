@@ -1,40 +1,65 @@
+import asyncio
 import logging
-from typing import Generator
+import ssl
+from typing import AsyncGenerator
 
-from sqlalchemy import create_engine
-from sqlalchemy.orm import DeclarativeBase, sessionmaker
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.pool import NullPool
 
 from app.config import settings
 
 logger = logging.getLogger(__name__)
 
-# Create synchronous engine
-engine = create_engine(
-    settings.SYNC_DATABASE_URI,
-    pool_pre_ping=True,
-    pool_size=5,
-    max_overflow=0,
+
+def get_ssl_context():
+    """Create SSL context for database connection"""
+    if settings.ENVIRONMENT == "prod":
+        ssl_context = ssl.create_default_context()
+        ssl_context.check_hostname = False
+        ssl_context.verify_mode = ssl.CERT_NONE
+        return ssl_context
+    return None
+
+
+# Create engine with specific configuration for serverless
+engine = create_async_engine(
+    str(settings.DATABASE_URI),
+    echo=settings.ENVIRONMENT == "local",
+    poolclass=NullPool,
     connect_args={
-        "connect_timeout": 10,
-        "sslmode": "require" if settings.ENVIRONMENT == "prod" else None,
+        "ssl": get_ssl_context(),
+        "timeout": 30,
+        "command_timeout": 30,
     },
 )
 
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+AsyncSessionLocal = async_sessionmaker(
+    engine,
+    class_=AsyncSession,
+    expire_on_commit=False,
+)
 
 
 class Base(DeclarativeBase):
     pass
 
 
-def get_db() -> Generator:
-    db = SessionLocal()
-    try:
-        yield db
-        db.commit()
-    except Exception as e:
-        logger.error(f"Database error: {e}")
-        db.rollback()
-        raise
-    finally:
-        db.close()
+async def get_db() -> AsyncGenerator[AsyncSession, None]:
+    for attempt in range(3):
+        try:
+            async with AsyncSessionLocal() as session:
+                try:
+                    yield session
+                    await session.commit()
+                except Exception as e:
+                    await session.rollback()
+                    logger.error(f"Database error: {str(e)}")
+                    raise
+                break  # Success, exit the retry loop
+        except Exception as e:
+            logger.error(f"Database connection attempt {attempt + 1} failed: {str(e)}")
+            if attempt == 2:  # Last attempt
+                logger.error("All database connection attempts failed")
+                raise
+            await asyncio.sleep(1)  # Wait before retrying
