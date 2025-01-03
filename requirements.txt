@@ -212,4 +212,4 @@ watchfiles==1.0.3
 websockets==14.1
     # via uvicorn
 yarl==1.18.3
-    # via aiohttp
+neon-postgres-driver
