@@ -9,7 +9,6 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from app.api.v1.router import api_router
 from app.config import settings
-from app.database import get_connection_pool
 
 # Load .env file before importing settings
 load_dotenv()
@@ -34,16 +33,6 @@ CORS_ORIGINS = ["http://localhost:3000", "https://yayska-frontend.vercel.app"]
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logger.info("Starting up FastAPI application")
-    if settings.ENVIRONMENT == "local":
-        try:
-            # Test database connection only in local environment
-            pool = await get_connection_pool()
-            async with pool.acquire() as conn:
-                version = await conn.fetchval("SELECT version();")
-                logger.info(f"Connected to PostgreSQL: {version}")
-            await pool.close()
-        except Exception as e:
-            logger.error(f"Failed to connect to database: {e}")
     yield
     logger.info("Shutting down FastAPI application")
 
