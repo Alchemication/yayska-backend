@@ -84,15 +84,8 @@ alembic upgrade head
 
 # Import initial curriculum data
 python -m app.scripts.import_master_data
-
-# (Optionally generate) and import further curriculum data
-# python -m app.scripts.generate_learning_outcomes
 python -m app.scripts.import_learning_outcomes
-
-# python -m app.scripts.generate_concepts
 python -m app.scripts.import_concepts
-
-# python -m app.scripts.generate_concept_metadata
 python -m app.scripts.import_concept_metadata
 ```
 
@@ -158,6 +151,16 @@ from app.config import settings
 
 # Access settings
 print(settings.ANTHROPIC_API_KEY)
+```
+
+## Deployment
+
+Pushing to the `main` branch will deploy the latest changes to the production environment (in Vercel).
+
+Remember to update requirements.txt file with the latest dependencies, as Vercel uses it to install dependencies:
+
+```bash
+uv pip compile pyproject.toml -o requirements.txt
 ```
 
 ## Database Schema Structure
