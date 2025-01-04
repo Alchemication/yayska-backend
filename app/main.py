@@ -39,10 +39,15 @@ CORS_ORIGINS = (
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    """Lifespan context manager for FastAPI application."""
     logger.info("Starting up FastAPI application")
-    FastAPICache.init(InMemoryBackend())
-    yield
-    logger.info("Shutting down FastAPI application")
+    # Initialize cache before yielding
+    FastAPICache.init(InMemoryBackend(), prefix="fastapi-cache")
+    try:
+        yield
+    finally:
+        # Clean up if needed
+        logger.info("Shutting down FastAPI application")
 
 
 app = FastAPI(
