@@ -1,5 +1,6 @@
 import structlog
 from fastapi import APIRouter, Depends
+from fastapi_cache.decorator import cache
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -11,6 +12,7 @@ router = APIRouter()
 
 
 @router.get("/education-levels")
+@cache(expire=600)  # Cache for 10 minutes (600 seconds)
 async def get_education_levels(db: AsyncSession = Depends(get_db)):
     """Get education levels."""
     query = text("""
@@ -23,6 +25,7 @@ async def get_education_levels(db: AsyncSession = Depends(get_db)):
 
 
 @router.get("/education-levels/{level_id}/years")
+@cache(expire=600)  # Cache for 10 minutes (600 seconds)
 async def get_school_years(level_id: int, db: AsyncSession = Depends(get_db)) -> dict:
     """Get school years for a specific education level."""
     query = text("""

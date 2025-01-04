@@ -1,3 +1,4 @@
+import os
 from contextlib import asynccontextmanager
 
 import structlog
@@ -5,6 +6,8 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi_cache import FastAPICache
+from fastapi_cache.backends.inmemory import InMemoryBackend
 from sqlalchemy.exc import SQLAlchemyError
 
 from app.api.v1.router import api_router
@@ -27,12 +30,17 @@ class AppException(Exception):
 
 
 # Define allowed origins
-CORS_ORIGINS = ["http://localhost:3000", "https://yayska-frontend.vercel.app"]
+CORS_ORIGINS = (
+    ["*"]
+    if os.getenv("ENVIRONMENT") == "local"
+    else ["https://yayska-frontend.vercel.app"]
+)
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logger.info("Starting up FastAPI application")
+    FastAPICache.init(InMemoryBackend())
     yield
     logger.info("Shutting down FastAPI application")
 
