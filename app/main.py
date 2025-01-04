@@ -6,8 +6,6 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from fastapi_cache import FastAPICache
-from fastapi_cache.backends.inmemory import InMemoryBackend
 from sqlalchemy.exc import SQLAlchemyError
 
 from app.api.v1.router import api_router
@@ -41,8 +39,8 @@ CORS_ORIGINS = (
 async def lifespan(app: FastAPI):
     """Lifespan context manager for FastAPI application."""
     logger.info("Starting up FastAPI application")
-    # Initialize cache before yielding
-    FastAPICache.init(InMemoryBackend(), prefix="fastapi-cache")
+    # Initialize cache before yielding (remove in serverless)
+    # FastAPICache.init(InMemoryBackend(), prefix="fastapi-cache")
     try:
         yield
     finally:

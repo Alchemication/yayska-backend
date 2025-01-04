@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends
-from fastapi_cache.decorator import cache
+
+# from fastapi_cache.decorator import cache
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -9,7 +10,7 @@ router = APIRouter()
 
 
 @router.get("/subjects/{year_id}/learning_paths")
-@cache(expire=300)  # Cache for 5 minutes (300 seconds)
+# @cache(expire=300)  # Cache for 5 minutes (300 seconds)
 async def get_subject_learning_paths(
     year_id: int, db: AsyncSession = Depends(get_db)
 ) -> dict:
