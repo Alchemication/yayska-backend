@@ -88,177 +88,80 @@
     "subjects": [
         {
             "id": 1,
+            "area_id": 1,
+            "subject_name": "English",
+            "introduction_year_id": 1,
+            "is_core": true
+        },
+        {
+            "id": 2,
+            "area_id": 1,
+            "subject_name": "Gaeilge",
+            "introduction_year_id": 1,
+            "is_core": true
+        },
+        {
+            "id": 3,
             "area_id": 2,
-            "subject_name": "Mathematics"
-        }
-    ],
-    "strands": [
-        {
-            "id": 1,
-            "subject_id": 1,
-            "strand_name": "Number"
-        },
-        {
-            "id": 2,
-            "subject_id": 1,
-            "strand_name": "Algebra"
-        },
-        {
-            "id": 3,
-            "subject_id": 1,
-            "strand_name": "Shape and Space"
+            "subject_name": "Mathematics",
+            "introduction_year_id": 1,
+            "is_core": true
         },
         {
             "id": 4,
-            "subject_id": 1,
-            "strand_name": "Measures"
+            "area_id": 3,
+            "subject_name": "History",
+            "introduction_year_id": 1,
+            "is_core": true
         },
         {
             "id": 5,
-            "subject_id": 1,
-            "strand_name": "Data"
-        }
-    ],
-    "strand_units": [
-        {
-            "id": 1,
-            "strand_id": 1,
-            "unit_name": "Counting and numeration"
-        },
-        {
-            "id": 2,
-            "strand_id": 1,
-            "unit_name": "Comparing and ordering"
-        },
-        {
-            "id": 3,
-            "strand_id": 1,
-            "unit_name": "Place value"
-        },
-        {
-            "id": 4,
-            "strand_id": 1,
-            "unit_name": "Operations - Addition"
-        },
-        {
-            "id": 5,
-            "strand_id": 1,
-            "unit_name": "Operations - Subtraction"
+            "area_id": 3,
+            "subject_name": "Geography",
+            "introduction_year_id": 1,
+            "is_core": true
         },
         {
             "id": 6,
-            "strand_id": 1,
-            "unit_name": "Operations - Multiplication"
+            "area_id": 3,
+            "subject_name": "Science",
+            "introduction_year_id": 1,
+            "is_core": true
         },
         {
             "id": 7,
-            "strand_id": 1,
-            "unit_name": "Operations - Division"
+            "area_id": 4,
+            "subject_name": "Visual Arts",
+            "introduction_year_id": 1,
+            "is_core": true
         },
         {
             "id": 8,
-            "strand_id": 1,
-            "unit_name": "Fractions"
+            "area_id": 4,
+            "subject_name": "Music",
+            "introduction_year_id": 1,
+            "is_core": true
         },
         {
             "id": 9,
-            "strand_id": 1,
-            "unit_name": "Decimals"
+            "area_id": 4,
+            "subject_name": "Drama",
+            "introduction_year_id": 1,
+            "is_core": true
         },
         {
             "id": 10,
-            "strand_id": 1,
-            "unit_name": "Percentages"
+            "area_id": 5,
+            "subject_name": "Physical Education",
+            "introduction_year_id": 1,
+            "is_core": true
         },
         {
             "id": 11,
-            "strand_id": 1,
-            "unit_name": "Number theory"
-        },
-        {
-            "id": 12,
-            "strand_id": 2,
-            "unit_name": "Extending patterns"
-        },
-        {
-            "id": 13,
-            "strand_id": 2,
-            "unit_name": "Number patterns and sequences"
-        },
-        {
-            "id": 14,
-            "strand_id": 2,
-            "unit_name": "Number sentences and equations"
-        },
-        {
-            "id": 15,
-            "strand_id": 3,
-            "unit_name": "2-D shapes"
-        },
-        {
-            "id": 16,
-            "strand_id": 3,
-            "unit_name": "3-D shapes"
-        },
-        {
-            "id": 17,
-            "strand_id": 3,
-            "unit_name": "Lines and angles"
-        },
-        {
-            "id": 18,
-            "strand_id": 3,
-            "unit_name": "Symmetry"
-        },
-        {
-            "id": 19,
-            "strand_id": 3,
-            "unit_name": "Position and direction"
-        },
-        {
-            "id": 20,
-            "strand_id": 4,
-            "unit_name": "Length"
-        },
-        {
-            "id": 21,
-            "strand_id": 4,
-            "unit_name": "Area"
-        },
-        {
-            "id": 22,
-            "strand_id": 4,
-            "unit_name": "Weight"
-        },
-        {
-            "id": 23,
-            "strand_id": 4,
-            "unit_name": "Capacity"
-        },
-        {
-            "id": 24,
-            "strand_id": 4,
-            "unit_name": "Time"
-        },
-        {
-            "id": 25,
-            "strand_id": 4,
-            "unit_name": "Money"
-        },
-        {
-            "id": 26,
-            "strand_id": 5,
-            "unit_name": "Recognising and interpreting data"
-        },
-        {
-            "id": 27,
-            "strand_id": 5,
-            "unit_name": "Representing and interpreting data"
-        },
-        {
-            "id": 28,
-            "strand_id": 5,
-            "unit_name": "Chance"
+            "area_id": 6,
+            "subject_name": "Social, Personal and Health Education",
+            "introduction_year_id": 1,
+            "is_core": true
         }
     ]
 }

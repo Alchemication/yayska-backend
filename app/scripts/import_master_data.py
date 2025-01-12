@@ -25,11 +25,7 @@ TABLES_LOAD_ORDER = [
     "school_years",
     "curriculum_areas",
     "subjects",
-    "strands",
-    "strand_units",
-    "learning_outcomes",
     "concepts",
-    "quizzes",
     "concept_metadata",
 ]
 

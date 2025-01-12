@@ -165,25 +165,43 @@ uv pip compile pyproject.toml -o requirements.txt
 
 ## Database Schema Structure
 
-### Educational Progress Path
+### Core Educational Structure
 
 ```
 education_levels
      └── school_years
-          └── learning_outcomes
-               └── concepts
-                    └── (quizzes & concept_metadata)
+          └── concepts
+               └── concept_metadata
 ```
 
-### Curriculum Structure Path
+### Curriculum Organization
 
 ```
 curriculum_areas
-     └── subjects
-          └── strands
-               └── strand_units
-                    └── learning_outcomes
+     └── subjects (with introduction_year_id linking to school_years)
+          └── concepts
 ```
+
+### User Management
+
+```
+users
+     └── events (user activity tracking)
+```
+
+### Key Relationships
+
+- Concepts are linked to both subjects and school_years
+- Subjects are associated with curriculum_areas and have an introduction year
+- Each concept can have detailed metadata (concept_metadata)
+- User actions are tracked through the events table
+
+### Notable Changes from Previous Schema
+
+- Removed strands, strand_units, and learning_outcomes tables
+- Added events table for user activity tracking
+- Concepts now link directly to subjects and school years
+- Added comprehensive user management structure
 
 ## Concept Metadata
 

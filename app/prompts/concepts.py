@@ -2,55 +2,69 @@ from pydantic import BaseModel, Field
 
 
 class Concept(BaseModel):
-    """Represents a single concept for a specific year level."""
+    """Represents a key milestone or concept that parents should monitor."""
 
-    learning_outcome_id: int = Field(..., description="Provided Learning Outcome ID")
-    concept_name: str = Field(..., description="Cannonical concept name")
+    subject_id: int = Field(..., description="Subject ID")
+    year_id: int = Field(..., description="School Year ID")
+    concept_name: str = Field(..., description="Clear, parent-friendly concept name")
     concept_description: str = Field(
-        ..., description="Short concept description, easy to understand"
+        ..., description="Brief, jargon-free description for parents"
     )
-    complexity_level: int = Field(
-        ...,
-        ge=1,
-        le=5,
-        description="""Complexity level from 1-5, where 1 is the simplest and 5 is 
-            typically extremely complex for the age group""",
+    learning_objectives: list[str] = Field(
+        ..., description="Key skills or understanding the child should demonstrate"
+    )
+    display_order: int = Field(
+        ..., description="Suggested order within the year's curriculum"
+    )
+    strand_reference: str = Field(
+        ..., description="Optional reference to curriculum strand for teachers"
     )
 
 
 class ConceptsResponse(BaseModel):
-    """Represents the complete response from the LLM for generating concepts."""
+    """Represents the complete response for generating year-level concepts."""
 
     reasoning: str = Field(
-        ...,
-        description="Concise explanation of progression logic and developmental considerations",
+        ..., description="Explanation of how concepts build through the year"
     )
-    concepts: list[Concept] = Field(..., description="List of concepts")
+    concepts: list[Concept] = Field(..., description="List of key concepts")
 
 
 system_prompt = """
-You are an expert in breaking down educational learning outcomes into specific, teachable concepts.
-Your task is to identify key concepts that will be presented in an educational app for parents to support their child's learning.
-Each concept should be clear, engaging, and practical.
+You are an expert in making the Irish primary curriculum accessible to parents.
+Your role is to identify the absolute essential concepts that parents should track in their child's learning journey.
 
-Provide your response in JSON format with reasoning and structured concepts.
+Key principles:
+1. Less is more - focus only on major milestone concepts
+2. Each concept should represent a significant leap in understanding
+3. Concepts should be observable at home
+4. Focus on foundational skills that impact future learning
+5. Consider concepts that might cause learning difficulties
+
+Remember: Parents should be able to keep all concepts in mind without feeling overwhelmed.
 """
 
 user_prompt = """
-Generate concepts for:
+Generate the essential concepts parents should monitor for:
 - Education Level: Primary
-- Curriculum Area: {area_name}
 - Subject: {subject_name}
-- Strand: {strand_name}
-- Strand Unit: {unit_name}
-- Learning Outcome: {outcome_description}
-- Learning Outcome ID: {outcome_id}
+- Subject ID: {subject_id}
+- Year: {year_name}
 
-Generate a list of specific concepts that will be presented in the app. Each concept should be:
-- Specific and measurable
-- Appropriate for the year level
-- Clearly related to the learning outcome
-- Suitable for interactive learning
-- Engaging for both parents and children
-- Occassionaly fun and entertaining
+Specific Requirements:
+1. Number of Concepts:
+   - Junior/Senior Infants: 3-4 concepts
+   - 1st/2nd Class: 4-5 concepts
+   - 3rd/4th Class: 5-6 concepts
+   - 5th/6th Class: 6-7 concepts
+
+2. Each concept must be:
+   - A major milestone (not a small stepping stone)
+   - Observable through everyday activities
+   - Potentially challenging for some students
+
+3. Focus on answering:
+   - What MUST a {year_name} student understand in {subject_name}?
+   - How can parents observe and support this learning?
+   - What might be challenging for students?
 """
