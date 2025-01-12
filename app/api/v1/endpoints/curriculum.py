@@ -18,58 +18,56 @@ async def get_subject_learning_paths(
         SELECT 
             s.id as subject_id,
             s.subject_name,
-            su.id as unit_id,
-            su.unit_name,
-            lo.id as outcome_id,
-            lo.outcome_description,
-            lo.complexity_level,
             c.id as concept_id,
             c.concept_name,
-            c.concept_description
-        FROM learning_outcomes lo
-        JOIN school_years sy ON sy.id = lo.year_id 
-        JOIN strand_units su ON su.id = lo.unit_id
-        JOIN strands str ON str.id = su.strand_id
-        JOIN subjects s ON s.id = str.subject_id
-        JOIN concepts c ON c.outcome_id = lo.id
-        WHERE sy.id = :year_id
-        ORDER BY s.subject_name, lo.complexity_level, su.unit_name
+            c.concept_description,
+            c.learning_objectives,
+            c.display_order,
+            cm.difficulty_stats->>'level' as complexity_level
+        FROM concepts c
+        JOIN subjects s ON s.id = c.subject_id
+        LEFT JOIN concept_metadata cm ON cm.concept_id = c.id
+        WHERE c.year_id = :year_id
+        ORDER BY s.id, c.id 
     """)
 
     result = await db.execute(query, {"year_id": year_id})
 
-    learning_paths = {}
+    subjects = {}
     for row in result.mappings():
         subject_id = row["subject_id"]
-        if subject_id not in learning_paths:
-            learning_paths[subject_id] = {
+        if subject_id not in subjects:
+            subjects[subject_id] = {
                 "id": subject_id,
-                "subject_name": row["subject_name"],
-                "learning_goals": {},
+                "name": row["subject_name"],
+                "concepts": [],
             }
 
-        unit_id = row["unit_id"]
-        if unit_id not in learning_paths[subject_id]["learning_goals"]:
-            learning_paths[subject_id]["learning_goals"][unit_id] = {
-                "id": unit_id,
-                "topic": row["unit_name"],
-                "what_child_will_learn": row["outcome_description"],
-                "complexity_level": row["complexity_level"],
-                "complexity_description": get_complexity_description(
-                    row["complexity_level"]
-                ),
-                "key_concepts": [],
-            }
+        complexity_level = (
+            int(row["complexity_level"]) if row["complexity_level"] else 1
+        )
 
-        learning_paths[subject_id]["learning_goals"][unit_id]["key_concepts"].append(
+        subjects[subject_id]["concepts"].append(
             {
                 "id": row["concept_id"],
                 "name": row["concept_name"],
                 "description": row["concept_description"],
+                "complexity": {
+                    "level": complexity_level,
+                    "description": get_complexity_description(complexity_level),
+                },
+                "learning_objectives": row["learning_objectives"]
+                if row["learning_objectives"]
+                else [],
+                "display_order": row["display_order"],
             }
         )
 
-    return {"subjects": list(learning_paths.values())}
+    response = []
+    for subject in subjects.values():
+        response.append(subject)
+
+    return {"subjects": response}
 
 
 def get_complexity_description(level: int) -> str:
