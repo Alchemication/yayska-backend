@@ -1,4 +1,6 @@
-# Yayska Backend
+# Yayska - Parent's Guide to School Success
+
+Know more. Help better.
 
 ## What is Yayska?
 
@@ -82,9 +84,8 @@ docker compose logs -f db
 # Apply all migrations
 alembic upgrade head
 
-# Import initial curriculum data
+# Import initial curriculum data (subjects, concepts, concept_metadata)
 python -m app.scripts.import_master_data
-python -m app.scripts.import_learning_outcomes
 python -m app.scripts.import_concepts
 python -m app.scripts.import_concept_metadata
 ```

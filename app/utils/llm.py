@@ -10,6 +10,7 @@ from langchain.prompts import ChatPromptTemplate
 from langchain_anthropic import ChatAnthropic
 from langchain_community.cache import SQLiteCache
 from pydantic_core import ValidationError
+from tqdm import tqdm
 
 from app.config import settings
 
@@ -82,7 +83,7 @@ def batch_process_with_llm(
     response_type: type[T],
     system_prompt: str,
     user_prompt: str,
-    chunk_size: int = 5,
+    chunk_size: int = 10,
 ) -> list[T]:
     """Process data in batches using LLM with retry logic.
 
@@ -99,7 +100,7 @@ def batch_process_with_llm(
     chunks = [data[i : i + chunk_size] for i in range(0, len(data), chunk_size)]
     responses = []
 
-    for chunk in chunks:
+    for chunk in tqdm(chunks):
         validation_error = False
         for attempt in range(3):
             try:
