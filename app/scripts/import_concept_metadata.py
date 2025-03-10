@@ -1,20 +1,18 @@
 """Script to import concept metadata into the database.
 
-This script loads predefined concept metadata from a JSON file into the concept_metadata table.
+This script loads generated concept metadata from a JSON file into the concept_metadata table.
 """
 
 import json
-import logging
 from pathlib import Path
 from typing import Any
 
 from tqdm import tqdm
 
 from app.utils.db import batch_insert, get_engine, load_json_data, truncate_table
+from app.utils.logger import get_logger
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 def prepare_metadata_records(data: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -24,23 +22,40 @@ def prepare_metadata_records(data: list[dict[str, Any]]) -> list[dict[str, Any]]
         data: Raw data from JSON file
 
     Returns:
-        list[dict[str, Any]]: List of prepared concept metadata records
+        List of prepared concept metadata records
     """
     records = []
     for record in tqdm(data, desc="Preparing concept metadata"):
-        records.append(
-            {
-                "concept_id": record["concept_id"],
-                "why_important": json.dumps(record["why_important"]),
-                "difficulty_stats": json.dumps(record["difficulty_stats"]),
-                "parent_guide": json.dumps(record["parent_guide"]),
-                "real_world": json.dumps(record["real_world"]),
-                "learning_path": json.dumps(record["learning_path"]),
-                "time_guide": json.dumps(record["time_guide"]),
-                "assessment_approaches": json.dumps(record["assessment_approaches"]),
-                "irish_language_support": json.dumps(record["irish_language_support"]),
-            }
-        )
+        for concept in record.get("concepts", []):
+            concept_id = concept["concept_id"]
+
+            for tag in concept.get("tags", []):
+                records.append(
+                    {
+                        "concept_id": concept_id,
+                        "metadata_type": "tag",
+                        "metadata_value": tag,
+                    }
+                )
+
+            if "prerequisites" in concept:
+                records.append(
+                    {
+                        "concept_id": concept_id,
+                        "metadata_type": "prerequisites",
+                        "metadata_value": json.dumps(concept["prerequisites"]),
+                    }
+                )
+
+            if "follow_ups" in concept:
+                records.append(
+                    {
+                        "concept_id": concept_id,
+                        "metadata_type": "follow_ups",
+                        "metadata_value": json.dumps(concept["follow_ups"]),
+                    }
+                )
+
     return records
 
 
@@ -52,22 +67,23 @@ def main() -> None:
 
         # Load JSON data
         json_path = Path(__file__).parents[2] / "app" / "data" / "concept_metadata.json"
-        logger.info("Loading concept metadata data from JSON file...")
+        logger.info("Loading concept metadata from JSON file", path=str(json_path))
         data = load_json_data(json_path)
 
         # Truncate existing data
-        logger.info("Truncating existing concept metadata data...")
+        logger.info("Truncating existing concept metadata")
         truncate_table(engine, "concept_metadata")
 
         # Prepare and insert records
-        logger.info("Preparing and inserting concept metadata data...")
+        logger.info("Preparing and inserting concept metadata")
         records = prepare_metadata_records(data)
+        logger.info("Inserting concept metadata records", count=len(records))
         batch_insert(engine, "concept_metadata", records)
 
         logger.info("Concept metadata import completed successfully")
 
     except Exception as e:
-        logger.error("Failed to import concept metadata: %s", str(e))
+        logger.error("Failed to import concept metadata", error=str(e))
         raise
 
 

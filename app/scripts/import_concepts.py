@@ -1,21 +1,19 @@
 """Script to import concepts into the database.
 
-This script loads predefined concepts from a JSON file into the concepts table.
+This script loads generated concepts from a JSON file into the concepts table.
 It follows a specific order to maintain referential integrity and truncates existing
 data before loading new data.
 """
 
-import logging
 from pathlib import Path
 from typing import Any
 
 from tqdm import tqdm
 
 from app.utils.db import batch_insert, get_engine, load_json_data, truncate_table
+from app.utils.logger import get_logger
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 def prepare_concept_records(data: list[dict[str, Any]]) -> list[dict[str, Any]]:

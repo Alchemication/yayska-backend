@@ -36,6 +36,7 @@ class Settings(BaseSettings):
     # Model Names
     ANTHROPIC_CLAUDE_3_5_HAIKU: str = "claude-3-5-haiku-20241022"
     ANTHROPIC_CLAUDE_3_5_SONNET: str = "claude-3-5-sonnet-20241022"
+    ANTHROPIC_CLAUDE_3_7_SONNET: str = "claude-3-7-sonnet-20250219"
 
     @property
     def get_db_connect_args(self) -> dict:
@@ -86,15 +87,14 @@ class Settings(BaseSettings):
     @classmethod
     def load_from_env_file(cls):
         """Load settings from .env file in local development."""
-        import os
         from pathlib import Path
 
         from dotenv import load_dotenv
 
-        if os.getenv("ENVIRONMENT") != "prod":
-            env_file = Path(".env")
-            if env_file.exists():
-                load_dotenv(env_file, override=True)
+        # Always load .env file if it exists
+        env_file = Path(".env")
+        if env_file.exists():
+            load_dotenv(env_file, override=True)
         return cls()
 
 

@@ -6,18 +6,17 @@ data before loading new data.
 """
 
 import json
-import logging
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 from sqlalchemy import create_engine, text
 from sqlalchemy.exc import SQLAlchemyError
 
 from app.config import settings
+from app.utils.db import load_json_data
+from app.utils.logger import get_logger
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 # Table loading order to maintain referential integrity
 TABLES_LOAD_ORDER = [
@@ -30,18 +29,18 @@ TABLES_LOAD_ORDER = [
 ]
 
 
-def load_json_data() -> Dict[str, Any]:
+def load_json_data() -> dict[str, Any]:
     """Load master data from JSON file.
 
     Returns:
-        Dict[str, Any]: Dictionary containing the master data
+        Dictionary containing the master data
     """
     json_path = Path(__file__).parents[2] / "app" / "data" / "master_data.json"
     try:
         with open(json_path, "r", encoding="utf-8") as file:
             return json.load(file)
     except FileNotFoundError:
-        logger.error("Master data file not found: %s", json_path)
+        logger.error("Master data file not found", path=str(json_path))
         raise
     except json.JSONDecodeError:
         logger.error("Invalid JSON format in master data file")
@@ -62,13 +61,13 @@ def truncate_tables(engine: Any) -> None:
         for table in reversed(TABLES_LOAD_ORDER):
             try:
                 conn.execute(text(f"TRUNCATE TABLE {table} RESTART IDENTITY CASCADE"))
-                logger.info("Truncated table: %s", table)
+                logger.info("Truncated table", table=table)
             except SQLAlchemyError as e:
-                logger.error("Error truncating table %s: %s", table, str(e))
+                logger.error("Error truncating table", table=table, error=str(e))
                 raise
 
 
-def insert_data(engine: Any, data: Dict[str, Any]) -> None:
+def insert_data(engine: Any, data: dict[str, Any]) -> None:
     """Insert data into tables in the correct order.
 
     Args:
@@ -78,7 +77,7 @@ def insert_data(engine: Any, data: Dict[str, Any]) -> None:
     with engine.begin() as conn:
         for table in TABLES_LOAD_ORDER:
             if table not in data:
-                logger.warning("No data found for table: %s", table)
+                logger.warning("No data found for table", table=table)
                 continue
 
             table_data = data[table]
@@ -106,15 +105,19 @@ def insert_data(engine: Any, data: Dict[str, Any]) -> None:
                 try:
                     conn.execute(text(insert_query), param_dict)
                 except SQLAlchemyError as e:
-                    logger.error("Error inserting data into %s: %s", table, str(e))
+                    logger.error(
+                        "Error inserting data into table", table=table, error=str(e)
+                    )
                     raise
+
+        logger.info("Data insertion completed for all tables")
 
 
 def get_sync_database_url() -> str:
     """Convert async database URL to sync format.
 
     Returns:
-        str: Synchronous database URL
+        Synchronous database URL
     """
     # Replace async driver with sync driver
     return str(settings.DATABASE_URI).replace("postgresql+asyncpg://", "postgresql://")
@@ -129,21 +132,21 @@ def main() -> None:
         )
 
         # Load JSON data
-        logger.info("Loading master data from JSON file...")
+        logger.info("Loading master data from JSON file")
         data = load_json_data()
 
         # Truncate existing data
-        logger.info("Truncating existing data...")
+        logger.info("Truncating existing data")
         truncate_tables(engine)
 
         # Insert new data
-        logger.info("Inserting new data...")
+        logger.info("Inserting new data")
         insert_data(engine, data)
 
         logger.info("Master data initialization completed successfully")
 
     except Exception as e:
-        logger.error("Failed to initialize master data: %s", str(e))
+        logger.error("Failed to initialize master data", error=str(e))
         raise
 
 

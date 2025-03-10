@@ -1,7 +1,5 @@
 import asyncio
-import importlib
 import os
-import pkgutil
 import ssl
 from logging.config import fileConfig
 from pathlib import Path
@@ -13,12 +11,6 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from alembic import context
 from app.database import Base
-
-# Import all SQLAlchemy models dynamically
-models_pkg = importlib.import_module("app.models")
-for _, name, _ in pkgutil.iter_modules(models_pkg.__path__):
-    if name.endswith("_model"):
-        importlib.import_module(f"app.models.{name}")
 
 # Clear any existing env vars that might interfere
 env_vars_to_clear = [

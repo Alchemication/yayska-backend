@@ -3,6 +3,10 @@ from contextlib import asynccontextmanager
 
 import structlog
 from dotenv import load_dotenv
+
+# Load .env file before importing app modules
+load_dotenv(override=True)
+
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -10,10 +14,6 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from app.api.v1.router import api_router
 from app.config import settings
-
-# Load .env file before importing settings
-load_dotenv()
-
 
 logger = structlog.get_logger()
 

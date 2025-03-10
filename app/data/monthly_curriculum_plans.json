@@ -1,0 +1,1968 @@
+[
+  {
+    "year_name": "Junior Infants",
+    "year_id": 1,
+    "monthly_plans": [
+      {
+        "month": "September",
+        "focus": "Settling into school and developing foundational social and communication skills.",
+        "rationale": "The first month focuses on helping children adjust to the school environment and establish basic routines, while building essential social and language skills that will support all future learning.",
+        "concepts": {
+          "essential": [
+            47,
+            335,
+            336,
+            185
+          ],
+          "important": [
+            39,
+            113,
+            267,
+            373,
+            75,
+            298
+          ],
+          "supplementary": [
+            1,
+            112,
+            149,
+            225,
+            337
+          ]
+        }
+      },
+      {
+        "month": "October",
+        "focus": "Exploring our senses and developing early literacy foundations.",
+        "rationale": "October builds on initial adjustment by introducing foundational literacy concepts and sensory exploration, which are critical building blocks for future learning across all subjects.",
+        "concepts": {
+          "essential": [
+            37,
+            38,
+            298,
+            304
+          ],
+          "important": [
+            186,
+            226,
+            262,
+            299,
+            374,
+            150
+          ],
+          "supplementary": [
+            2,
+            114,
+            227,
+            300,
+            375
+          ]
+        }
+      },
+      {
+        "month": "November",
+        "focus": "Understanding numbers, patterns, and basic mathematical concepts.",
+        "rationale": "November emphasizes early mathematical understanding, which provides essential cognitive frameworks that children will build upon throughout their education.",
+        "concepts": {
+          "essential": [
+            185,
+            186,
+            187
+          ],
+          "important": [
+            112,
+            231,
+            305,
+            76,
+            379,
+            151
+          ],
+          "supplementary": [
+            3,
+            225,
+            269,
+            306,
+            77
+          ]
+        }
+      },
+      {
+        "month": "December",
+        "focus": "Expressing ourselves through creativity and celebrating cultural traditions.",
+        "rationale": "December's focus on creative expression and cultural awareness helps children develop confidence in self-expression while building community connections during the festive season.",
+        "concepts": {
+          "essential": [
+            1,
+            39,
+            77
+          ],
+          "important": [
+            227,
+            232,
+            375,
+            382,
+            82,
+            343
+          ],
+          "supplementary": [
+            2,
+            233,
+            270,
+            381,
+            158
+          ]
+        }
+      },
+      {
+        "month": "January",
+        "focus": "Building early reading skills and understanding time concepts.",
+        "rationale": "January introduces more structured literacy learning and concepts of time, providing children with tools to understand their world and develop independence.",
+        "concepts": {
+          "essential": [
+            38,
+            149,
+            156
+          ],
+          "important": [
+            44,
+            155,
+            192,
+            268,
+            307,
+            344
+          ],
+          "supplementary": [
+            45,
+            157,
+            234,
+            263,
+            345
+          ]
+        }
+      },
+      {
+        "month": "February",
+        "focus": "Developing friendships and understanding relationships.",
+        "rationale": "February emphasizes social development and relationship building, which supports emotional well-being and creates a foundation for collaborative learning.",
+        "concepts": {
+          "essential": [
+            336,
+            343,
+            150
+          ],
+          "important": [
+            3,
+            342,
+            76,
+            118,
+            158,
+            270
+          ],
+          "supplementary": [
+            83,
+            121,
+            233,
+            345,
+            380
+          ]
+        }
+      },
+      {
+        "month": "March",
+        "focus": "Exploring our environment and developing scientific thinking.",
+        "rationale": "March introduces more structured scientific exploration, encouraging children to observe, question and understand the world around them as spring begins.",
+        "concepts": {
+          "essential": [
+            304,
+            299,
+            307
+          ],
+          "important": [
+            113,
+            114,
+            119,
+            151,
+            306,
+            381
+          ],
+          "supplementary": [
+            120,
+            157,
+            300,
+            305,
+            374
+          ]
+        }
+      },
+      {
+        "month": "April",
+        "focus": "Building confidence in language and communication across English and Gaeilge.",
+        "rationale": "April deepens language development in both English and Irish, building vocabulary and communication skills that support learning across all subjects.",
+        "concepts": {
+          "essential": [
+            47,
+            46,
+            81
+          ],
+          "important": [
+            44,
+            75,
+            82,
+            84,
+            342,
+            380
+          ],
+          "supplementary": [
+            45,
+            76,
+            83,
+            234,
+            382
+          ]
+        }
+      },
+      {
+        "month": "May",
+        "focus": "Developing mathematical thinking and problem-solving skills.",
+        "rationale": "May builds on earlier mathematical foundations to develop more complex numerical understanding and introduces practical applications of math concepts.",
+        "concepts": {
+          "essential": [
+            192,
+            193,
+            194
+          ],
+          "important": [
+            187,
+            195,
+            119,
+            263,
+            268,
+            379
+          ],
+          "supplementary": [
+            120,
+            121,
+            269,
+            270,
+            381
+          ]
+        }
+      },
+      {
+        "month": "June",
+        "focus": "Consolidating learning and celebrating growth and achievements.",
+        "rationale": "June provides opportunities to review and reinforce key concepts from throughout the year, while celebrating children's progress and preparing them for continued learning.",
+        "concepts": {
+          "essential": [
+            47,
+            46,
+            192
+          ],
+          "important": [
+            44,
+            45,
+            83,
+            84,
+            157,
+            195
+          ],
+          "supplementary": [
+            121,
+            158,
+            233,
+            234,
+            270,
+            307,
+            345,
+            382
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "year_name": "Senior Infants",
+    "year_id": 2,
+    "monthly_plans": [
+      {
+        "month": "September",
+        "focus": "Building classroom routines and foundational skills for learning and social development.",
+        "rationale": "The first month focuses on establishing routines and developing the essential social and learning skills needed for successful school adjustment, helping children transition smoothly into the school environment.",
+        "concepts": {
+          "essential": [
+            338,
+            188,
+            52,
+            78,
+            264
+          ],
+          "important": [
+            339,
+            340,
+            190,
+            191,
+            301,
+            376,
+            228,
+            4
+          ],
+          "supplementary": [
+            341,
+            115,
+            152,
+            377
+          ]
+        }
+      },
+      {
+        "month": "October",
+        "focus": "Developing early literacy, numeracy, and sensory exploration skills through autumn-themed learning.",
+        "rationale": "October builds on established routines to introduce core academic concepts while using seasonal changes as a context for learning, making abstract concepts more concrete and relevant.",
+        "concepts": {
+          "essential": [
+            40,
+            189,
+            301,
+            312
+          ],
+          "important": [
+            41,
+            79,
+            116,
+            302,
+            229,
+            265,
+            383
+          ],
+          "supplementary": [
+            80,
+            125,
+            153,
+            230,
+            303,
+            5
+          ]
+        }
+      },
+      {
+        "month": "November",
+        "focus": "Strengthening social connections and developing early reading and mathematical skills.",
+        "rationale": "As children become more comfortable in school, November emphasizes building relationships and advancing core literacy and numeracy skills that form the foundation for future learning.",
+        "concepts": {
+          "essential": [
+            41,
+            339,
+            189,
+            78
+          ],
+          "important": [
+            42,
+            190,
+            347,
+            85,
+            266,
+            308,
+            6
+          ],
+          "supplementary": [
+            43,
+            154,
+            230,
+            310,
+            378,
+            13
+          ]
+        }
+      },
+      {
+        "month": "December",
+        "focus": "Celebrating cultural traditions while developing creative expression and language skills.",
+        "rationale": "December uses seasonal celebrations to develop cultural awareness, creative expression, and oral language, providing meaningful contexts for learning during this festive period.",
+        "concepts": {
+          "essential": [
+            52,
+            80,
+            376
+          ],
+          "important": [
+            43,
+            79,
+            229,
+            237,
+            377,
+            5
+          ],
+          "supplementary": [
+            86,
+            159,
+            235,
+            384,
+            14
+          ]
+        }
+      },
+      {
+        "month": "January",
+        "focus": "Reinforcing core literacy and numeracy skills while exploring winter science concepts.",
+        "rationale": "January refocuses on academic fundamentals after the holiday break, using winter themes to explore scientific concepts and strengthen essential literacy and numeracy skills.",
+        "concepts": {
+          "essential": [
+            40,
+            196,
+            312,
+            42
+          ],
+          "important": [
+            48,
+            191,
+            302,
+            310,
+            271,
+            385
+          ],
+          "supplementary": [
+            51,
+            125,
+            160,
+            311,
+            273,
+            11
+          ]
+        }
+      },
+      {
+        "month": "February",
+        "focus": "Developing understanding of relationships, emotions, and early history concepts.",
+        "rationale": "February uses themes of friendship and family to develop emotional intelligence and introduces history concepts through personal timelines, creating meaningful connections to abstract concepts.",
+        "concepts": {
+          "essential": [
+            346,
+            159,
+            42
+          ],
+          "important": [
+            347,
+            153,
+            49,
+            86,
+            272,
+            12
+          ],
+          "supplementary": [
+            348,
+            154,
+            161,
+            162,
+            87,
+            274,
+            386
+          ]
+        }
+      },
+      {
+        "month": "March",
+        "focus": "Exploring Irish culture and developing more advanced literacy and mathematical skills.",
+        "rationale": "March uses St. Patrick's Day and spring themes to deepen cultural awareness while advancing literacy and mathematical concepts, building on previously established foundations.",
+        "concepts": {
+          "essential": [
+            48,
+            80,
+            197
+          ],
+          "important": [
+            49,
+            86,
+            87,
+            199,
+            235,
+            309
+          ],
+          "supplementary": [
+            50,
+            88,
+            161,
+            236,
+            303,
+            384
+          ]
+        }
+      },
+      {
+        "month": "April",
+        "focus": "Developing environmental awareness and advancing reading and writing skills.",
+        "rationale": "April uses spring themes to explore environmental concepts while continuing to build more complex literacy skills, taking advantage of children's growing confidence and abilities.",
+        "concepts": {
+          "essential": [
+            49,
+            124,
+            309
+          ],
+          "important": [
+            50,
+            116,
+            125,
+            303,
+            312,
+            236,
+            385
+          ],
+          "supplementary": [
+            51,
+            126,
+            238,
+            311,
+            387,
+            12
+          ]
+        }
+      },
+      {
+        "month": "May",
+        "focus": "Developing spatial awareness, mapping skills, and more complex mathematical concepts.",
+        "rationale": "May builds on children's growing cognitive abilities to introduce more complex spatial and mathematical concepts, preparing them for the advanced learning expected in the following school year.",
+        "concepts": {
+          "essential": [
+            122,
+            197,
+            123
+          ],
+          "important": [
+            117,
+            198,
+            200,
+            273,
+            311,
+            386
+          ],
+          "supplementary": [
+            126,
+            199,
+            275,
+            89,
+            13,
+            14
+          ]
+        }
+      },
+      {
+        "month": "June",
+        "focus": "Consolidating learning and preparing for transition to the next school year.",
+        "rationale": "June focuses on reviewing and celebrating key learning from the year while developing independence and confidence for the transition to the next class level.",
+        "concepts": {
+          "essential": [
+            350,
+            51,
+            89
+          ],
+          "important": [
+            349,
+            50,
+            88,
+            198,
+            274,
+            387
+          ],
+          "supplementary": [
+            348,
+            162,
+            238,
+            275,
+            14
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "year_name": "First Class",
+    "year_id": 3,
+    "monthly_plans": [
+      {
+        "month": "September",
+        "focus": "Building foundational skills and establishing classroom routines as children transition into First Class.",
+        "rationale": "September focuses on core skills that will support learning throughout the year while helping children adjust to the increased expectations of First Class.",
+        "concepts": {
+          "essential": [
+            201,
+            351,
+            352,
+            56
+          ],
+          "important": [
+            90,
+            91,
+            276,
+            277,
+            313,
+            390,
+            53
+          ],
+          "supplementary": [
+            7,
+            239,
+            240,
+            127,
+            354
+          ]
+        }
+      },
+      {
+        "month": "October",
+        "focus": "Developing literacy skills and exploring the natural world during autumn.",
+        "rationale": "October builds on established routines to deepen literacy skills while using seasonal changes as a context for science and geography learning.",
+        "concepts": {
+          "essential": [
+            53,
+            54,
+            316,
+            129
+          ],
+          "important": [
+            202,
+            315,
+            317,
+            391,
+            240,
+            243,
+            91
+          ],
+          "supplementary": [
+            8,
+            128,
+            166,
+            279,
+            388
+          ]
+        }
+      },
+      {
+        "month": "November",
+        "focus": "Strengthening number sense and exploring local history and geography.",
+        "rationale": "November builds on earlier mathematical foundations while introducing local history concepts that connect children to their community.",
+        "concepts": {
+          "essential": [
+            202,
+            165,
+            127
+          ],
+          "important": [
+            55,
+            92,
+            93,
+            164,
+            166,
+            128,
+            314
+          ],
+          "supplementary": [
+            9,
+            16,
+            241,
+            278,
+            392
+          ]
+        }
+      },
+      {
+        "month": "December",
+        "focus": "Celebrating cultural traditions and developing creative expression.",
+        "rationale": "December leverages seasonal celebrations to explore Irish cultural traditions while developing performance and creative skills.",
+        "concepts": {
+          "essential": [
+            94,
+            243,
+            242,
+            57
+          ],
+          "important": [
+            205,
+            279,
+            388,
+            390,
+            8,
+            18
+          ],
+          "supplementary": [
+            10,
+            19,
+            167,
+            355,
+            392
+          ]
+        }
+      },
+      {
+        "month": "January",
+        "focus": "Introducing new mathematical concepts and developing scientific investigation skills.",
+        "rationale": "January begins with a focus on core academic skills after the holiday break, introducing more complex mathematical concepts and scientific thinking.",
+        "concepts": {
+          "essential": [
+            203,
+            313,
+            314,
+            54
+          ],
+          "important": [
+            56,
+            92,
+            130,
+            315,
+            280,
+            353
+          ],
+          "supplementary": [
+            15,
+            17,
+            131,
+            163,
+            241,
+            389
+          ]
+        }
+      },
+      {
+        "month": "February",
+        "focus": "Developing reading fluency and comprehension while exploring historical concepts.",
+        "rationale": "February builds on earlier literacy work to develop deeper comprehension skills while introducing historical concepts about change over time.",
+        "concepts": {
+          "essential": [
+            53,
+            54,
+            166,
+            167
+          ],
+          "important": [
+            55,
+            93,
+            163,
+            164,
+            242,
+            354,
+            391
+          ],
+          "supplementary": [
+            7,
+            10,
+            131,
+            204,
+            317,
+            392
+          ]
+        }
+      },
+      {
+        "month": "March",
+        "focus": "Exploring Irish culture and traditions while developing mathematical problem-solving skills.",
+        "rationale": "March uses St. Patrick's Day as a context for deepening Irish language and cultural learning while continuing to build mathematical understanding.",
+        "concepts": {
+          "essential": [
+            90,
+            94,
+            204,
+            205
+          ],
+          "important": [
+            56,
+            91,
+            93,
+            203,
+            239,
+            355,
+            390
+          ],
+          "supplementary": [
+            8,
+            18,
+            128,
+            165,
+            278,
+            316
+          ]
+        }
+      },
+      {
+        "month": "April",
+        "focus": "Exploring the natural environment and developing creative expression through various art forms.",
+        "rationale": "April uses spring as a context for environmental learning while developing creative skills across multiple subjects.",
+        "concepts": {
+          "essential": [
+            316,
+            317,
+            388,
+            389
+          ],
+          "important": [
+            129,
+            243,
+            279,
+            315,
+            390,
+            391,
+            57
+          ],
+          "supplementary": [
+            9,
+            16,
+            130,
+            167,
+            204,
+            280
+          ]
+        }
+      },
+      {
+        "month": "May",
+        "focus": "Consolidating mathematical understanding and developing collaborative skills.",
+        "rationale": "May focuses on solidifying key mathematical concepts while developing social and collaborative skills that prepare children for group projects.",
+        "concepts": {
+          "essential": [
+            201,
+            203,
+            204,
+            352
+          ],
+          "important": [
+            16,
+            205,
+            242,
+            277,
+            278,
+            355,
+            392
+          ],
+          "supplementary": [
+            15,
+            17,
+            19,
+            131,
+            167,
+            241,
+            280
+          ]
+        }
+      },
+      {
+        "month": "June",
+        "focus": "Reviewing and celebrating learning achievements while preparing for summer.",
+        "rationale": "June provides opportunities to review and consolidate key learning from the year while celebrating achievements and preparing for the summer break.",
+        "concepts": {
+          "essential": [
+            57,
+            353,
+            354,
+            355
+          ],
+          "important": [
+            10,
+            19,
+            94,
+            167,
+            205,
+            243,
+            280
+          ],
+          "supplementary": [
+            18,
+            131,
+            242,
+            317,
+            392
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "year_name": "Second Class",
+    "year_id": 4,
+    "monthly_plans": [
+      {
+        "month": "September",
+        "focus": "Building foundational skills and establishing classroom routines.",
+        "rationale": "September focuses on transitioning children back to school and establishing core skills that will support learning throughout the year.",
+        "concepts": {
+          "essential": [
+            206,
+            58,
+            356,
+            283
+          ],
+          "important": [
+            60,
+            96,
+            98,
+            210,
+            281,
+            359,
+            395
+          ],
+          "supplementary": [
+            22,
+            61,
+            95,
+            132,
+            168,
+            244,
+            282,
+            318,
+            357,
+            393
+          ]
+        }
+      },
+      {
+        "month": "October",
+        "focus": "Developing reading comprehension and mathematical problem-solving skills.",
+        "rationale": "October builds on established routines to deepen literacy and numeracy skills while introducing seasonal themes.",
+        "concepts": {
+          "essential": [
+            58,
+            207,
+            209,
+            320
+          ],
+          "important": [
+            60,
+            98,
+            135,
+            169,
+            211,
+            319,
+            396
+          ],
+          "supplementary": [
+            21,
+            61,
+            97,
+            134,
+            170,
+            245,
+            284,
+            322,
+            357,
+            394
+          ]
+        }
+      },
+      {
+        "month": "November",
+        "focus": "Strengthening writing skills and exploring historical concepts.",
+        "rationale": "November emphasizes structured writing and historical understanding as children have now settled into the school year rhythm.",
+        "concepts": {
+          "essential": [
+            59,
+            168,
+            207,
+            357
+          ],
+          "important": [
+            60,
+            96,
+            170,
+            171,
+            208,
+            247,
+            322,
+            360
+          ],
+          "supplementary": [
+            20,
+            62,
+            99,
+            133,
+            172,
+            246,
+            285,
+            321,
+            358,
+            397
+          ]
+        }
+      },
+      {
+        "month": "December",
+        "focus": "Developing creative expression and collaborative skills.",
+        "rationale": "December leverages seasonal celebrations to enhance creative and collaborative learning before the winter break.",
+        "concepts": {
+          "essential": [
+            23,
+            61,
+            246,
+            396
+          ],
+          "important": [
+            20,
+            98,
+            172,
+            210,
+            248,
+            285,
+            357,
+            397
+          ],
+          "supplementary": [
+            24,
+            62,
+            99,
+            136,
+            169,
+            244,
+            282,
+            320,
+            360,
+            393
+          ]
+        }
+      },
+      {
+        "month": "January",
+        "focus": "Consolidating number skills and developing scientific investigation.",
+        "rationale": "January provides an opportunity to reinforce core mathematical concepts and introduce scientific investigation after the holiday break.",
+        "concepts": {
+          "essential": [
+            206,
+            209,
+            318,
+            319
+          ],
+          "important": [
+            60,
+            97,
+            134,
+            208,
+            211,
+            247,
+            320,
+            359
+          ],
+          "supplementary": [
+            22,
+            59,
+            95,
+            132,
+            171,
+            245,
+            283,
+            321,
+            356,
+            395
+          ]
+        }
+      },
+      {
+        "month": "February",
+        "focus": "Exploring fractions and developing research skills.",
+        "rationale": "February builds on number work to introduce fractions while developing independent research capabilities.",
+        "concepts": {
+          "essential": [
+            62,
+            208,
+            321,
+            358
+          ],
+          "important": [
+            58,
+            97,
+            133,
+            169,
+            211,
+            244,
+            320,
+            360
+          ],
+          "supplementary": [
+            21,
+            59,
+            99,
+            135,
+            170,
+            246,
+            281,
+            319,
+            356,
+            394
+          ]
+        }
+      },
+      {
+        "month": "March",
+        "focus": "Strengthening Irish language skills and environmental awareness.",
+        "rationale": "March aligns with St. Patrick's Day and spring themes to enhance Irish language learning and environmental understanding.",
+        "concepts": {
+          "essential": [
+            96,
+            98,
+            136,
+            322
+          ],
+          "important": [
+            59,
+            95,
+            132,
+            170,
+            209,
+            248,
+            283,
+            360
+          ],
+          "supplementary": [
+            23,
+            61,
+            97,
+            133,
+            168,
+            245,
+            284,
+            318,
+            359,
+            396
+          ]
+        }
+      },
+      {
+        "month": "April",
+        "focus": "Developing data interpretation and geographical understanding.",
+        "rationale": "April uses spring themes to explore data collection and geographical concepts as children prepare for the final term.",
+        "concepts": {
+          "essential": [
+            133,
+            135,
+            211,
+            322
+          ],
+          "important": [
+            58,
+            97,
+            132,
+            171,
+            210,
+            247,
+            319,
+            356
+          ],
+          "supplementary": [
+            24,
+            60,
+            99,
+            134,
+            172,
+            244,
+            282,
+            320,
+            357,
+            393
+          ]
+        }
+      },
+      {
+        "month": "May",
+        "focus": "Mastering multi-step problems and developing presentation skills.",
+        "rationale": "May consolidates learning across subjects and prepares children to demonstrate their knowledge through presentations and complex problem-solving.",
+        "concepts": {
+          "essential": [
+            61,
+            209,
+            284,
+            321
+          ],
+          "important": [
+            59,
+            95,
+            134,
+            170,
+            207,
+            245,
+            318,
+            359
+          ],
+          "supplementary": [
+            20,
+            62,
+            96,
+            136,
+            169,
+            248,
+            281,
+            319,
+            358,
+            397
+          ]
+        }
+      },
+      {
+        "month": "June",
+        "focus": "Reviewing key concepts and celebrating creative achievements.",
+        "rationale": "June provides time to revisit important concepts from throughout the year while celebrating learning through creative projects.",
+        "concepts": {
+          "essential": [
+            24,
+            62,
+            285,
+            360
+          ],
+          "important": [
+            58,
+            99,
+            136,
+            172,
+            208,
+            248,
+            283,
+            322
+          ],
+          "supplementary": [
+            23,
+            60,
+            98,
+            135,
+            171,
+            246,
+            282,
+            321,
+            357,
+            394
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "year_name": "Third Class",
+    "year_id": 5,
+    "monthly_plans": [
+      {
+        "month": "September",
+        "focus": "Building foundational skills and establishing classroom routines.",
+        "rationale": "The first month focuses on core skills that will support learning throughout the year while helping students transition back to school after summer holidays.",
+        "concepts": {
+          "essential": [
+            63,
+            214,
+            323,
+            361,
+            286
+          ],
+          "important": [
+            212,
+            217,
+            101,
+            105,
+            173,
+            174,
+            251,
+            365
+          ],
+          "supplementary": [
+            28,
+            64,
+            100,
+            137,
+            249,
+            252,
+            289,
+            290,
+            326,
+            363,
+            398,
+            403
+          ]
+        }
+      },
+      {
+        "month": "October",
+        "focus": "Developing critical thinking and exploring seasonal changes.",
+        "rationale": "October builds on established routines to introduce more complex thinking skills, with themes often connected to autumn and Halloween in Irish schools.",
+        "concepts": {
+          "essential": [
+            64,
+            213,
+            325,
+            326,
+            399
+          ],
+          "important": [
+            65,
+            102,
+            138,
+            175,
+            216,
+            254,
+            288,
+            328
+          ],
+          "supplementary": [
+            25,
+            66,
+            103,
+            140,
+            176,
+            250,
+            287,
+            324,
+            362,
+            400,
+            402
+          ]
+        }
+      },
+      {
+        "month": "November",
+        "focus": "Strengthening communication skills and exploring community connections.",
+        "rationale": "November deepens students' ability to express themselves and understand their place in the wider community before the busy December period.",
+        "concepts": {
+          "essential": [
+            65,
+            101,
+            178,
+            363,
+            366
+          ],
+          "important": [
+            67,
+            104,
+            141,
+            177,
+            215,
+            290,
+            327,
+            401
+          ],
+          "supplementary": [
+            26,
+            68,
+            103,
+            139,
+            176,
+            253,
+            291,
+            364,
+            402
+          ]
+        }
+      },
+      {
+        "month": "December",
+        "focus": "Celebrating cultural traditions and collaborative creativity.",
+        "rationale": "December's focus on celebrations provides rich opportunities for cultural learning and creative expression through collaborative projects.",
+        "concepts": {
+          "essential": [
+            105,
+            28,
+            251,
+            366,
+            400
+          ],
+          "important": [
+            27,
+            100,
+            139,
+            178,
+            253,
+            288,
+            290,
+            403
+          ],
+          "supplementary": [
+            29,
+            67,
+            102,
+            142,
+            175,
+            249,
+            252,
+            328,
+            362,
+            398
+          ]
+        }
+      },
+      {
+        "month": "January",
+        "focus": "Developing mathematical thinking and problem-solving strategies.",
+        "rationale": "January provides a fresh start to focus on core mathematical concepts and analytical thinking that will support learning across subjects.",
+        "concepts": {
+          "essential": [
+            212,
+            214,
+            217,
+            324,
+            323
+          ],
+          "important": [
+            63,
+            68,
+            137,
+            173,
+            216,
+            289,
+            325,
+            365
+          ],
+          "supplementary": [
+            64,
+            104,
+            138,
+            174,
+            250,
+            286,
+            327,
+            361,
+            401
+          ]
+        }
+      },
+      {
+        "month": "February",
+        "focus": "Exploring scientific concepts and developing research skills.",
+        "rationale": "February builds on analytical skills to deepen scientific understanding and research capabilities across the curriculum.",
+        "concepts": {
+          "essential": [
+            66,
+            323,
+            324,
+            325,
+            327
+          ],
+          "important": [
+            64,
+            102,
+            138,
+            174,
+            215,
+            254,
+            287,
+            328
+          ],
+          "supplementary": [
+            65,
+            103,
+            140,
+            177,
+            213,
+            250,
+            291,
+            364,
+            402
+          ]
+        }
+      },
+      {
+        "month": "March",
+        "focus": "Celebrating Irish heritage and strengthening language skills.",
+        "rationale": "March, with St. Patrick's Day, provides an ideal context for deepening Irish language skills and cultural understanding.",
+        "concepts": {
+          "essential": [
+            100,
+            101,
+            105,
+            139,
+            178
+          ],
+          "important": [
+            63,
+            102,
+            104,
+            176,
+            251,
+            288,
+            366,
+            399
+          ],
+          "supplementary": [
+            27,
+            65,
+            103,
+            142,
+            175,
+            249,
+            252,
+            326,
+            363,
+            400
+          ]
+        }
+      },
+      {
+        "month": "April",
+        "focus": "Developing creative expression and environmental awareness.",
+        "rationale": "Spring provides rich opportunities to explore environmental themes and express creativity across different media.",
+        "concepts": {
+          "essential": [
+            326,
+            328,
+            253,
+            398,
+            403
+          ],
+          "important": [
+            65,
+            140,
+            175,
+            215,
+            252,
+            286,
+            325,
+            400
+          ],
+          "supplementary": [
+            25,
+            67,
+            103,
+            138,
+            177,
+            214,
+            249,
+            287,
+            327,
+            362,
+            401
+          ]
+        }
+      },
+      {
+        "month": "May",
+        "focus": "Strengthening physical skills and collaborative teamwork.",
+        "rationale": "Better weather in May allows for increased outdoor activities, making it ideal for developing physical skills and team collaboration.",
+        "concepts": {
+          "essential": [
+            286,
+            287,
+            290,
+            291,
+            363
+          ],
+          "important": [
+            28,
+            67,
+            141,
+            214,
+            288,
+            289,
+            365,
+            366
+          ],
+          "supplementary": [
+            26,
+            68,
+            104,
+            142,
+            216,
+            251,
+            323,
+            364,
+            403
+          ]
+        }
+      },
+      {
+        "month": "June",
+        "focus": "Consolidating learning and celebrating achievements.",
+        "rationale": "June provides opportunities to review and celebrate the year's learning while preparing students for the transition to the next class.",
+        "concepts": {
+          "essential": [
+            30,
+            63,
+            214,
+            361,
+            402
+          ],
+          "important": [
+            64,
+            65,
+            101,
+            105,
+            177,
+            178,
+            216,
+            254,
+            290,
+            328
+          ],
+          "supplementary": [
+            27,
+            66,
+            102,
+            139,
+            175,
+            213,
+            249,
+            286,
+            323,
+            363,
+            398
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "year_name": "Fourth Class",
+    "year_id": 6,
+    "monthly_plans": [
+      {
+        "month": "September",
+        "focus": "Building foundational skills and establishing learning routines across all subjects.",
+        "rationale": "The first month focuses on refreshing key skills from Third Class while introducing new concepts that will serve as building blocks for the year ahead.",
+        "concepts": {
+          "essential": [
+            218,
+            69,
+            106,
+            367,
+            329
+          ],
+          "important": [
+            71,
+            109,
+            143,
+            292,
+            331,
+            368,
+            406
+          ],
+          "supplementary": [
+            31,
+            72,
+            107,
+            144,
+            179,
+            219,
+            255,
+            293,
+            330,
+            404
+          ]
+        }
+      },
+      {
+        "month": "October",
+        "focus": "Developing critical thinking skills and deepening subject knowledge.",
+        "rationale": "October builds on September's foundations by introducing more complex concepts and encouraging students to think more critically about their learning.",
+        "concepts": {
+          "essential": [
+            219,
+            70,
+            144,
+            371,
+            332
+          ],
+          "important": [
+            33,
+            73,
+            107,
+            180,
+            220,
+            256,
+            294,
+            405
+          ],
+          "supplementary": [
+            32,
+            74,
+            108,
+            145,
+            181,
+            221,
+            257,
+            295,
+            333,
+            369,
+            407
+          ]
+        }
+      },
+      {
+        "month": "November",
+        "focus": "Applying knowledge to real-world contexts and developing research skills.",
+        "rationale": "November emphasizes practical application of learning and introduces research skills that will be valuable across all subject areas.",
+        "concepts": {
+          "essential": [
+            220,
+            72,
+            181,
+            334,
+            372
+          ],
+          "important": [
+            34,
+            110,
+            146,
+            222,
+            258,
+            296,
+            370
+          ],
+          "supplementary": [
+            35,
+            73,
+            111,
+            147,
+            182,
+            223,
+            259,
+            297,
+            333,
+            408
+          ]
+        }
+      },
+      {
+        "month": "December",
+        "focus": "Consolidating term learning through creative expression and cultural understanding.",
+        "rationale": "December provides opportunities to review and celebrate learning through creative projects while exploring cultural traditions.",
+        "concepts": {
+          "essential": [
+            110,
+            71,
+            260,
+            404
+          ],
+          "important": [
+            36,
+            74,
+            108,
+            183,
+            224,
+            259,
+            369
+          ],
+          "supplementary": [
+            31,
+            73,
+            111,
+            148,
+            184,
+            221,
+            258,
+            295,
+            332,
+            368,
+            409
+          ]
+        }
+      },
+      {
+        "month": "January",
+        "focus": "Developing independent learning skills and introducing new mathematical concepts.",
+        "rationale": "January refreshes skills after the holiday break and introduces new mathematical concepts that will be built upon throughout the term.",
+        "concepts": {
+          "essential": [
+            221,
+            69,
+            111,
+            224,
+            331
+          ],
+          "important": [
+            32,
+            70,
+            109,
+            145,
+            222,
+            255,
+            293,
+            330
+          ],
+          "supplementary": [
+            33,
+            71,
+            107,
+            146,
+            179,
+            223,
+            256,
+            294,
+            332,
+            367,
+            405
+          ]
+        }
+      },
+      {
+        "month": "February",
+        "focus": "Exploring historical connections and developing scientific investigation skills.",
+        "rationale": "February deepens understanding of history and science while continuing to build on core literacy and numeracy skills.",
+        "concepts": {
+          "essential": [
+            180,
+            329,
+            107,
+            222,
+            368
+          ],
+          "important": [
+            34,
+            72,
+            108,
+            182,
+            223,
+            257,
+            296,
+            333
+          ],
+          "supplementary": [
+            35,
+            73,
+            109,
+            147,
+            183,
+            220,
+            258,
+            297,
+            334,
+            370,
+            406
+          ]
+        }
+      },
+      {
+        "month": "March",
+        "focus": "Strengthening Irish language skills and exploring cultural heritage.",
+        "rationale": "March includes St. Patrick's Day, making it an ideal time to focus on Irish language and cultural understanding across subjects.",
+        "concepts": {
+          "essential": [
+            106,
+            110,
+            180,
+            405,
+            370
+          ],
+          "important": [
+            31,
+            108,
+            182,
+            223,
+            257,
+            295,
+            332,
+            372
+          ],
+          "supplementary": [
+            36,
+            71,
+            109,
+            148,
+            184,
+            224,
+            260,
+            294,
+            333,
+            371,
+            407
+          ]
+        }
+      },
+      {
+        "month": "April",
+        "focus": "Developing environmental awareness and sustainable practices.",
+        "rationale": "April includes Earth Day, providing a natural opportunity to focus on environmental topics across subjects while continuing to build core skills.",
+        "concepts": {
+          "essential": [
+            147,
+            332,
+            224,
+            372,
+            70
+          ],
+          "important": [
+            33,
+            72,
+            111,
+            148,
+            221,
+            259,
+            297,
+            334
+          ],
+          "supplementary": [
+            32,
+            74,
+            107,
+            143,
+            181,
+            220,
+            258,
+            296,
+            333,
+            369,
+            408
+          ]
+        }
+      },
+      {
+        "month": "May",
+        "focus": "Integrating learning across subjects through project-based activities.",
+        "rationale": "May encourages students to make connections between different subject areas through integrated projects that demonstrate their learning.",
+        "concepts": {
+          "essential": [
+            72,
+            148,
+            223,
+            371,
+            407
+          ],
+          "important": [
+            35,
+            73,
+            108,
+            183,
+            222,
+            260,
+            294,
+            330
+          ],
+          "supplementary": [
+            36,
+            74,
+            109,
+            144,
+            184,
+            219,
+            256,
+            293,
+            331,
+            368,
+            409
+          ]
+        }
+      },
+      {
+        "month": "June",
+        "focus": "Celebrating achievements and preparing for Fifth Class.",
+        "rationale": "June provides opportunities to consolidate and celebrate the year's learning while preparing students for the transition to Fifth Class.",
+        "concepts": {
+          "essential": [
+            224,
+            74,
+            111,
+            184,
+            372
+          ],
+          "important": [
+            36,
+            73,
+            110,
+            148,
+            223,
+            260,
+            297,
+            334
+          ],
+          "supplementary": [
+            31,
+            70,
+            107,
+            143,
+            179,
+            218,
+            255,
+            292,
+            329,
+            367,
+            404
+          ]
+        }
+      }
+    ]
+  }
+]
