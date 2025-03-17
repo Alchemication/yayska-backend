@@ -183,6 +183,18 @@ curriculum_areas
           └── concepts
 ```
 
+### Monthly Curriculum Planning
+
+The system uses an academic month numbering system where:
+
+- Month 1 = September (start of school year)
+- Month 2 = October
+- ...
+- Month 10 = June (end of school year)
+- Month 0 = Summer (special mode for July/August)
+
+Monthly curriculum plans associate concepts with specific months of the academic year and categorize them by importance (essential, important, supplementary).
+
 ### User Management
 
 ```
