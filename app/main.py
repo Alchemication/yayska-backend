@@ -31,7 +31,11 @@ class AppException(Exception):
 CORS_ORIGINS = (
     ["*"]
     if os.getenv("ENVIRONMENT") == "local"
-    else ["https://yayska-frontend.vercel.app", "https://yayska.ie"]
+    else [
+        "https://yayska-frontend.vercel.app",
+        "https://yayska.ie",
+        "https://yayska.com",
+    ]
 )
 
 
