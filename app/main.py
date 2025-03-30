@@ -14,6 +14,7 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from app.api.v1.router import api_router
 from app.config import settings
+from app.middleware.auth import setup_auth_middleware
 
 logger = structlog.get_logger()
 
@@ -29,7 +30,7 @@ class AppException(Exception):
 
 # Define allowed origins
 CORS_ORIGINS = (
-    ["*"]
+    ["http://localhost:8081"]
     if os.getenv("ENVIRONMENT") == "local"
     else [
         "https://yayska-frontend.vercel.app",
@@ -134,6 +135,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Setup auth middleware (must be after CORS middleware)
+setup_auth_middleware(app)
 
 # Include API router
 app.include_router(api_router, prefix=settings.API_V1_STR)

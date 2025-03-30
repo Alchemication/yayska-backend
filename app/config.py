@@ -10,9 +10,13 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         case_sensitive=True,
         extra="ignore",
-        # Remove env_file configuration so it only uses environment variables
-        # env_file=".env",
-        # env_file_encoding="utf-8",
+        env_file=".env",
+        env_file_encoding="utf-8",
+        env_nested_delimiter="__",
+        env_mapping={
+            "GOOGLE_CLIENT_ID": ["GOOGLE_WEB_CLIENT_ID"],
+            "GOOGLE_CLIENT_SECRET": ["GOOGLE_WEB_CLIENT_SECRET"],
+        },
     )
 
     # App Settings
@@ -22,6 +26,19 @@ class Settings(BaseSettings):
     API_V1_STR: str = "/api/v1"
     PROJECT_NAME: str = "Yayska"
     SECRET_KEY: str
+
+    # JWT Settings
+    JWT_ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_DAYS: int = 365  # Long lived token for best UX
+    REFRESH_TOKEN_EXPIRE_DAYS: int = 730  # 2 years for refresh token
+
+    # OAuth Settings - Google Web
+    GOOGLE_CLIENT_ID: str = ""  # Default fallback to environment variable
+    GOOGLE_CLIENT_SECRET: str = ""
+    GOOGLE_REDIRECT_URI: str = "http://localhost:8081/auth/google/callback"
+    GOOGLE_AUTH_URL: str = "https://accounts.google.com/o/oauth2/auth"
+    GOOGLE_TOKEN_URL: str = "https://oauth2.googleapis.com/token"
+    GOOGLE_USER_INFO_URL: str = "https://www.googleapis.com/oauth2/v1/userinfo"
 
     # PostgreSQL Settings
     POSTGRES_SERVER: str
@@ -83,10 +100,10 @@ class Settings(BaseSettings):
             return self.POSTGRES_SERVER.split(".")[0]
         return ""
 
-    # Optional: Add a method to load .env file only in local development
     @classmethod
     def load_from_env_file(cls):
         """Load settings from .env file in local development."""
+        import os
         from pathlib import Path
 
         from dotenv import load_dotenv
@@ -95,7 +112,20 @@ class Settings(BaseSettings):
         env_file = Path(".env")
         if env_file.exists():
             load_dotenv(env_file, override=True)
-        return cls()
+
+        # Create the settings instance
+        instance = cls()
+
+        # Manually map the web client credentials if they're not set directly
+        if not instance.GOOGLE_CLIENT_ID and os.environ.get("GOOGLE_WEB_CLIENT_ID"):
+            instance.GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_WEB_CLIENT_ID")
+
+        if not instance.GOOGLE_CLIENT_SECRET and os.environ.get(
+            "GOOGLE_WEB_CLIENT_SECRET"
+        ):
+            instance.GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_WEB_CLIENT_SECRET")
+
+        return instance
 
 
 # Use the conditional loading
