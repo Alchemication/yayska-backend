@@ -27,16 +27,22 @@ attrs==24.3.0
 bcrypt==4.2.1
     # via passlib
 cachetools==5.5.0
-    # via yayska (pyproject.toml)
+    # via
+    #   yayska (pyproject.toml)
+    #   google-auth
 certifi==2024.12.14
     # via
     #   httpcore
     #   httpx
     #   requests
+cffi==1.17.1
+    # via cryptography
 charset-normalizer==3.4.1
     # via requests
 click==8.1.8
     # via uvicorn
+cryptography==44.0.2
+    # via python-jose
 dataclasses-json==0.6.7
     # via langchain-community
 defusedxml==0.7.1
@@ -45,6 +51,8 @@ distro==1.9.0
     # via anthropic
 dnspython==2.7.0
     # via email-validator
+ecdsa==0.19.1
+    # via python-jose
 email-validator==2.2.0
     # via pydantic
 fastapi==0.115.6
@@ -57,6 +65,10 @@ frozenlist==1.5.0
     # via
     #   aiohttp
     #   aiosignal
+google-auth==2.38.0
+    # via google-auth-oauthlib
+google-auth-oauthlib==1.2.1
+    # via yayska (pyproject.toml)
 greenlet==3.1.1
     # via sqlalchemy
 h11==0.14.0
@@ -69,6 +81,7 @@ httptools==0.6.4
     # via uvicorn
 httpx==0.28.1
     # via
+    #   yayska (pyproject.toml)
     #   anthropic
     #   langsmith
 httpx-sse==0.4.0
@@ -123,6 +136,8 @@ numpy==1.26.4
     # via
     #   langchain
     #   langchain-community
+oauthlib==3.2.2
+    # via requests-oauthlib
 orjson==3.10.13
     # via langsmith
 packaging==24.2
@@ -139,6 +154,15 @@ propcache==0.2.1
     #   yarl
 psycopg2-binary==2.9.10
     # via yayska (pyproject.toml)
+pyasn1==0.4.8
+    # via
+    #   pyasn1-modules
+    #   python-jose
+    #   rsa
+pyasn1-modules==0.4.1
+    # via google-auth
+pycparser==2.22
+    # via cffi
 pydantic==2.10.4
     # via
     #   yayska (pyproject.toml)
@@ -155,6 +179,8 @@ pydantic-settings==2.7.1
     # via
     #   yayska (pyproject.toml)
     #   langchain-community
+pyjwt==2.10.1
+    # via yayska (pyproject.toml)
 python-dateutil==2.9.0.post0
     # via
     #   pendulum
@@ -164,6 +190,8 @@ python-dotenv==1.0.1
     #   yayska (pyproject.toml)
     #   pydantic-settings
     #   uvicorn
+python-jose==3.4.0
+    # via yayska (pyproject.toml)
 pyyaml==6.0.2
     # via
     #   langchain
@@ -175,11 +203,20 @@ requests==2.32.3
     #   langchain
     #   langchain-community
     #   langsmith
+    #   requests-oauthlib
     #   requests-toolbelt
+requests-oauthlib==2.0.0
+    # via google-auth-oauthlib
 requests-toolbelt==1.0.0
     # via langsmith
+rsa==4.9
+    # via
+    #   google-auth
+    #   python-jose
 six==1.17.0
-    # via python-dateutil
+    # via
+    #   ecdsa
+    #   python-dateutil
 sniffio==1.3.1
     # via
     #   anthropic
