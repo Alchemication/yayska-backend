@@ -26,6 +26,7 @@ dependencies = [
     "google-auth-oauthlib>=1.2.1",
     "pyjwt>=2.10.1",
     "httpx>=0.28.1",
+    "langchain-google-genai>=2.1.5",
 ]
 
 [project.optional-dependencies]

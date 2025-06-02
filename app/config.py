@@ -49,11 +49,7 @@ class Settings(BaseSettings):
 
     # Third Party Services
     ANTHROPIC_API_KEY: str
-
-    # Model Names
-    ANTHROPIC_CLAUDE_3_5_HAIKU: str = "claude-3-5-haiku-20241022"
-    ANTHROPIC_CLAUDE_3_5_SONNET: str = "claude-3-5-sonnet-20241022"
-    ANTHROPIC_CLAUDE_3_7_SONNET: str = "claude-3-7-sonnet-20250219"
+    GEMINI_API_KEY: str
 
     @property
     def get_db_connect_args(self) -> dict:

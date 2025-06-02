@@ -2,12 +2,14 @@
 
 import os
 import time
+from enum import Enum
 from typing import Any, TypeVar
 
 from langchain.globals import set_llm_cache
 from langchain.prompts import ChatPromptTemplate
 from langchain_anthropic import ChatAnthropic
 from langchain_community.cache import SQLiteCache
+from langchain_google_genai import ChatGoogleGenerativeAI
 from pydantic_core import ValidationError
 from tqdm import tqdm
 
@@ -17,6 +19,23 @@ from app.utils.logger import get_logger
 logger = get_logger(__name__)
 
 T = TypeVar("T")
+
+
+class AIPlatform(Enum):
+    ANTHROPIC = "anthropic"
+    GOOGLE = "google"
+
+
+class AnthropicModel(Enum):
+    CLAUDE_HAIKU_3_5 = "claude-3-5-haiku-20241022"
+    CLAUDE_SONNET_3_7 = "claude-3-7-sonnet-20250219"
+    CLAUDE_SONNET_4 = "claude-sonnet-4-20250514"
+
+
+class GoogleModel(Enum):
+    GEMINI_FLASH_2_0 = "gemini-2.0-flash"
+    GEMINI_FLASH_2_5 = "gemini-2.5-flash-preview-05-20"
+    GEMINI_PRO_2_5 = "gemini-2.5-pro-preview-05-06"
 
 
 def setup_llm_cache(cache_name: str) -> None:
@@ -32,6 +51,8 @@ def setup_llm_cache(cache_name: str) -> None:
 
 
 def setup_llm_chain(
+    ai_platform: AIPlatform,
+    ai_model: AnthropicModel | GoogleModel,
     system_prompt: str,
     user_prompt: str,
     response_type: type[T] | None,
@@ -51,13 +72,32 @@ def setup_llm_chain(
         The configured LLM chain
     """
     temperature = 0.1 + (attempt * 0.15) if validation_error else 0.1
-    llm = ChatAnthropic(
-        model=settings.ANTHROPIC_CLAUDE_3_7_SONNET,
-        api_key=settings.ANTHROPIC_API_KEY,
-        temperature=temperature,
-        max_tokens=4096,
-        max_retries=3,
-    )
+    if ai_platform == AIPlatform.ANTHROPIC:
+        # validate model is an Anthropic model
+        if not isinstance(ai_model, AnthropicModel):
+            raise ValueError(f"Invalid Anthropic model: {ai_model}")
+        logger.info("Using Anthropic model", model=ai_model.value)
+        llm = ChatAnthropic(
+            model=ai_model.value,
+            api_key=settings.ANTHROPIC_API_KEY,
+            temperature=temperature,
+            max_tokens=4096,
+            max_retries=3,
+        )
+    elif ai_platform == AIPlatform.GOOGLE:
+        # validate model is a Google model
+        if not isinstance(ai_model, GoogleModel):
+            raise ValueError(f"Invalid Google model: {ai_model}")
+        logger.info("Using Google model", model=ai_model.value)
+        llm = ChatGoogleGenerativeAI(
+            model=ai_model.value,
+            api_key=settings.GEMINI_API_KEY,
+            temperature=temperature,
+            max_tokens=4096,
+            max_retries=3,
+        )
+    else:
+        raise ValueError(f"Invalid AI platform: {ai_platform}")
     if response_type is not None:
         logger.info("Using structured output", response_type=response_type.__name__)
         llm = llm.with_structured_output(response_type)
@@ -71,7 +111,7 @@ def setup_llm_chain(
     )
     logger.debug(
         "LLM chain configured",
-        model=settings.ANTHROPIC_CLAUDE_3_7_SONNET,
+        model=ai_model.value,
         temperature=temperature,
         attempt=attempt,
     )
@@ -79,6 +119,8 @@ def setup_llm_chain(
 
 
 def batch_process_with_llm(
+    ai_platform: AIPlatform,
+    ai_model: AnthropicModel | GoogleModel,
     data: list[dict[str, Any]],
     system_prompt: str,
     user_prompt: str,
@@ -89,6 +131,8 @@ def batch_process_with_llm(
     """Process data in batches using LLM with retry logic.
 
     Args:
+        ai_platform: The AI platform to use
+        ai_model: The AI model to use
         data: List of data items to process
         response_type: The Pydantic model type for structured output or None for unstructured
         system_prompt: The system prompt text
@@ -113,7 +157,13 @@ def batch_process_with_llm(
         for attempt in range(3):
             try:
                 chain = setup_llm_chain(
-                    system_prompt, user_prompt, response_type, attempt, validation_error
+                    ai_platform,
+                    ai_model,
+                    system_prompt,
+                    user_prompt,
+                    response_type,
+                    attempt,
+                    validation_error,
                 )
                 logger.info(
                     "Processing chunk",
@@ -177,6 +227,8 @@ def batch_process_with_llm(
 
 
 def run_with_llm(
+    ai_platform: AIPlatform,
+    ai_model: AnthropicModel | GoogleModel,
     data: dict[str, Any],
     system_prompt: str,
     user_prompt: str,
@@ -185,6 +237,8 @@ def run_with_llm(
     """Run a single prompt through the LLM.
 
     Args:
+        ai_platform: The AI platform to use
+        ai_model: The AI model to use
         data: The data to process
         response_type: The Pydantic model type for structured output or None for unstructured
         system_prompt: The system prompt text
@@ -197,7 +251,13 @@ def run_with_llm(
     for attempt in range(3):
         try:
             chain = setup_llm_chain(
-                system_prompt, user_prompt, response_type, attempt, validation_error
+                ai_platform,
+                ai_model,
+                system_prompt,
+                user_prompt,
+                response_type,
+                attempt,
+                validation_error,
             )
             response = chain.invoke(data)
             if response_type is not None:
