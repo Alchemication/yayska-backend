@@ -19,15 +19,6 @@ logger = get_logger(__name__)
 T = TypeVar("T")
 
 
-def get_sync_database_url() -> str:
-    """Convert async database URL to sync format.
-
-    Returns:
-        Synchronous database URL
-    """
-    return str(settings.DATABASE_URI).replace("postgresql+asyncpg://", "postgresql://")
-
-
 def setup_llm_cache(cache_name: str) -> None:
     """Set up SQLite cache for LLM responses.
 
@@ -41,19 +32,19 @@ def setup_llm_cache(cache_name: str) -> None:
 
 
 def setup_llm_chain(
-    response_type: type[T],
     system_prompt: str,
     user_prompt: str,
+    response_type: type[T] | None,
     attempt: int = 0,
     validation_error: bool = False,
 ) -> Any:
     """Set up the LLM chain with retry logic.
 
     Args:
-        response_type: The Pydantic model type for structured output
         system_prompt: The system prompt text
         user_prompt: The user prompt text or list of prompts
         attempt: Current retry attempt number
+        response_type: The Pydantic model type for structured output (or None for unstructured)
         validation_error: Whether the previous attempt failed due to validation
 
     Returns:
@@ -67,7 +58,11 @@ def setup_llm_chain(
         max_tokens=4096,
         max_retries=3,
     )
-    structured_llm = llm.with_structured_output(response_type)
+    if response_type is not None:
+        logger.info("Using structured output", response_type=response_type.__name__)
+        llm = llm.with_structured_output(response_type)
+    else:
+        logger.info("Using unstructured output (str)")
     template = ChatPromptTemplate.from_messages(
         [
             ("system", system_prompt),
@@ -80,21 +75,22 @@ def setup_llm_chain(
         temperature=temperature,
         attempt=attempt,
     )
-    return template | structured_llm
+    return template | llm
 
 
 def batch_process_with_llm(
     data: list[dict[str, Any]],
-    response_type: type[T],
     system_prompt: str,
-    user_prompt: str | list[str],
+    user_prompt: str,
+    response_type: type[T] | None,
+    max_concurrency: int = 50,
     chunk_size: int = 10,
-) -> list[T]:
+) -> list[T | str]:
     """Process data in batches using LLM with retry logic.
 
     Args:
         data: List of data items to process
-        response_type: The Pydantic model type for structured output
+        response_type: The Pydantic model type for structured output or None for unstructured
         system_prompt: The system prompt text
         user_prompt: The user prompt text or list of prompts
         chunk_size: Size of chunks to process at once
@@ -117,15 +113,20 @@ def batch_process_with_llm(
         for attempt in range(3):
             try:
                 chain = setup_llm_chain(
-                    response_type, system_prompt, user_prompt, attempt, validation_error
+                    system_prompt, user_prompt, response_type, attempt, validation_error
                 )
                 logger.info(
                     "Processing chunk",
                     chunk_idx=chunk_idx + 1,
                     total_chunks=len(chunks),
                 )
-                chunk_responses = chain.batch(chunk, config={"max_concurrency": 50})
-                responses.extend(chunk_responses)
+                chunk_responses = chain.batch(
+                    chunk, config={"max_concurrency": max_concurrency}
+                )
+                if response_type is not None:
+                    responses.extend(chunk_responses)
+                else:
+                    responses.extend([response.content for response in chunk_responses])
                 break
             except (ValidationError, Exception) as e:
                 if isinstance(e, ValidationError):
@@ -176,14 +177,16 @@ def batch_process_with_llm(
 
 
 def run_with_llm(
-    response_type: type[T],
+    data: dict[str, Any],
     system_prompt: str,
     user_prompt: str,
-) -> T:
+    response_type: type[T] | None,
+) -> T | str:
     """Run a single prompt through the LLM.
 
     Args:
-        response_type: The Pydantic model type for structured output
+        data: The data to process
+        response_type: The Pydantic model type for structured output or None for unstructured
         system_prompt: The system prompt text
         user_prompt: The user prompt text
 
@@ -194,10 +197,13 @@ def run_with_llm(
     for attempt in range(3):
         try:
             chain = setup_llm_chain(
-                response_type, system_prompt, user_prompt, attempt, validation_error
+                system_prompt, user_prompt, response_type, attempt, validation_error
             )
-            logger.info("Processing single prompt")
-            return chain.invoke({})
+            response = chain.invoke(data)
+            if response_type is not None:
+                return response
+            else:
+                return response.content
         except (ValidationError, Exception) as e:
             if isinstance(e, ValidationError):
                 validation_error = True
