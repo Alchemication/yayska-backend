@@ -9,7 +9,11 @@ from langchain.globals import set_llm_cache
 from langchain.prompts import ChatPromptTemplate
 from langchain_anthropic import ChatAnthropic
 from langchain_community.cache import SQLiteCache
-from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_google_genai import (
+    ChatGoogleGenerativeAI,
+    HarmBlockThreshold,
+    HarmCategory,
+)
 from pydantic_core import ValidationError
 from tqdm import tqdm
 
@@ -33,9 +37,24 @@ class AnthropicModel(Enum):
 
 
 class GoogleModel(Enum):
+    GEMINI_FLASH_2_0_LITE = "gemini-2.0-flash-lite"
     GEMINI_FLASH_2_0 = "gemini-2.0-flash"
     GEMINI_FLASH_2_5 = "gemini-2.5-flash-preview-05-20"
     GEMINI_PRO_2_5 = "gemini-2.5-pro-preview-05-06"
+
+
+class LLMResponse:
+    """Wrapper class to unify response format and provide token usage tracking."""
+
+    def __init__(
+        self,
+        content: T | str,
+        usage_metadata: dict | None = None,
+        raw_response: Any = None,
+    ):
+        self.content = content
+        self.usage_metadata = usage_metadata or {}
+        self.raw_response = raw_response
 
 
 def setup_llm_cache(cache_name: str) -> None:
@@ -56,6 +75,7 @@ def setup_llm_chain(
     system_prompt: str,
     user_prompt: str,
     response_type: type[T] | None,
+    temperature: float = 0.5,
     attempt: int = 0,
     validation_error: bool = False,
 ) -> Any:
@@ -95,14 +115,23 @@ def setup_llm_chain(
             temperature=temperature,
             max_tokens=4096,
             max_retries=3,
+            safety_settings={
+                HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+                HarmCategory.HARM_CATEGORY_HATE_SPEECH: HarmBlockThreshold.BLOCK_ONLY_HIGH,
+                HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
+                HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: HarmBlockThreshold.BLOCK_NONE,
+            },
         )
     else:
         raise ValueError(f"Invalid AI platform: {ai_platform}")
+
+    # Configure structured output with raw response for token tracking
     if response_type is not None:
         logger.info("Using structured output", response_type=response_type.__name__)
-        llm = llm.with_structured_output(response_type)
+        llm = llm.with_structured_output(response_type, include_raw=True)
     else:
         logger.info("Using unstructured output (str)")
+
     template = ChatPromptTemplate.from_messages(
         [
             ("system", system_prompt),
@@ -118,7 +147,36 @@ def setup_llm_chain(
     return template | llm
 
 
-def batch_process_with_llm(
+def _extract_response_and_usage(
+    response: Any, response_type: type[T] | None
+) -> LLMResponse:
+    """Extract the content and usage metadata from the response.
+
+    Args:
+        response: The raw response from the LLM
+        response_type: The response type (None for unstructured)
+
+    Returns:
+        LLMResponse with unified interface
+    """
+    if response_type is not None:
+        # Structured output with include_raw=True
+        # Response format: {"parsed": <structured_data>, "raw": <AIMessage>, "parsing_error": None}
+        content = response["parsed"]
+        usage_metadata = getattr(response["raw"], "usage_metadata", {})
+        raw_response = response["raw"]
+    else:
+        # Unstructured output - response is AIMessage
+        content = response.content
+        usage_metadata = getattr(response, "usage_metadata", {})
+        raw_response = response
+
+    return LLMResponse(
+        content=content, usage_metadata=usage_metadata, raw_response=raw_response
+    )
+
+
+def llm_batch(
     ai_platform: AIPlatform,
     ai_model: AnthropicModel | GoogleModel,
     data: list[dict[str, Any]],
@@ -127,7 +185,8 @@ def batch_process_with_llm(
     response_type: type[T] | None,
     max_concurrency: int = 50,
     chunk_size: int = 10,
-) -> list[T | str]:
+    temperature: float = 0.5,
+) -> list[LLMResponse]:
     """Process data in batches using LLM with retry logic.
 
     Args:
@@ -140,7 +199,7 @@ def batch_process_with_llm(
         chunk_size: Size of chunks to process at once
 
     Returns:
-        List of processed responses
+        List of LLMResponse objects with unified interface
     """
     chunks = [data[i : i + chunk_size] for i in range(0, len(data), chunk_size)]
     responses = []
@@ -162,6 +221,7 @@ def batch_process_with_llm(
                     system_prompt,
                     user_prompt,
                     response_type,
+                    temperature,
                     attempt,
                     validation_error,
                 )
@@ -173,10 +233,13 @@ def batch_process_with_llm(
                 chunk_responses = chain.batch(
                     chunk, config={"max_concurrency": max_concurrency}
                 )
-                if response_type is not None:
-                    responses.extend(chunk_responses)
-                else:
-                    responses.extend([response.content for response in chunk_responses])
+
+                # Extract content and usage metadata from each response
+                processed_responses = [
+                    _extract_response_and_usage(response, response_type)
+                    for response in chunk_responses
+                ]
+                responses.extend(processed_responses)
                 break
             except (ValidationError, Exception) as e:
                 if isinstance(e, ValidationError):
@@ -226,14 +289,15 @@ def batch_process_with_llm(
     return responses
 
 
-def run_with_llm(
+def llm_invoke(
     ai_platform: AIPlatform,
     ai_model: AnthropicModel | GoogleModel,
     data: dict[str, Any],
     system_prompt: str,
     user_prompt: str,
     response_type: type[T] | None,
-) -> T | str:
+    temperature: float = 0.5,
+) -> LLMResponse:
     """Run a single prompt through the LLM.
 
     Args:
@@ -245,7 +309,7 @@ def run_with_llm(
         user_prompt: The user prompt text
 
     Returns:
-        The processed response
+        LLMResponse with unified interface
     """
     validation_error = False
     for attempt in range(3):
@@ -256,14 +320,12 @@ def run_with_llm(
                 system_prompt,
                 user_prompt,
                 response_type,
+                temperature,
                 attempt,
                 validation_error,
             )
             response = chain.invoke(data)
-            if response_type is not None:
-                return response
-            else:
-                return response.content
+            return _extract_response_and_usage(response, response_type)
         except (ValidationError, Exception) as e:
             if isinstance(e, ValidationError):
                 validation_error = True
@@ -299,6 +361,6 @@ def run_with_llm(
                 attempt=attempt + 1,
                 backoff_seconds=backoff,
                 error=str(e),
-                temperature=0.1 + ((attempt + 1) * 0.15) if validation_error else 0.1,
+                temperature=temperature,
             )
             time.sleep(backoff)

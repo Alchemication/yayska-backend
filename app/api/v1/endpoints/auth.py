@@ -1,13 +1,15 @@
+import json
 import logging
 from datetime import datetime, timezone
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel
 from sqlalchemy import text
 
 from app.database import get_db
 from app.schemas.auth import AuthResponse, GoogleAuthInput, OAuthInput
+from app.schemas.events import Source
 from app.services.auth import (
     blacklist_token,
     blacklist_user_tokens,
@@ -25,6 +27,49 @@ router = APIRouter()
 security = HTTPBearer()
 
 
+async def create_event_record(
+    db, user_id: int, event_type: str, payload: dict = None, request: Request = None
+):
+    """Helper function to create event records"""
+    try:
+        # Extract metadata from request if provided
+        ip_address = request.client.host if request and request.client else None
+        user_agent = request.headers.get("user-agent") if request else None
+
+        # Convert payload to JSON string for PostgreSQL JSONB
+        payload_json = json.dumps(payload) if payload is not None else None
+
+        query = text("""
+            INSERT INTO events (
+                created_at, user_id, event_type, payload, 
+                ip_address, user_agent, source
+            )
+            VALUES (
+                CURRENT_TIMESTAMP, :user_id, :event_type, :payload,
+                :ip_address, :user_agent, :source
+            )
+        """)
+
+        await db.execute(
+            query,
+            {
+                "user_id": user_id,
+                "event_type": event_type,
+                "payload": payload_json,
+                "ip_address": ip_address,
+                "user_agent": user_agent,
+                "source": Source.SERVER.value,  # Use enum for server events
+            },
+        )
+        # Note: We don't commit here, let the calling function handle the transaction
+    except Exception as e:
+        # Log the error but don't fail the main operation
+        logger.error(
+            f"Failed to create event record: {str(e)}",
+            extra={"user_id": user_id, "event_type": event_type, "error": str(e)},
+        )
+
+
 class TokenRefreshRequest(BaseModel):
     """Schema for token refresh request."""
 
@@ -39,12 +84,15 @@ class TokenRefreshResponse(BaseModel):
 
 
 @router.post("/oauth/callback", response_model=AuthResponse)
-async def oauth_callback(data: OAuthInput, db=Depends(get_db)) -> AuthResponse:
+async def oauth_callback(
+    data: OAuthInput, request: Request, db=Depends(get_db)
+) -> AuthResponse:
     """
     Handle OAuth callback with authorization code for any supported provider.
 
     Args:
         data: The OAuth authorization data including provider, code, and platform
+        request: FastAPI request object for extracting metadata
         db: Database connection
 
     Returns:
@@ -62,6 +110,19 @@ async def oauth_callback(data: OAuthInput, db=Depends(get_db)) -> AuthResponse:
         # Create tokens
         access_token = create_access_token(user["id"])
         refresh_token = create_refresh_token(user["id"])
+
+        # Create login event
+        await create_event_record(
+            db,
+            user["id"],
+            "USER_LOGIN",
+            {
+                "provider": data.provider,
+                "platform": data.platform,
+                "is_new_user": is_new_user,
+            },
+            request,
+        )
 
         # Prepare response
         response_data = {
@@ -95,7 +156,7 @@ async def oauth_callback(data: OAuthInput, db=Depends(get_db)) -> AuthResponse:
 
 @router.post("/google/callback", response_model=AuthResponse)
 async def google_oauth_callback(
-    data: GoogleAuthInput, db=Depends(get_db)
+    data: GoogleAuthInput, request: Request, db=Depends(get_db)
 ) -> AuthResponse:
     """
     Handle Google OAuth callback with authorization code.
@@ -110,6 +171,7 @@ async def google_oauth_callback(
 
     Args:
         data: The Google authorization code
+        request: FastAPI request object for extracting metadata
         db: Database connection
 
     Returns:
@@ -124,7 +186,7 @@ async def google_oauth_callback(
     )
 
     # Use the generic OAuth endpoint
-    return await oauth_callback(oauth_input, db)
+    return await oauth_callback(oauth_input, request, db)
 
 
 @router.post("/refresh", response_model=TokenRefreshResponse)
@@ -206,7 +268,9 @@ async def get_current_user_info(current_user: CurrentUser):
 
 @router.post("/logout")
 async def logout(
-    db=Depends(get_db), credentials: HTTPAuthorizationCredentials = Depends(security)
+    request: Request,
+    db=Depends(get_db),
+    credentials: HTTPAuthorizationCredentials = Depends(security),
 ):
     """
     Log out a user by adding their access token to the blacklist.
@@ -215,6 +279,7 @@ async def logout(
     For that, use the logout_all_sessions endpoint.
 
     Args:
+        request: FastAPI request object for extracting metadata
         db: Database connection
         credentials: HTTP Authorization credentials with Bearer token
 
@@ -243,6 +308,13 @@ async def logout(
         # Add token to blacklist
         await blacklist_token(db, token, user_id, "access", expires_at)
 
+        # Create logout event
+        await create_event_record(
+            db, user_id, "USER_LOGOUT", {"logout_type": "single_session"}, request
+        )
+
+        await db.commit()
+
         # Return success message (frontend only needs 200 status)
         return {"status": "success", "message": "Logged out successfully"}
 
@@ -256,13 +328,16 @@ async def logout(
 
 
 @router.post("/logout/all")
-async def logout_all_sessions(current_user: CurrentUser, db=Depends(get_db)):
+async def logout_all_sessions(
+    request: Request, current_user: CurrentUser, db=Depends(get_db)
+):
     """
     Log out a user from all sessions by blacklisting all their tokens.
 
     This is useful for security-sensitive operations like password changes.
 
     Args:
+        request: FastAPI request object for extracting metadata
         db: Database connection
         current_user: The authenticated user (injected by dependency)
 
@@ -274,6 +349,13 @@ async def logout_all_sessions(current_user: CurrentUser, db=Depends(get_db)):
 
         # Blacklist all tokens for this user
         await blacklist_user_tokens(db, user_id)
+
+        # Create logout event
+        await create_event_record(
+            db, user_id, "USER_LOGOUT", {"logout_type": "all_sessions"}, request
+        )
+
+        await db.commit()
 
         # Return success message (frontend only needs 200 status)
         return {
