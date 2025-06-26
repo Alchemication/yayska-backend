@@ -146,13 +146,18 @@ def setup_llm_chain(
 
 
 def _extract_response_and_usage(
-    response: Any, response_type: type[T] | None
+    response: Any,
+    response_type: type[T] | None,
+    ai_platform: AIPlatform,
+    ai_model: AnthropicModel | GoogleModel,
 ) -> LLMResponse:
     """Extract the content and usage metadata from the response.
 
     Args:
         response: The raw response from the LLM
         response_type: The response type (None for unstructured)
+        ai_platform: The AI platform used
+        ai_model: The AI model used
 
     Returns:
         LLMResponse with unified interface
@@ -168,6 +173,12 @@ def _extract_response_and_usage(
         content = response.content
         usage_metadata = getattr(response, "usage_metadata", {})
         raw_response = response
+
+    # Add platform and model info
+    if usage_metadata is None:
+        usage_metadata = {}
+    usage_metadata["ai_platform"] = ai_platform.value
+    usage_metadata["ai_model"] = ai_model.value
 
     return LLMResponse(
         content=content, usage_metadata=usage_metadata, raw_response=raw_response
@@ -228,7 +239,9 @@ def llm_batch(
 
                 # Extract content and usage metadata from each response
                 processed_responses = [
-                    _extract_response_and_usage(response, response_type)
+                    _extract_response_and_usage(
+                        response, response_type, ai_platform, ai_model
+                    )
                     for response in chunk_responses
                 ]
                 responses.extend(processed_responses)
@@ -312,7 +325,9 @@ def llm_invoke(
                 validation_error,
             )
             response = chain.invoke(data)
-            return _extract_response_and_usage(response, response_type)
+            return _extract_response_and_usage(
+                response, response_type, ai_platform, ai_model
+            )
         except (ValidationError, Exception) as e:
             if isinstance(e, ValidationError):
                 validation_error = True
@@ -385,7 +400,9 @@ async def allm_invoke(
                 validation_error,
             )
             response = await chain.ainvoke(data)
-            return _extract_response_and_usage(response, response_type)
+            return _extract_response_and_usage(
+                response, response_type, ai_platform, ai_model
+            )
         except (ValidationError, Exception) as e:
             if isinstance(e, ValidationError):
                 validation_error = True
