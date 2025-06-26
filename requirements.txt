@@ -61,16 +61,35 @@ fastapi==0.115.6
     #   fastapi-cache2
 fastapi-cache2==0.2.2
     # via yayska (pyproject.toml)
+filetype==1.2.0
+    # via langchain-google-genai
 frozenlist==1.5.0
     # via
     #   aiohttp
     #   aiosignal
+google-ai-generativelanguage==0.6.18
+    # via langchain-google-genai
+google-api-core==2.25.1
+    # via google-ai-generativelanguage
 google-auth==2.38.0
-    # via google-auth-oauthlib
+    # via
+    #   google-ai-generativelanguage
+    #   google-api-core
+    #   google-auth-oauthlib
 google-auth-oauthlib==1.2.1
     # via yayska (pyproject.toml)
+googleapis-common-protos==1.70.0
+    # via
+    #   google-api-core
+    #   grpcio-status
 greenlet==3.1.1
     # via sqlalchemy
+grpcio==1.73.1
+    # via
+    #   google-api-core
+    #   grpcio-status
+grpcio-status==1.73.1
+    # via google-api-core
 h11==0.14.0
     # via
     #   httpcore
@@ -107,12 +126,15 @@ langchain-anthropic==0.3.1
     # via yayska (pyproject.toml)
 langchain-community==0.3.13
     # via yayska (pyproject.toml)
-langchain-core==0.3.28
+langchain-core==0.3.63
     # via
     #   langchain
     #   langchain-anthropic
     #   langchain-community
+    #   langchain-google-genai
     #   langchain-text-splitters
+langchain-google-genai==2.1.5
+    # via yayska (pyproject.toml)
 langchain-text-splitters==0.3.4
     # via langchain
 langsmith==0.2.7
@@ -152,6 +174,17 @@ propcache==0.2.1
     # via
     #   aiohttp
     #   yarl
+proto-plus==1.26.1
+    # via
+    #   google-ai-generativelanguage
+    #   google-api-core
+protobuf==6.31.1
+    # via
+    #   google-ai-generativelanguage
+    #   google-api-core
+    #   googleapis-common-protos
+    #   grpcio-status
+    #   proto-plus
 psycopg2-binary==2.9.10
     # via yayska (pyproject.toml)
 pyasn1==0.4.8
@@ -171,6 +204,7 @@ pydantic==2.10.4
     #   langchain
     #   langchain-anthropic
     #   langchain-core
+    #   langchain-google-genai
     #   langsmith
     #   pydantic-settings
 pydantic-core==2.27.2
@@ -200,6 +234,7 @@ pyyaml==6.0.2
     #   uvicorn
 requests==2.32.3
     # via
+    #   google-api-core
     #   langchain
     #   langchain-community
     #   langsmith
