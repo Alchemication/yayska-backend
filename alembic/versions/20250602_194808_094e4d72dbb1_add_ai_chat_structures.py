@@ -44,7 +44,7 @@ def upgrade() -> None:
             user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
             child_id INTEGER REFERENCES children(id) ON DELETE CASCADE,  -- nullable for general sessions
             title VARCHAR(200),
-            entry_point_type VARCHAR(50) NOT NULL,  -- 'GENERAL', 'MONTHLY', 'CONCEPT', 'SECTION'
+            entry_point_type VARCHAR(50) NOT NULL,
             entry_point_context JSONB DEFAULT '{}'::jsonb,  -- {month_id: 1, concept_id: 123, etc.}
             created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP WITH TIME ZONE DEFAULT NULL

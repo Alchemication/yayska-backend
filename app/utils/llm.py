@@ -1,5 +1,6 @@
 """Utility functions for LLM-related operations."""
 
+import asyncio
 import os
 import time
 from enum import Enum
@@ -39,7 +40,7 @@ class AnthropicModel(Enum):
 class GoogleModel(Enum):
     GEMINI_FLASH_2_0_LITE = "gemini-2.0-flash-lite"
     GEMINI_FLASH_2_0 = "gemini-2.0-flash"
-    GEMINI_FLASH_2_5 = "gemini-2.5-flash-preview-05-20"
+    GEMINI_FLASH_2_5 = "gemini-2.5-flash"
     GEMINI_PRO_2_5 = "gemini-2.5-pro-preview-05-06"
 
 
@@ -72,8 +73,6 @@ def setup_llm_cache(cache_name: str) -> None:
 def setup_llm_chain(
     ai_platform: AIPlatform,
     ai_model: AnthropicModel | GoogleModel,
-    system_prompt: str,
-    user_prompt: str,
     response_type: type[T] | None,
     temperature: float = 0.5,
     attempt: int = 0,
@@ -82,10 +81,9 @@ def setup_llm_chain(
     """Set up the LLM chain with retry logic.
 
     Args:
-        system_prompt: The system prompt text
-        user_prompt: The user prompt text or list of prompts
-        attempt: Current retry attempt number
         response_type: The Pydantic model type for structured output (or None for unstructured)
+        temperature: The temperature for the LLM
+        attempt: Current retry attempt number
         validation_error: Whether the previous attempt failed due to validation
 
     Returns:
@@ -134,8 +132,8 @@ def setup_llm_chain(
 
     template = ChatPromptTemplate.from_messages(
         [
-            ("system", system_prompt),
-            ("human", user_prompt),
+            ("system", "{system_prompt}"),
+            ("human", "{user_prompt}"),
         ]
     )
     logger.debug(
@@ -180,8 +178,6 @@ def llm_batch(
     ai_platform: AIPlatform,
     ai_model: AnthropicModel | GoogleModel,
     data: list[dict[str, Any]],
-    system_prompt: str,
-    user_prompt: str,
     response_type: type[T] | None,
     max_concurrency: int = 50,
     chunk_size: int = 10,
@@ -194,8 +190,6 @@ def llm_batch(
         ai_model: The AI model to use
         data: List of data items to process
         response_type: The Pydantic model type for structured output or None for unstructured
-        system_prompt: The system prompt text
-        user_prompt: The user prompt text or list of prompts
         chunk_size: Size of chunks to process at once
 
     Returns:
@@ -218,8 +212,6 @@ def llm_batch(
                 chain = setup_llm_chain(
                     ai_platform,
                     ai_model,
-                    system_prompt,
-                    user_prompt,
                     response_type,
                     temperature,
                     attempt,
@@ -293,8 +285,6 @@ def llm_invoke(
     ai_platform: AIPlatform,
     ai_model: AnthropicModel | GoogleModel,
     data: dict[str, Any],
-    system_prompt: str,
-    user_prompt: str,
     response_type: type[T] | None,
     temperature: float = 0.5,
 ) -> LLMResponse:
@@ -305,8 +295,7 @@ def llm_invoke(
         ai_model: The AI model to use
         data: The data to process
         response_type: The Pydantic model type for structured output or None for unstructured
-        system_prompt: The system prompt text
-        user_prompt: The user prompt text
+        temperature: The temperature for the LLM
 
     Returns:
         LLMResponse with unified interface
@@ -317,8 +306,6 @@ def llm_invoke(
             chain = setup_llm_chain(
                 ai_platform,
                 ai_model,
-                system_prompt,
-                user_prompt,
                 response_type,
                 temperature,
                 attempt,
@@ -364,3 +351,75 @@ def llm_invoke(
                 temperature=temperature,
             )
             time.sleep(backoff)
+    raise Exception("LLM invoke failed after multiple retries")
+
+
+async def allm_invoke(
+    ai_platform: AIPlatform,
+    ai_model: AnthropicModel | GoogleModel,
+    data: dict[str, Any],
+    response_type: type[T] | None,
+    temperature: float = 0.5,
+) -> LLMResponse:
+    """Run a single prompt through the LLM asynchronously.
+
+    Args:
+        ai_platform: The AI platform to use
+        ai_model: The AI model to use
+        data: The data to process
+        response_type: The Pydantic model type for structured output or None for unstructured
+        temperature: The temperature for the LLM
+
+    Returns:
+        LLMResponse with unified interface
+    """
+    validation_error = False
+    for attempt in range(3):
+        try:
+            chain = setup_llm_chain(
+                ai_platform,
+                ai_model,
+                response_type,
+                temperature,
+                attempt,
+                validation_error,
+            )
+            response = await chain.ainvoke(data)
+            return _extract_response_and_usage(response, response_type)
+        except (ValidationError, Exception) as e:
+            if isinstance(e, ValidationError):
+                validation_error = True
+
+            if attempt == 2:
+                error_msg = (
+                    "Validation failed"
+                    if isinstance(e, ValidationError)
+                    else "Failed to process prompt"
+                )
+                logger.error(error_msg, error=str(e), attempts=3)
+                raise
+
+            is_rate_limit = "429" in str(e) or "rate limit" in str(e).lower()
+
+            if is_rate_limit:
+                backoff = 5 * (2**attempt)
+            else:
+                backoff = 2
+
+            error_type = (
+                "Validation error"
+                if isinstance(e, ValidationError)
+                else "Rate limit error"
+                if is_rate_limit
+                else "Error"
+            )
+
+            logger.warning(
+                f"Retrying after {error_type}",
+                attempt=attempt + 1,
+                backoff_seconds=backoff,
+                error=str(e),
+                temperature=temperature,
+            )
+            await asyncio.sleep(backoff)
+    raise Exception("LLM call failed after multiple retries")

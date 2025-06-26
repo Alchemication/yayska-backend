@@ -51,6 +51,14 @@ class Settings(BaseSettings):
     ANTHROPIC_API_KEY: str
     GEMINI_API_KEY: str
 
+    # AI Chat Rate Limiting
+    AI_REQUESTS_PER_DAY_LIMIT: int = 3
+    AI_REQUEST_WHITELIST: list[str] = [
+        "napora.adam@gmail.com",
+        "adam@yayska.com",
+        "anna.fabrykowska@gmail.com",
+    ]
+
     @property
     def get_db_connect_args(self) -> dict:
         """Minimal connection arguments for SQLAlchemy."""

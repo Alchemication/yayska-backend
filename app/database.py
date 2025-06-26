@@ -3,6 +3,7 @@ import logging
 import ssl
 from typing import AsyncGenerator
 
+from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.pool import NullPool
@@ -68,11 +69,16 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
                 try:
                     yield session
                     await session.commit()
+                except HTTPException as http_exc:
+                    await session.rollback()
+                    raise http_exc
                 except Exception as e:
                     await session.rollback()
                     logger.error(f"Database error: {str(e)}")
                     raise
                 break
+        except HTTPException as http_exc:
+            raise http_exc
         except Exception as e:
             logger.error(f"Database connection attempt {attempt + 1} failed: {str(e)}")
             if attempt == 2:
