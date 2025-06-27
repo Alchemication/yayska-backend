@@ -17,8 +17,8 @@
     "ENVIRONMENT": "prod"
   },
   "functions": {
-    "app/main.py": {
-      "excludeFiles": "app/data/**"
+    "app/**": {
+      "excludeFiles": "data/**"
     }
   }
 }
