@@ -15,5 +15,10 @@
   "env": {
     "PYTHONPATH": ".",
     "ENVIRONMENT": "prod"
+  },
+  "functions": {
+    "app/main.py": {
+      "excludeFiles": "app/data/**"
+    }
   }
 }
