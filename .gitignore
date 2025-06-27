@@ -38,3 +38,4 @@ wheels/
 !app/data/*.json
 !vercel.json
 !.vscode/*.json
+.vercel

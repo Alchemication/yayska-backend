@@ -17,7 +17,7 @@ from app.schemas.chat import (
     EntryPointType,
     UserMessageCreate,
 )
-from app.utils.llm import AIPlatform, GoogleModel, allm_invoke
+from app.utils.llm import AIPlatform, GoogleModel, LLMMessage, allm_invoke
 
 logger = structlog.get_logger()
 
@@ -396,25 +396,34 @@ async def create_message_and_get_bot_response(
             f"Could not construct learning context for concept_id: {concept_id}"
         )
 
-    # 4d. Build the final system prompt string
-    system_prompt = prompt_generator.construct(
+    # 4d. Build the final system prompt string and conversation messages
+    system_prompt = prompt_generator.get_system_prompt(
         parent_context=parent_context,
         child_context=child_context,
         learning_context=learning_context,
-        conversation_history=conversation_history,
     )
+    # The user's new message is part of the conversation now
+    conversation_history.append(
+        prompt_models.Message(
+            role=ChatMessageRole.USER.value, content=user_message.content
+        )
+    )
+    messages = [
+        LLMMessage(role=msg.role, content=msg.content) for msg in conversation_history
+    ]
 
     # 5. Call the LLM
     llm_response = await allm_invoke(
         ai_platform=AIPlatform.GOOGLE,
         ai_model=GoogleModel.GEMINI_FLASH_2_5,
-        data={
-            "system_prompt": system_prompt,
-            "user_prompt": user_message.content,
-        },
+        system_prompt=system_prompt,
+        messages=messages,
         response_type=None,  # We want a plain string response
     )
     assistant_content = llm_response.content
+    if not isinstance(assistant_content, str):
+        # Handle cases where the LLM might return unexpected structured data
+        assistant_content = str(assistant_content)
     llm_usage_data = llm_response.usage_metadata
 
     # 6. Save the assistant's response to the database

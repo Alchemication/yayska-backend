@@ -135,6 +135,37 @@ alembic downgrade -1    # Revert last migration
 alembic downgrade base  # Revert all migrations
 ```
 
+## Testing
+
+This project uses `pytest` for unit testing. The tests are located in the `tests/` directory, mirroring the structure of the `app/` directory.
+
+### Running Tests
+
+To run all tests, execute the following command from the project root:
+
+```bash
+uv run pytest
+```
+
+To run tests for a specific file or directory, provide the path:
+
+```bash
+# Run all tests in the utils directory
+uv run pytest tests/utils/
+
+# Run a specific test file
+uv run pytest tests/utils/test_llm.py
+```
+
+### Test Configuration
+
+Some tests, particularly those interacting with external services like LLMs, require API keys. These should be defined in a `.env` file in the project root. The tests are designed to skip themselves gracefully if the required environment variables are not found.
+
+Currently, the tests for `app/utils/llm.py` require:
+
+- `ANTHROPIC_API_KEY`
+- `GEMINI_API_KEY`
+
 ## Start the server
 
 ```bash

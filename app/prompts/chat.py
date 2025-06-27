@@ -70,14 +70,20 @@ FINAL INSTRUCTIONS:
 - Use emojis sparingly to add warmth (e.g., 🤔,💡).
 """
 
-    def _render_context(
+
+class ConceptCoachPrompt(PromptTemplate):
+    """Generates the system prompt specifically for the Concept Coach feature."""
+
+    def get_system_prompt(
         self,
         parent_context: ParentContext,
         child_context: ChildContext,
         learning_context: LearningContext,
-        conversation_history: list[Message],
     ) -> str:
-        """Renders the dynamic context section of the prompt as a JSON object."""
+        """
+        Builds the final system prompt string by assembling the static and dynamic parts,
+        excluding the conversation history.
+        """
 
         def non_empty_asdict(data: Any) -> dict[str, Any]:
             """Helper to convert dataclass to dict, excluding empty lists/None values."""
@@ -87,48 +93,19 @@ FINAL INSTRUCTIONS:
             "PARENT_CONTEXT": non_empty_asdict(parent_context),
             "CHILD_CONTEXT": non_empty_asdict(child_context),
             "LEARNING_CONTEXT": non_empty_asdict(learning_context),
-            "CONVERSATION_HISTORY": [asdict(msg) for msg in conversation_history],
         }
 
         # Filter out top-level keys if their content is empty
         filtered_context_data = {
-            k: v
-            for k, v in context_data.items()
-            if v and (isinstance(v, list) or v.keys())
+            k: v for k, v in context_data.items() if v and v.keys()
         }
 
-        context_str = f"""
+        context_section = f"""
 ---
 CONTEXT FOR THIS CONVERSATION:
 {json.dumps(filtered_context_data, indent=2)}
 ---
 """
-        return context_str
-
-    def construct(self, **kwargs: Any) -> str:
-        """Constructs the full system prompt."""
-        raise NotImplementedError("Subclasses must implement the construct method.")
-
-
-class ConceptCoachPrompt(PromptTemplate):
-    """Generates the system prompt specifically for the Concept Coach feature."""
-
-    def construct(
-        self,
-        parent_context: ParentContext,
-        child_context: ChildContext,
-        learning_context: LearningContext,
-        conversation_history: list[Message],
-    ) -> str:
-        """
-        Builds the final system prompt string by assembling the static and dynamic parts.
-        """
-        context_section = self._render_context(
-            parent_context,
-            child_context,
-            learning_context,
-            conversation_history,
-        )
 
         full_prompt = (
             f"{self.CORE_IDENTITY}\n\n"

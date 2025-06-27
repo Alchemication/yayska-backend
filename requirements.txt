@@ -4,8 +4,11 @@ alembic==1.14.0
     # via yayska (pyproject.toml)
 annotated-types==0.7.0
     # via pydantic
-anyio==4.7.0
+anthropic==0.55.0
+    # via yayska (pyproject.toml)
+anyio==4.9.0
     # via
+    #   anthropic
     #   httpx
     #   starlette
     #   watchfiles
@@ -30,6 +33,8 @@ click==8.1.8
     # via uvicorn
 cryptography==44.0.2
     # via python-jose
+distro==1.9.0
+    # via anthropic
 dnspython==2.7.0
     # via email-validator
 ecdsa==0.19.1
@@ -42,28 +47,65 @@ fastapi==0.115.6
     #   fastapi-cache2
 fastapi-cache2==0.2.2
     # via yayska (pyproject.toml)
+google-ai-generativelanguage==0.6.15
+    # via google-generativeai
+google-api-core==2.25.1
+    # via
+    #   google-ai-generativelanguage
+    #   google-api-python-client
+    #   google-generativeai
+google-api-python-client==2.174.0
+    # via google-generativeai
 google-auth==2.38.0
-    # via google-auth-oauthlib
+    # via
+    #   google-ai-generativelanguage
+    #   google-api-core
+    #   google-api-python-client
+    #   google-auth-httplib2
+    #   google-auth-oauthlib
+    #   google-generativeai
+google-auth-httplib2==0.2.0
+    # via google-api-python-client
 google-auth-oauthlib==1.2.1
     # via yayska (pyproject.toml)
+google-generativeai==0.8.5
+    # via yayska (pyproject.toml)
+googleapis-common-protos==1.70.0
+    # via
+    #   google-api-core
+    #   grpcio-status
 greenlet==3.1.1
     # via sqlalchemy
+grpcio==1.73.1
+    # via
+    #   google-api-core
+    #   grpcio-status
+grpcio-status==1.71.0
+    # via google-api-core
 h11==0.14.0
     # via
     #   httpcore
     #   uvicorn
 httpcore==1.0.7
     # via httpx
+httplib2==0.22.0
+    # via
+    #   google-api-python-client
+    #   google-auth-httplib2
 httptools==0.6.4
     # via uvicorn
 httpx==0.28.1
-    # via yayska (pyproject.toml)
+    # via
+    #   yayska (pyproject.toml)
+    #   anthropic
 idna==3.10
     # via
     #   anyio
     #   email-validator
     #   httpx
     #   requests
+jiter==0.10.0
+    # via anthropic
 mako==1.3.8
     # via alembic
 markupsafe==3.0.2
@@ -74,6 +116,18 @@ passlib==1.7.4
     # via yayska (pyproject.toml)
 pendulum==3.0.0
     # via fastapi-cache2
+proto-plus==1.26.1
+    # via
+    #   google-ai-generativelanguage
+    #   google-api-core
+protobuf==5.29.5
+    # via
+    #   google-ai-generativelanguage
+    #   google-api-core
+    #   google-generativeai
+    #   googleapis-common-protos
+    #   grpcio-status
+    #   proto-plus
 psycopg2-binary==2.9.10
     # via yayska (pyproject.toml)
 pyasn1==0.4.8
@@ -88,7 +142,9 @@ pycparser==2.22
 pydantic==2.10.4
     # via
     #   yayska (pyproject.toml)
+    #   anthropic
     #   fastapi
+    #   google-generativeai
     #   pydantic-settings
 pydantic-core==2.27.2
     # via pydantic
@@ -96,6 +152,8 @@ pydantic-settings==2.7.1
     # via yayska (pyproject.toml)
 pyjwt==2.10.1
     # via yayska (pyproject.toml)
+pyparsing==3.2.3
+    # via httplib2
 python-dateutil==2.9.0.post0
     # via
     #   pendulum
@@ -110,7 +168,9 @@ python-jose==3.4.0
 pyyaml==6.0.2
     # via uvicorn
 requests==2.32.3
-    # via requests-oauthlib
+    # via
+    #   google-api-core
+    #   requests-oauthlib
 requests-oauthlib==2.0.0
     # via google-auth-oauthlib
 rsa==4.9
@@ -122,7 +182,9 @@ six==1.17.0
     #   ecdsa
     #   python-dateutil
 sniffio==1.3.1
-    # via anyio
+    # via
+    #   anthropic
+    #   anyio
 sqlalchemy==2.0.36
     # via
     #   yayska (pyproject.toml)
@@ -131,23 +193,29 @@ starlette==0.41.3
     # via fastapi
 structlog==24.4.0
     # via yayska (pyproject.toml)
-tenacity==9.0.0
+tenacity==8.5.0
     # via yayska (pyproject.toml)
 time-machine==2.16.0
     # via pendulum
 tqdm==4.67.1
-    # via yayska (pyproject.toml)
+    # via
+    #   yayska (pyproject.toml)
+    #   google-generativeai
 typing-extensions==4.12.2
     # via
     #   alembic
+    #   anthropic
     #   anyio
     #   fastapi
     #   fastapi-cache2
+    #   google-generativeai
     #   pydantic
     #   pydantic-core
     #   sqlalchemy
 tzdata==2024.2
     # via pendulum
+uritemplate==4.2.0
+    # via google-api-python-client
 urllib3==2.3.0
     # via requests
 uvicorn==0.34.0
