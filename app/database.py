@@ -46,7 +46,7 @@ def get_connect_args():
 # Create engine with specific configuration for serverless
 engine = create_async_engine(
     settings.DATABASE_URI,
-    echo=settings.ENVIRONMENT == "local",
+    echo=settings.DB_ECHO_QUERIES,
     poolclass=NullPool,
     connect_args=get_connect_args(),
 )

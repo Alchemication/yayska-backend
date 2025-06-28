@@ -59,6 +59,9 @@ class Settings(BaseSettings):
         "anna.fabrykowska@gmail.com",
     ]
 
+    # Database Settings
+    DB_ECHO_QUERIES: bool = False  # Set to True to log all SQL queries
+
     @property
     def get_db_connect_args(self) -> dict:
         """Minimal connection arguments for SQLAlchemy."""

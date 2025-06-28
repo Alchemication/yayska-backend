@@ -17,7 +17,7 @@ from app.schemas.chat import (
     EntryPointType,
     UserMessageCreate,
 )
-from app.utils.llm import AIPlatform, GoogleModel, LLMMessage, allm_invoke
+from app.utils.llm import AIModel, LLMMessage, get_completion
 
 logger = structlog.get_logger()
 
@@ -289,7 +289,7 @@ async def create_message_and_get_bot_response(
     history_result = await db.execute(history_query, {"session_id": session_id})
     history_rows = reversed(history_result.mappings().all())
     conversation_history = [
-        prompt_models.Message(role=row["role"], content=row["content"])
+        prompt_models.Message(role=row["role"].lower(), content=row["content"])
         for row in history_rows
     ]
 
@@ -413,9 +413,8 @@ async def create_message_and_get_bot_response(
     ]
 
     # 5. Call the LLM
-    llm_response = await allm_invoke(
-        ai_platform=AIPlatform.GOOGLE,
-        ai_model=GoogleModel.GEMINI_FLASH_2_5,
+    llm_response = await get_completion(
+        ai_model=AIModel.GEMINI_FLASH_2_0,
         system_prompt=system_prompt,
         messages=messages,
         response_type=None,  # We want a plain string response

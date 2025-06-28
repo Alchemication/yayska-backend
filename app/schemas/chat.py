@@ -63,8 +63,8 @@ class ChatSessionListResponse(BaseModel):
 class ChatMessageRole(str, Enum):
     """Enum for message roles."""
 
-    USER = "USER"
-    ASSISTANT = "ASSISTANT"
+    USER = "user"
+    ASSISTANT = "assistant"
 
 
 class UserMessageCreate(BaseModel):

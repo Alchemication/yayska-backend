@@ -7,13 +7,7 @@ import pytest
 from dotenv import load_dotenv
 from pydantic import BaseModel, Field
 
-from app.utils.llm import (
-    AIPlatform,
-    AnthropicModel,
-    GoogleModel,
-    LLMMessage,
-    allm_invoke,
-)
+from app.utils.llm import AIModel, LLMMessage, get_completion
 
 # Load environment variables from .env file
 load_dotenv()
@@ -27,15 +21,27 @@ class UserInfo(BaseModel):
     age: int = Field(..., description="The user's age")
 
 
-@pytest.mark.asyncio
-async def test_anthropic_unstructured_invoke():
-    """Test a simple unstructured call to Anthropic."""
-    if not os.getenv("ANTHROPIC_API_KEY"):
-        pytest.skip("ANTHROPIC_API_KEY not set")
+# Models to test against. Tuple format: (AIModel, API_KEY_NAME, expected_capital)
+TEST_MODELS = [
+    (AIModel.CLAUDE_HAIKU_3_5, "ANTHROPIC_API_KEY", "Dublin"),
+    (AIModel.GEMINI_FLASH_2_0_LITE, "GEMINI_API_KEY", "Dublin"),
+]
 
-    response = await allm_invoke(
-        ai_platform=AIPlatform.ANTHROPIC,
-        ai_model=AnthropicModel.CLAUDE_HAIKU_3_5,
+# Use model ID for cleaner test names in pytest output
+MODEL_IDS = [model[0].value for model in TEST_MODELS]
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "ai_model, api_key_name, expected_capital", TEST_MODELS, ids=MODEL_IDS
+)
+async def test_get_completion_unstructured(ai_model, api_key_name, expected_capital):
+    """Test a simple unstructured call to the LLM."""
+    if not os.getenv(api_key_name):
+        pytest.skip(f"{api_key_name} not set")
+
+    response = await get_completion(
+        ai_model=ai_model,
         system_prompt="You are a helpful assistant.",
         messages=[
             LLMMessage(role="user", content="Hello! What is the capital of Ireland?")
@@ -43,22 +49,22 @@ async def test_anthropic_unstructured_invoke():
         response_type=None,
     )
 
-    print("Anthropic Unstructured Response:", response.content)
+    print(f"[{ai_model.value}] Unstructured Response:", response.content)
     assert isinstance(response.content, str)
-    assert "Dublin" in response.content
+    assert expected_capital in response.content
     assert response.usage_metadata["input_tokens"] > 0
     assert response.usage_metadata["output_tokens"] > 0
 
 
 @pytest.mark.asyncio
-async def test_anthropic_structured_invoke():
-    """Test a structured call to Anthropic using a Pydantic model."""
-    if not os.getenv("ANTHROPIC_API_KEY"):
-        pytest.skip("ANTHROPIC_API_KEY not set")
+@pytest.mark.parametrize("ai_model, api_key_name, _", TEST_MODELS, ids=MODEL_IDS)
+async def test_get_completion_structured(ai_model, api_key_name, _):
+    """Test a structured call using a Pydantic model."""
+    if not os.getenv(api_key_name):
+        pytest.skip(f"{api_key_name} not set")
 
-    response = await allm_invoke(
-        ai_platform=AIPlatform.ANTHROPIC,
-        ai_model=AnthropicModel.CLAUDE_HAIKU_3_5,
+    response = await get_completion(
+        ai_model=ai_model,
         system_prompt="Extract the user's information as a JSON object.",
         messages=[
             LLMMessage(
@@ -68,7 +74,7 @@ async def test_anthropic_structured_invoke():
         response_type=UserInfo,
     )
 
-    print("Anthropic Structured Response:", response.content)
+    print(f"[{ai_model.value}] Structured Response:", response.content)
     assert isinstance(response.content, UserInfo)
     assert response.content.name == "John Doe"
     assert response.content.age == 30
@@ -77,59 +83,11 @@ async def test_anthropic_structured_invoke():
 
 
 @pytest.mark.asyncio
-async def test_google_unstructured_invoke():
-    """Test a simple unstructured call to Google."""
-    if not os.getenv("GEMINI_API_KEY"):
-        pytest.skip("GEMINI_API_KEY not set")
-
-    response = await allm_invoke(
-        ai_platform=AIPlatform.GOOGLE,
-        ai_model=GoogleModel.GEMINI_FLASH_2_0_LITE,
-        system_prompt="You are a helpful assistant.",
-        messages=[
-            LLMMessage(role="user", content="Hello! What is the capital of France?")
-        ],
-        response_type=None,
-    )
-
-    print("Google Unstructured Response:", response.content)
-    assert isinstance(response.content, str)
-    assert "Paris" in response.content
-    assert response.usage_metadata["input_tokens"] > 0
-    assert response.usage_metadata["output_tokens"] > 0
-
-
-@pytest.mark.asyncio
-async def test_google_structured_invoke():
-    """Test a structured call to Google using a Pydantic model."""
-    if not os.getenv("GEMINI_API_KEY"):
-        pytest.skip("GEMINI_API_KEY not set")
-
-    response = await allm_invoke(
-        ai_platform=AIPlatform.GOOGLE,
-        ai_model=GoogleModel.GEMINI_FLASH_2_0_LITE,
-        system_prompt="Extract the user's information as a JSON object.",
-        messages=[
-            LLMMessage(
-                role="user", content="My name is Jane Doe and I am 25 years old."
-            )
-        ],
-        response_type=UserInfo,
-    )
-
-    print("Google Structured Response:", response.content)
-    assert isinstance(response.content, UserInfo)
-    assert response.content.name == "Jane Doe"
-    assert response.content.age == 25
-    assert response.usage_metadata["input_tokens"] > 0
-    assert response.usage_metadata["output_tokens"] > 0
-
-
-@pytest.mark.asyncio
-async def test_anthropic_multi_turn_invoke():
-    """Test a multi-turn conversation with Anthropic."""
-    if not os.getenv("ANTHROPIC_API_KEY"):
-        pytest.skip("ANTHROPIC_API_KEY not set")
+@pytest.mark.parametrize("ai_model, api_key_name, _", TEST_MODELS, ids=MODEL_IDS)
+async def test_get_completion_multi_turn(ai_model, api_key_name, _):
+    """Test a multi-turn conversation."""
+    if not os.getenv(api_key_name):
+        pytest.skip(f"{api_key_name} not set")
 
     messages = [
         LLMMessage(role="user", content="My name is Adam."),
@@ -140,45 +98,16 @@ async def test_anthropic_multi_turn_invoke():
         LLMMessage(role="user", content="What is my name?"),
     ]
 
-    response = await allm_invoke(
-        ai_platform=AIPlatform.ANTHROPIC,
-        ai_model=AnthropicModel.CLAUDE_HAIKU_3_5,
-        system_prompt="You are a helpful assistant. Remember user's name.",
-        messages=messages,
-        response_type=None,
-    )
-
-    print("Anthropic Multi-turn Response:", response.content)
-    assert isinstance(response.content, str)
-    assert "Adam" in response.content
-
-
-@pytest.mark.asyncio
-async def test_google_multi_turn_invoke():
-    """Test a multi-turn conversation with Google."""
-    if not os.getenv("GEMINI_API_KEY"):
-        pytest.skip("GEMINI_API_KEY not set")
-
-    messages = [
-        LLMMessage(role="user", content="My name is Jane."),
-        LLMMessage(
-            role="assistant",
-            content="Nice to meet you, Jane! How can I help you today?",
-        ),
-        LLMMessage(role="user", content="What is my name?"),
-    ]
-
-    response = await allm_invoke(
-        ai_platform=AIPlatform.GOOGLE,
-        ai_model=GoogleModel.GEMINI_FLASH_2_0_LITE,
+    response = await get_completion(
+        ai_model=ai_model,
         system_prompt="You are a helpful assistant. Remember the user's name.",
         messages=messages,
         response_type=None,
     )
 
-    print("Google Multi-turn Response:", response.content)
+    print(f"[{ai_model.value}] Multi-turn Response:", response.content)
     assert isinstance(response.content, str)
-    assert "Jane" in response.content
+    assert "Adam" in response.content
 
 
 if __name__ == "__main__":
@@ -186,11 +115,21 @@ if __name__ == "__main__":
     # with ANTHROPIC_API_KEY and GEMINI_API_KEY set.
     # You can run this file directly: `python -m tests.utils.test_llm`
     # Or use pytest: `pytest tests/utils/test_llm.py`
-    asyncio.run(test_anthropic_unstructured_invoke())
-    asyncio.run(test_anthropic_structured_invoke())
-    asyncio.run(test_google_unstructured_invoke())
-    asyncio.run(test_google_structured_invoke())
-    asyncio.run(test_anthropic_multi_turn_invoke())
-    asyncio.run(test_google_multi_turn_invoke())
 
-    print("All tests passed!")
+    async def run_tests():
+        """Run all tests, iterating through the defined models."""
+        # Manually iterate through models for direct script execution
+        for model, key, capital in TEST_MODELS:
+            print(f"--- Testing model: {model.value} ---")
+            if os.getenv(key):
+                await test_get_completion_unstructured(model, key, capital)
+                await test_get_completion_structured(model, key, None)
+                await test_get_completion_multi_turn(model, key, None)
+                print(f"--- Tests for {model.value} passed ---")
+            else:
+                print(f"--- Skipping tests for {model.value} ({key} not set) ---")
+            print("\n")
+
+    asyncio.run(run_tests())
+
+    print("All test runs complete!")
