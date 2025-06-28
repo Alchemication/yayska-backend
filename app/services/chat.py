@@ -472,7 +472,7 @@ async def update_message_feedback(
         """
         SELECT m.id FROM chat_messages m
         JOIN chat_sessions s ON m.session_id = s.id
-        WHERE m.id = :message_id AND s.id = :session_id AND s.user_id = :user_id AND m.role = 'ASSISTANT'
+        WHERE m.id = :message_id AND s.id = :session_id AND s.user_id = :user_id AND m.role = 'assistant'
     """
     )
     result = await db.execute(

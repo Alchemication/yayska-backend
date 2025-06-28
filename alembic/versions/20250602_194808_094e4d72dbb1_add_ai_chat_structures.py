@@ -56,7 +56,7 @@ def upgrade() -> None:
         CREATE TABLE chat_messages (
             id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
             session_id UUID NOT NULL REFERENCES chat_sessions(id) ON DELETE CASCADE,
-            role VARCHAR(20) NOT NULL,  -- 'USER', 'ASSISTANT'
+            role VARCHAR(20) NOT NULL,  -- 'user', 'assistant'
             reasoning TEXT,
             content TEXT NOT NULL,
             context_snapshot JSONB DEFAULT '{}'::jsonb,  -- context snapshots, etc.
