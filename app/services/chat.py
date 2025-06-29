@@ -1,6 +1,6 @@
 import json
 from datetime import date, datetime, timezone
-from typing import Any
+from typing import Any, AsyncGenerator
 from uuid import UUID
 
 import structlog
@@ -9,6 +9,7 @@ from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
+from app.database import AsyncSessionLocal
 from app.exceptions import DatabaseError, NotFoundError
 from app.prompts import chat as prompt_models
 from app.schemas.chat import (
@@ -17,7 +18,7 @@ from app.schemas.chat import (
     EntryPointType,
     UserMessageCreate,
 )
-from app.utils.llm import AIModel, LLMMessage, get_completion
+from app.utils.llm import AIModel, LLMMessage, get_completion, get_completion_stream
 
 logger = structlog.get_logger()
 
@@ -225,6 +226,206 @@ async def get_messages_by_session(
     return result.mappings().all()
 
 
+async def _get_session_data(
+    db: AsyncSession, session_id: UUID, user_id: int
+) -> dict[str, Any]:
+    """Fetches essential session and context data."""
+    session_check_query = text(
+        """
+        SELECT cs.id, cs.child_id, cs.entry_point_type, cs.entry_point_context,
+               u.first_name as user_name,
+               c.name as child_name,
+               sy.year_name as school_year
+        FROM chat_sessions cs
+        JOIN users u ON cs.user_id = u.id
+        JOIN children c ON cs.child_id = c.id
+        LEFT JOIN school_years sy ON c.school_year_id = sy.id
+        WHERE cs.id = :session_id AND cs.user_id = :user_id
+    """
+    )
+    session_result = await db.execute(
+        session_check_query, {"session_id": session_id, "user_id": user_id}
+    )
+    session_data = session_result.mappings().first()
+    if not session_data:
+        raise NotFoundError(f"Chat session with id {session_id} not found.")
+    return session_data
+
+
+async def _get_conversation_history(
+    db: AsyncSession, session_id: UUID
+) -> list[prompt_models.Message]:
+    """Fetches the recent conversation history for a session."""
+    history_query = text(
+        """
+        SELECT role, content FROM chat_messages
+        WHERE session_id = :session_id
+        ORDER BY message_order DESC
+        LIMIT 10
+    """
+    )
+    history_result = await db.execute(history_query, {"session_id": session_id})
+    history_rows = reversed(history_result.mappings().all())
+    return [
+        prompt_models.Message(role=row["role"].lower(), content=row["content"])
+        for row in history_rows
+    ]
+
+
+async def _save_user_message(
+    db: AsyncSession, session_id: UUID, user_message: UserMessageCreate
+):
+    """Saves the user's message to the database."""
+    user_insert_query = text(
+        """
+        INSERT INTO chat_messages (session_id, role, content)
+        VALUES (:session_id, :role, :content)
+        RETURNING id;
+    """
+    )
+    await db.execute(
+        user_insert_query,
+        {
+            "session_id": session_id,
+            "role": ChatMessageRole.USER.value,
+            "content": user_message.content,
+        },
+    )
+
+
+async def _build_system_prompt(
+    db: AsyncSession, user_id: int, session_data: dict[str, Any]
+) -> str:
+    """Constructs the detailed system prompt for the LLM."""
+    prompt_generator = prompt_models.ConceptCoachPrompt()
+
+    parent_context = prompt_models.ParentContext(name=session_data["user_name"])
+    child_context = prompt_models.ChildContext(
+        name=session_data["child_name"],
+        class_level=session_data["school_year"],
+    )
+
+    interaction_history_query = text(
+        """
+        SELECT
+            cs.entry_point_context ->> 'concept_id' as concept_id,
+            c.concept_name as concept_name,
+            s.subject_name as subject_name,
+            cs.updated_at
+        FROM chat_sessions cs
+        JOIN concepts c ON (cs.entry_point_context ->> 'concept_id')::int = c.id
+        LEFT JOIN subjects s ON c.subject_id = s.id
+        WHERE cs.user_id = :user_id
+          AND cs.child_id = :child_id
+          AND cs.entry_point_type = 'CONCEPT_COACH'
+          AND cs.id != :current_session_id
+        ORDER BY cs.updated_at DESC
+        LIMIT 10;
+    """
+    )
+    interaction_result = await db.execute(
+        interaction_history_query,
+        {
+            "user_id": user_id,
+            "child_id": session_data["child_id"],
+            "current_session_id": session_data["id"],
+        },
+    )
+    concept_history = [
+        prompt_models.ConceptHistoryItem(
+            concept_id=row["concept_id"],
+            concept_name=row["concept_name"],
+            subject=row["subject_name"],
+            viewed_ago=_time_ago(row["updated_at"]),
+        )
+        for row in interaction_result.mappings().all()
+    ]
+
+    learning_context = None
+    concept_id = None
+    # TODO: This logic is specific to CONCEPT_COACH. In the future, we should
+    # have different prompt builders for different entry point types.
+    if session_data["entry_point_type"] == EntryPointType.CONCEPT_COACH.value:
+        concept_id = session_data["entry_point_context"].get("concept_id")
+        if concept_id:
+            concept_query = text(
+                """
+                SELECT
+                    c.concept_name,
+                    c.concept_description,
+                    s.subject_name,
+                    cm.why_important ->> 'practical_value' as practical_value,
+                    cm.parent_guide -> 'key_points' as key_points,
+                    cm.difficulty_stats -> 'common_barriers' as common_barriers
+                FROM concepts c
+                LEFT JOIN subjects s ON c.subject_id = s.id
+                LEFT JOIN concept_metadata cm ON c.id = cm.concept_id
+                WHERE c.id = :concept_id
+            """
+            )
+            concept_result = await db.execute(concept_query, {"concept_id": concept_id})
+            concept_data = concept_result.mappings().first()
+            if concept_data:
+                learning_context = prompt_models.LearningContext(
+                    current_concept_id=concept_id,
+                    current_concept_name=concept_data["concept_name"],
+                    current_subject=concept_data["subject_name"],
+                    short_description=concept_data["concept_description"],
+                    practical_value=concept_data["practical_value"],
+                    key_points=concept_data["key_points"],
+                    common_barriers=concept_data["common_barriers"],
+                    recent_concept_chats=concept_history,
+                )
+
+    if not learning_context:
+        raise DatabaseError(
+            f"Could not construct learning context for concept_id: {concept_id}"
+        )
+
+    return prompt_generator.get_system_prompt(
+        parent_context=parent_context,
+        child_context=child_context,
+        learning_context=learning_context,
+    )
+
+
+async def _save_assistant_message(
+    db: AsyncSession,
+    session_id: UUID,
+    assistant_content: str,
+    llm_usage_data: dict | None,
+) -> dict[str, Any]:
+    """Saves the assistant's response and updates the session timestamp."""
+    assistant_insert_query = text(
+        """
+        INSERT INTO chat_messages (session_id, role, content, llm_usage)
+        VALUES (:session_id, :role, :content, :llm_usage)
+        RETURNING *;
+    """
+    )
+    result = await db.execute(
+        assistant_insert_query,
+        {
+            "session_id": session_id,
+            "role": ChatMessageRole.ASSISTANT.value,
+            "content": assistant_content,
+            "llm_usage": json.dumps(llm_usage_data) if llm_usage_data else None,
+        },
+    )
+    assistant_message = result.mappings().first()
+    if not assistant_message:
+        raise DatabaseError("Failed to create assistant message.")
+
+    update_session_query = text(
+        """
+        UPDATE chat_sessions SET updated_at = CURRENT_TIMESTAMP WHERE id = :session_id
+    """
+    )
+    await db.execute(update_session_query, {"session_id": session_id})
+
+    return assistant_message
+
+
 def _time_ago(dt: datetime) -> str:
     """Converts a datetime object to a human-readable 'time ago' string."""
     if dt.tzinfo is None:
@@ -256,152 +457,17 @@ async def create_message_and_get_bot_response(
     Creates a user message, constructs a detailed prompt, calls the LLM,
     and returns the assistant's response.
     """
-    # 1. Verify session exists and belongs to user, and get its context
-    session_check_query = text(
-        """
-        SELECT cs.id, cs.child_id, cs.entry_point_context,
-               u.first_name as user_name,
-               c.name as child_name,
-               sy.year_name as school_year
-        FROM chat_sessions cs
-        JOIN users u ON cs.user_id = u.id
-        JOIN children c ON cs.child_id = c.id
-        LEFT JOIN school_years sy ON c.school_year_id = sy.id
-        WHERE cs.id = :session_id AND cs.user_id = :user_id
-    """
-    )
-    session_result = await db.execute(
-        session_check_query, {"session_id": session_id, "user_id": user_id}
-    )
-    session_data = session_result.mappings().first()
-    if not session_data:
-        raise NotFoundError(f"Chat session with id {session_id} not found.")
+    # 1. Fetch session data and build prompt context
+    session_data = await _get_session_data(db, session_id, user_id)
+    system_prompt = await _build_system_prompt(db, user_id, session_data)
 
-    # 2. Fetch conversation history (from before this new message)
-    history_query = text(
-        """
-        SELECT role, content FROM chat_messages
-        WHERE session_id = :session_id
-        ORDER BY message_order DESC
-        LIMIT 10
-    """
-    )
-    history_result = await db.execute(history_query, {"session_id": session_id})
-    history_rows = reversed(history_result.mappings().all())
-    conversation_history = [
-        prompt_models.Message(role=row["role"].lower(), content=row["content"])
-        for row in history_rows
-    ]
+    # 2. Fetch conversation history
+    conversation_history = await _get_conversation_history(db, session_id)
 
-    # 3. Insert the new user message *after* fetching history
-    user_insert_query = text(
-        """
-        INSERT INTO chat_messages (session_id, role, content)
-        VALUES (:session_id, :role, :content)
-        RETURNING id;
-    """
-    )
-    await db.execute(
-        user_insert_query,
-        {
-            "session_id": session_id,
-            "role": ChatMessageRole.USER.value,
-            "content": user_message.content,
-        },
-    )
+    # 3. Insert the new user message
+    await _save_user_message(db, session_id, user_message)
 
-    # 4. Construct the prompt for the LLM
-    prompt_generator = prompt_models.ConceptCoachPrompt()
-
-    # 4a. Populate Parent and Child Context
-    parent_context = prompt_models.ParentContext(name=session_data["user_name"])
-    child_context = prompt_models.ChildContext(
-        name=session_data["child_name"],
-        class_level=session_data["school_year"],
-        # notes_from_memory will be populated from DB in the future
-    )
-
-    # 4b. Fetch Concept Interaction History
-    interaction_history_query = text(
-        """
-        SELECT
-            cs.entry_point_context ->> 'concept_id' as concept_id,
-            c.concept_name as concept_name,
-            s.subject_name as subject_name,
-            cs.updated_at
-        FROM chat_sessions cs
-        JOIN concepts c ON (cs.entry_point_context ->> 'concept_id')::int = c.id
-        LEFT JOIN subjects s ON c.subject_id = s.id
-        WHERE cs.user_id = :user_id
-          AND cs.child_id = :child_id
-          AND cs.entry_point_type = 'CONCEPT_COACH'
-          AND cs.id != :current_session_id
-        ORDER BY cs.updated_at DESC
-        LIMIT 10;
-    """
-    )
-    interaction_result = await db.execute(
-        interaction_history_query,
-        {
-            "user_id": user_id,
-            "child_id": session_data["child_id"],
-            "current_session_id": session_id,
-        },
-    )
-    concept_history = [
-        prompt_models.ConceptHistoryItem(
-            concept_id=row["concept_id"],
-            concept_name=row["concept_name"],
-            subject=row["subject_name"],
-            viewed_ago=_time_ago(row["updated_at"]),
-        )
-        for row in interaction_result.mappings().all()
-    ]
-
-    # 4c. Populate Learning Context (specific to CONCEPT_COACH)
-    concept_id = session_data["entry_point_context"].get("concept_id")
-    learning_context = None
-    if concept_id:
-        concept_query = text(
-            """
-            SELECT
-                c.concept_name,
-                c.concept_description,
-                s.subject_name,
-                cm.why_important ->> 'practical_value' as practical_value,
-                cm.parent_guide -> 'key_points' as key_points,
-                cm.difficulty_stats -> 'common_barriers' as common_barriers
-            FROM concepts c
-            LEFT JOIN subjects s ON c.subject_id = s.id
-            LEFT JOIN concept_metadata cm ON c.id = cm.concept_id
-            WHERE c.id = :concept_id
-        """
-        )
-        concept_result = await db.execute(concept_query, {"concept_id": concept_id})
-        concept_data = concept_result.mappings().first()
-        if concept_data:
-            learning_context = prompt_models.LearningContext(
-                current_concept_id=concept_id,
-                current_concept_name=concept_data["concept_name"],
-                current_subject=concept_data["subject_name"],
-                short_description=concept_data["concept_description"],
-                practical_value=concept_data["practical_value"],
-                key_points=concept_data["key_points"],
-                common_barriers=concept_data["common_barriers"],
-                recent_concept_chats=concept_history,
-            )
-
-    if not learning_context:
-        raise DatabaseError(
-            f"Could not construct learning context for concept_id: {concept_id}"
-        )
-
-    # 4d. Build the final system prompt string and conversation messages
-    system_prompt = prompt_generator.get_system_prompt(
-        parent_context=parent_context,
-        child_context=child_context,
-        learning_context=learning_context,
-    )
+    # 4. Prepare messages for LLM
     # The user's new message is part of the conversation now
     conversation_history.append(
         prompt_models.Message(
@@ -423,39 +489,108 @@ async def create_message_and_get_bot_response(
     if not isinstance(assistant_content, str):
         # Handle cases where the LLM might return unexpected structured data
         assistant_content = str(assistant_content)
-    llm_usage_data = llm_response.usage_metadata
 
-    # 6. Save the assistant's response to the database
-    assistant_insert_query = text(
-        """
-        INSERT INTO chat_messages (session_id, role, content, llm_usage)
-        VALUES (:session_id, :role, :content, :llm_usage)
-        RETURNING *;
-    """
+    # 6. Save the assistant's response
+    assistant_message = await _save_assistant_message(
+        db, session_id, assistant_content, llm_response.usage_metadata
     )
-    result = await db.execute(
-        assistant_insert_query,
-        {
-            "session_id": session_id,
-            "role": ChatMessageRole.ASSISTANT.value,
-            "content": assistant_content,
-            "llm_usage": json.dumps(llm_usage_data) if llm_usage_data else None,
-        },
-    )
-    assistant_message = result.mappings().first()
-
-    # 7. Update the session's updated_at timestamp
-    update_session_query = text(
-        """
-        UPDATE chat_sessions SET updated_at = CURRENT_TIMESTAMP WHERE id = :session_id
-    """
-    )
-    await db.execute(update_session_query, {"session_id": session_id})
 
     if not assistant_message:
         raise DatabaseError("Failed to create assistant message.")
 
     return assistant_message
+
+
+async def create_message_and_stream_bot_response(
+    db: AsyncSession,
+    session_id: UUID,
+    user_id: int,
+    user_message: UserMessageCreate,
+) -> AsyncGenerator[str, None]:
+    """
+    Creates a user message, constructs a detailed prompt, calls the LLM,
+    streams the response, and then saves the final message to the database.
+    """
+    # 1. Fetch session data and build prompt context
+    session_data = await _get_session_data(db, session_id, user_id)
+    system_prompt = await _build_system_prompt(db, user_id, session_data)
+
+    # 2. Fetch conversation history
+    conversation_history = await _get_conversation_history(db, session_id)
+
+    # 3. Insert the new user message - MOVED TO FINALLY BLOCK
+    # await _save_user_message(db, session_id, user_message)
+
+    # 4. Prepare messages for LLM
+    conversation_history.append(
+        prompt_models.Message(
+            role=ChatMessageRole.USER.value, content=user_message.content
+        )
+    )
+    messages = [
+        LLMMessage(role=msg.role, content=msg.content) for msg in conversation_history
+    ]
+
+    # 5. Stream the LLM response and save it afterwards
+    full_response = ""
+    try:
+        stream = get_completion_stream(
+            ai_model=AIModel.GEMINI_FLASH_2_0,
+            system_prompt=system_prompt,
+            messages=messages,
+        )
+        async for chunk in stream:
+            yield chunk
+            full_response += chunk
+    finally:
+        # 6. Save the full assistant message after streaming is complete
+        if full_response:
+            # We must use a new session here because the original `db` session
+            # from the request context will be closed by the time the stream finishes.
+            async with AsyncSessionLocal() as session:
+                try:
+                    # Save both user and assistant messages in one transaction
+                    await _save_user_message(session, session_id, user_message)
+
+                    # We call a simplified save operation here because we don't get
+                    # token usage data from the streaming endpoint.
+                    assistant_insert_query = text(
+                        """
+                        INSERT INTO chat_messages (session_id, role, content, llm_usage)
+                        VALUES (:session_id, :role, :content, :llm_usage)
+                        RETURNING id;
+                    """
+                    )
+                    await session.execute(
+                        assistant_insert_query,
+                        {
+                            "session_id": session_id,
+                            "role": ChatMessageRole.ASSISTANT.value,
+                            "content": full_response,
+                            "llm_usage": None,
+                        },
+                    )
+                    update_session_query = text(
+                        """
+                        UPDATE chat_sessions SET updated_at = CURRENT_TIMESTAMP
+                        WHERE id = :session_id
+                    """
+                    )
+                    await session.execute(
+                        update_session_query, {"session_id": session_id}
+                    )
+                    await session.commit()
+                    logger.info(
+                        "Saved user message and streamed response to database",
+                        session_id=session_id,
+                    )
+                except Exception as e:
+                    await session.rollback()
+                    logger.error(
+                        "Failed to save user message and streamed response to database",
+                        session_id=session_id,
+                        error=str(e),
+                    )
 
 
 async def update_message_feedback(

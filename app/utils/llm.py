@@ -2,7 +2,7 @@
 
 import asyncio
 from enum import Enum
-from typing import Any, Generic, TypeVar
+from typing import Any, AsyncGenerator, Generic, TypeVar
 
 import litellm
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
@@ -191,6 +191,59 @@ async def get_completion(
             await asyncio.sleep(backoff)
 
     raise Exception("LLM call failed after multiple retries")
+
+
+async def get_completion_stream(
+    ai_model: AIModel,
+    messages: list[LLMMessage],
+    system_prompt: str | None = None,
+    temperature: float = 0.5,
+    max_tokens: int = 4096,
+) -> AsyncGenerator[str, None]:
+    """
+    Run a single prompt through the LLM asynchronously and stream the response.
+
+    Args:
+        ai_model: The AI model to use.
+        messages: The list of messages forming the conversation.
+        system_prompt: The system prompt to use.
+        temperature: The model temperature.
+        max_tokens: The maximum number of tokens to generate.
+
+    Yields:
+        String chunks of the response.
+    """
+    api_messages = [msg.model_dump() for msg in messages]
+    if system_prompt:
+        api_messages.insert(0, {"role": "system", "content": system_prompt})
+
+    params: dict[str, Any] = {
+        "model": ai_model.value,
+        "messages": api_messages,
+        "temperature": temperature,
+        "max_tokens": max_tokens,
+        "stream": True,
+    }
+
+    try:
+        logger.info("Sending messages to LLM for streaming", messages=api_messages)
+        response = await litellm.acompletion(**params)
+
+        async for chunk in response:
+            content = chunk.choices[0].delta.content
+            if content:
+                yield content
+
+    except Exception as e:
+        logger.error(
+            "LLM streaming call failed",
+            error=str(e),
+            model=ai_model.value,
+        )
+        # In a production scenario, you might want to yield a specific
+        # error message to the user. For now, we'll just log and stop.
+        # yield "An error occurred while generating the response."
+        raise
 
 
 async def get_batch_completions(

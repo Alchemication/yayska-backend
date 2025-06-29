@@ -2,6 +2,7 @@ from uuid import UUID
 
 import structlog
 from fastapi import APIRouter, Depends, Query, status
+from fastapi.responses import StreamingResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
@@ -25,22 +26,13 @@ async def find_or_create_session(
     db: AsyncSession = Depends(get_db),
 ):
     """
-    The heart of the chat feature. This single endpoint starts a new chat
+    The starting point of the chat feature. This single endpoint starts a new chat
     or retrieves an existing one for a specific context, making it endlessly scalable.
     """
     session_row = await chat_service.find_or_create_chat_session(
         db=db, user_id=current_user["id"], create_data=create_data
     )
-    return chat_schemas.ChatSessionResponse(
-        id=session_row["id"],
-        user_id=session_row["user_id"],
-        child_id=session_row["child_id"],
-        title=session_row["title"],
-        entry_point_type=session_row["entry_point_type"],
-        entry_point_context=session_row["entry_point_context"],
-        created_at=session_row["created_at"],
-        updated_at=session_row["updated_at"],
-    )
+    return chat_schemas.ChatSessionResponse.model_validate(session_row)
 
 
 @router.get(
@@ -61,17 +53,7 @@ async def get_sessions(
     sessions_data = await chat_service.get_chat_sessions_by_user(
         db=db, user_id=current_user["id"], limit=limit, offset=offset
     )
-    return chat_schemas.ChatSessionListResponse(
-        items=[
-            chat_schemas.ChatSessionListItem(
-                id=item["id"],
-                title=item["title"],
-                updated_at=item["updated_at"],
-            )
-            for item in sessions_data["items"]
-        ],
-        total=sessions_data["total"],
-    )
+    return chat_schemas.ChatSessionListResponse.model_validate(sessions_data)
 
 
 @router.get(
@@ -98,19 +80,7 @@ async def get_messages(
         offset=offset,
     )
     return [
-        chat_schemas.ChatMessageResponse(
-            id=row["id"],
-            session_id=row["session_id"],
-            role=row["role"],
-            content=row["content"],
-            reasoning=row["reasoning"],
-            context_snapshot=row["context_snapshot"],
-            llm_usage=row["llm_usage"],
-            feedback_thumbs=row["feedback_thumbs"],
-            feedback_text=row["feedback_text"],
-            created_at=row["created_at"],
-        )
-        for row in message_rows
+        chat_schemas.ChatMessageResponse.model_validate(row) for row in message_rows
     ]
 
 
@@ -127,28 +97,43 @@ async def create_message(
     db: AsyncSession = Depends(get_db),
 ):
     """
-    Sends a new message from the user and gets the AI's response.
-    This is the main interaction endpoint.
-    For the MVP, it returns a standard JSON response with the assistant's complete message.
+    Creates a new message in a chat session and gets a response from the AI.
+    This is a standard request-response endpoint.
     """
     await chat_service.check_and_update_user_ai_request_count(
-        db=db, user_id=current_user["id"]
+        db, user_id=current_user["id"]
     )
+
     assistant_message_row = await chat_service.create_message_and_get_bot_response(
         db=db, session_id=chat_id, user_id=current_user["id"], user_message=message
     )
-    return chat_schemas.ChatMessageResponse(
-        id=assistant_message_row["id"],
-        session_id=assistant_message_row["session_id"],
-        role=assistant_message_row["role"],
-        content=assistant_message_row["content"],
-        reasoning=assistant_message_row["reasoning"],
-        context_snapshot=assistant_message_row["context_snapshot"],
-        llm_usage=assistant_message_row["llm_usage"],
-        feedback_thumbs=assistant_message_row["feedback_thumbs"],
-        feedback_text=assistant_message_row["feedback_text"],
-        created_at=assistant_message_row["created_at"],
+    return chat_schemas.ChatMessageResponse.model_validate(assistant_message_row)
+
+
+@router.post(
+    "/{chat_id}/messages/stream",
+    summary="Create a new message and stream the response",
+    description="Creates a new message in a chat session and streams the AI's response chunk by chunk.",
+    response_description="A streaming response of text chunks.",
+    tags=["Chat"],
+)
+async def stream_message(
+    chat_id: UUID,
+    message: chat_schemas.UserMessageCreate,
+    current_user: CurrentUser,
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    Creates a new message in a chat session and streams the AI's response.
+    """
+    await chat_service.check_and_update_user_ai_request_count(
+        db, user_id=current_user["id"]
     )
+
+    stream_generator = chat_service.create_message_and_stream_bot_response(
+        db=db, session_id=chat_id, user_id=current_user["id"], user_message=message
+    )
+    return StreamingResponse(stream_generator, media_type="text/event-stream")
 
 
 @router.patch(
@@ -174,15 +159,4 @@ async def update_message_feedback(
         vote=update_data.feedback.vote,
         text_feedback=update_data.feedback.text,
     )
-    return chat_schemas.ChatMessageResponse(
-        id=updated_message_row["id"],
-        session_id=updated_message_row["session_id"],
-        role=updated_message_row["role"],
-        content=updated_message_row["content"],
-        reasoning=updated_message_row["reasoning"],
-        context_snapshot=updated_message_row["context_snapshot"],
-        llm_usage=updated_message_row["llm_usage"],
-        feedback_thumbs=updated_message_row["feedback_thumbs"],
-        feedback_text=updated_message_row["feedback_text"],
-        created_at=updated_message_row["created_at"],
-    )
+    return chat_schemas.ChatMessageResponse.model_validate(updated_message_row)
