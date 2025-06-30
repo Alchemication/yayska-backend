@@ -16,7 +16,7 @@ Yayska:
 
 It's a FastAPI-based backend service that manages educational curriculum data, student progress tracking, and assessment generation. The system organizes educational content hierarchically from education levels down to individual concepts, with comprehensive metadata support for educational topics. Built with PostgreSQL for data persistence, it provides APIs to handle curriculum structure, learning outcomes, and concept-based assessments.
 
-Currently (in early MVP) focused on mathematics education in primary school with Irish language integration. It will be expanded to include other subjects and languages in the near future.
+Currently (in early MVP) focused on education in primary school with Irish language integration. It will be expanded to include other subjects and languages in the near future.
 
 ### Why Yayska name?
 
