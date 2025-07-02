@@ -4,8 +4,15 @@ from typing import Any
 
 
 @dataclass
+class ChildSummary:
+    name: str
+    school_year: str | None = None
+
+
+@dataclass
 class ParentContext:
     name: str
+    children: list[ChildSummary] = field(default_factory=list)
     parent_notes_from_memory: list[str] = field(default_factory=list)
 
 

@@ -299,7 +299,27 @@ async def _build_system_prompt(
     """Constructs the detailed system prompt for the LLM."""
     prompt_generator = prompt_models.ConceptCoachPrompt()
 
-    parent_context = prompt_models.ParentContext(name=session_data["user_name"])
+    # Get all children for context
+    children_query = text(
+        """
+        SELECT
+            c.name,
+            sy.year_name as school_year
+        FROM children c
+        LEFT JOIN school_years sy ON c.school_year_id = sy.id
+        WHERE c.user_id = :user_id
+        ORDER BY c.created_at ASC;
+    """
+    )
+    children_result = await db.execute(children_query, {"user_id": user_id})
+    children_summary_list = [
+        prompt_models.ChildSummary(name=row["name"], school_year=row["school_year"])
+        for row in children_result.mappings().all()
+    ]
+
+    parent_context = prompt_models.ParentContext(
+        name=session_data["user_name"], children=children_summary_list
+    )
     child_context = prompt_models.ChildContext(
         name=session_data["child_name"],
         class_level=session_data["school_year"],
