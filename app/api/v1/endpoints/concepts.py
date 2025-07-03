@@ -6,12 +6,14 @@ from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
+from app.utils.deps import CurrentUser
 
 router = APIRouter()
 
 
 @router.get("/monthly-curriculum")
 async def get_monthly_curriculum(
+    current_user: CurrentUser,
     year_ids: str = Query(..., description="Comma-separated list of school year IDs"),
     reference_month: Optional[int] = Query(
         None,
@@ -23,9 +25,10 @@ async def get_monthly_curriculum(
     Get monthly curriculum plans and concepts for specified school years.
 
     Returns previous, current, and next month's curriculum plans with
-    detailed concept information for each month.
+    detailed concept information for each month, enriched with user interaction data.
 
     Args:
+        current_user: Current authenticated user
         year_ids: Comma-separated list of school year IDs
         reference_month: Academic month number where 1=September, 2=October, ..., 10=June. Use 0 for summer months (July/August). Defaults to current corresponding academic month.
         db: Database session dependency
@@ -129,8 +132,14 @@ async def get_monthly_curriculum(
         all_concept_ids.update(plan["important_concept_ids"] or [])
         all_concept_ids.update(plan["supplementary_concept_ids"] or [])
 
-    # 3. Fetch all concept details in one query
+    # 3. Fetch concept details and user interactions in parallel
+    concept_details = {}
+    user_interactions_data = {}
+
     if all_concept_ids:
+        concept_ids_list = list(all_concept_ids)
+
+        # Fetch concept details
         concepts_query = text("""
             SELECT 
                 c.id,
@@ -143,14 +152,59 @@ async def get_monthly_curriculum(
             WHERE c.id = ANY(:concept_ids)
         """)
 
-        result = await db.execute(
-            concepts_query, {"concept_ids": list(all_concept_ids)}
-        )
-        concept_details = {row.id: dict(row) for row in result.mappings().all()}
-    else:
-        concept_details = {}
+        # Fetch user interactions
+        interactions_query = text("""
+            SELECT 
+                (interaction_context->'concept_id')::text::integer as concept_id,
+                interaction_type
+            FROM user_interactions
+            WHERE user_id = :user_id
+            AND interaction_context->>'concept_id' IS NOT NULL
+            AND (interaction_context->'concept_id')::text::integer = ANY(:concept_ids)
+            AND interaction_type IN ('CONCEPT_STUDIED', 'AI_CHAT_ENGAGED')
+        """)
 
-    # 4. Structure the response
+        # Execute both queries
+        concepts_result = await db.execute(
+            concepts_query, {"concept_ids": concept_ids_list}
+        )
+        interactions_result = await db.execute(
+            interactions_query,
+            {"user_id": current_user["id"], "concept_ids": concept_ids_list},
+        )
+
+        # Process concept details
+        concept_details = {
+            row.id: dict(row) for row in concepts_result.mappings().all()
+        }
+
+        # Process user interactions
+        interactions = interactions_result.mappings().all()
+        for interaction in interactions:
+            concept_id = interaction["concept_id"]
+            interaction_type = interaction["interaction_type"]
+
+            if concept_id not in user_interactions_data:
+                user_interactions_data[concept_id] = {
+                    "previously_studied": False,
+                    "previously_discussed": False,
+                }
+
+            if interaction_type == "CONCEPT_STUDIED":
+                user_interactions_data[concept_id]["previously_studied"] = True
+            elif interaction_type == "AI_CHAT_ENGAGED":
+                user_interactions_data[concept_id]["previously_discussed"] = True
+
+    # 4. Enrich concept details with user interaction data
+    enriched_concept_details = {}
+    for concept_id, concept_data in concept_details.items():
+        interaction_data = user_interactions_data.get(
+            concept_id,
+            {"previously_studied": False, "previously_discussed": False},
+        )
+        enriched_concept_details[concept_id] = {**concept_data, **interaction_data}
+
+    # 5. Structure the response
     response = {"curriculum_plans": [], "is_summer_mode": reference_month == 0}
     current_year = None
     current_year_data = None
@@ -172,21 +226,21 @@ async def get_monthly_curriculum(
 
         # Process concepts for this month
         essential_concepts = [
-            concept_details[concept_id]
+            enriched_concept_details[concept_id]
             for concept_id in (plan["essential_concept_ids"] or [])
-            if concept_id in concept_details
+            if concept_id in enriched_concept_details
         ]
 
         important_concepts = [
-            concept_details[concept_id]
+            enriched_concept_details[concept_id]
             for concept_id in (plan["important_concept_ids"] or [])
-            if concept_id in concept_details
+            if concept_id in enriched_concept_details
         ]
 
         supplementary_concepts = [
-            concept_details[concept_id]
+            enriched_concept_details[concept_id]
             for concept_id in (plan["supplementary_concept_ids"] or [])
-            if concept_id in concept_details
+            if concept_id in enriched_concept_details
         ]
 
         # Add month data to the response
@@ -199,7 +253,7 @@ async def get_monthly_curriculum(
             "supplementary_concepts": supplementary_concepts,
         }
 
-    # If summer mode, add a special "summer review" entry
+    # Handle summer mode special case
     if reference_month == 0:
         # For each year's data, create a summer review section
         for year_data in response["curriculum_plans"]:
@@ -212,14 +266,11 @@ async def get_monthly_curriculum(
                     # Get some essential concepts from June (up to 3)
                     june_concepts.extend(june_data["essential_concepts"][:3])
 
-                # Add a special message for summer mode
-                summer_focus = "Summer Review: Practice key concepts from the past year and preview upcoming topics."
-
                 # Add the summer review section
                 year_data["months"]["current"] = {
                     "month_order": 0,
                     "month_name": "Summer Review",
-                    "focus_statement": summer_focus,
+                    "focus_statement": "Summer Review: Practice key concepts from the past year and preview upcoming topics.",
                     "essential_concepts": june_concepts,
                     "important_concepts": [],
                     "supplementary_concepts": [],

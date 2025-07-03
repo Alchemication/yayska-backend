@@ -115,7 +115,6 @@ async def create_message(
     summary="Create a new message and stream the response",
     description="Creates a new message in a chat session and streams the AI's response chunk by chunk.",
     response_description="A streaming response of text chunks.",
-    tags=["Chat"],
 )
 async def stream_message(
     chat_id: UUID,
