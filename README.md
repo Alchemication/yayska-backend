@@ -16,7 +16,7 @@ Yayska:
 
 It's a FastAPI-based backend service that manages educational curriculum data, student progress tracking, and assessment generation. The system organizes educational content hierarchically from education levels down to individual concepts, with comprehensive metadata support for educational topics. Built with PostgreSQL for data persistence, it provides APIs to handle curriculum structure, learning outcomes, and concept-based assessments.
 
-Currently (in early MVP) focused on education in primary school with Irish language integration. It will be expanded to include other subjects and languages in the near future.
+Focused on education in primary school with Irish language integration.
 
 ### Why Yayska name?
 
@@ -28,30 +28,50 @@ So "Yayska" is a play on words combining:
 
 ## Development Setup
 
-### 1. Environment Setup
-
-First, create and activate a virtual environment:
-
-```bash
-python -m venv .venv
-source .venv/bin/activate  # On Unix/macOS
-# or
-.venv\Scripts\activate  # On Windows
-```
-
-### 2. Install Dependencies
+### 1. Install Dependencies
 
 ```bash
 # Install uv package manager (recommended)
 pip install uv
 
-# Install project dependencies
-uv pip install --editable ".[dev]"
+# Install project dependencies including dev extras
+uv sync --extra dev
 ```
 
-### 3. Configure Environment Variables
+### 2. Configure Environment Variables
 
-Copy existing `.env.example` as `.env` file into the project root and update with your own values where needed.
+Create a `.env` file in the project root with the following required variables:
+
+```bash
+# App Settings
+ENVIRONMENT=local
+SECRET_KEY=your-secret-key-here
+
+# Database Settings
+POSTGRES_SERVER=localhost
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+POSTGRES_DB=yayska
+POSTGRES_PORT=5432
+
+# OAuth Settings - Google
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
+GOOGLE_REDIRECT_URI=http://localhost:8081/auth/google/callback
+
+# AI Services (Required for chat functionality)
+ANTHROPIC_API_KEY=your-anthropic-api-key
+GEMINI_API_KEY=your-gemini-api-key
+
+# Optional: AI Chat Rate Limiting
+AI_REQUESTS_PER_DAY_LIMIT=50
+AI_REQUEST_WHITELIST=["your-email@example.com"]
+
+# Optional: Database Query Logging
+DB_ECHO_QUERIES=false
+```
+
+**Note**: You'll need to obtain API keys from Google Cloud Console, Anthropic, and Google AI Studio for full functionality.
 
 ### 4. Database Setup
 
@@ -82,12 +102,12 @@ docker compose logs -f db
 
 ```bash
 # Apply all migrations
-alembic upgrade head
+uv run alembic upgrade head
 
 # Import initial curriculum data (subjects, concepts, concept_metadata)
-python -m app.scripts.import_master_data
-python -m app.scripts.import_concepts
-python -m app.scripts.import_concept_metadata
+uv run python -m app.scripts.import_master_data
+uv run python -m app.scripts.import_concepts
+uv run python -m app.scripts.import_concept_metadata
 ```
 
 #### Common Issues
@@ -101,7 +121,7 @@ python -m app.scripts.import_concept_metadata
 ### Migration Approach
 
 ```bash
-alembic revision -m "raw_sql_changes"
+uv run alembic revision -m "raw_sql_changes"
 ```
 
 Example raw SQL migration:
@@ -128,11 +148,11 @@ For `prod` environment, you need to have all `POSTGRES_` variables set in `.env`
 
 ```bash
 # Apply all pending migrations
-alembic upgrade head
+uv run alembic upgrade head
 
 # Rollback migrations
-alembic downgrade -1    # Revert last migration
-alembic downgrade base  # Revert all migrations
+uv run alembic downgrade -1    # Revert last migration
+uv run alembic downgrade base  # Revert all migrations
 ```
 
 ## Testing
@@ -169,8 +189,10 @@ Currently, the tests for `app/utils/llm.py` require:
 ## Start the server
 
 ```bash
-uvicorn app.main:app --reload
+uv run uvicorn app.main:app --reload
 ```
+
+The server will start on `http://localhost:8000` by default.
 
 ## App configuration
 
@@ -194,6 +216,108 @@ Remember to update requirements.txt file with the latest dependencies, as Vercel
 ```bash
 uv pip compile pyproject.toml -o requirements.txt
 ```
+
+## API Documentation
+
+### Swagger UI
+
+Once the server is running, you can access the interactive API documentation at:
+
+- **Swagger UI**: `http://localhost:8000/docs`
+- **ReDoc**: `http://localhost:8000/redoc`
+
+The API documentation is automatically generated from the FastAPI application and includes all available endpoints, request/response schemas, and the ability to test endpoints directly from the browser.
+
+### Authentication
+
+The API uses **OAuth 2.0 with Google** for authentication. Most endpoints require a valid JWT token in the Authorization header:
+
+```bash
+Authorization: Bearer <your-jwt-token>
+```
+
+#### Getting Started with Authentication
+
+1. **Frontend Integration**: The frontend handles OAuth flow with Google
+2. **Token Exchange**: Use `/api/v1/auth/oauth/callback` endpoint to exchange authorization code for tokens
+3. **Token Refresh**: Use `/api/v1/auth/refresh` endpoint to refresh expired tokens
+4. **Current User**: Use `/api/v1/auth/me` endpoint to get current user information
+
+#### Public Endpoints (No Authentication Required)
+
+- `GET /api/v1/health` - Health check
+- `POST /api/v1/auth/oauth/callback` - OAuth callback
+- `POST /api/v1/auth/google/callback` - Google OAuth callback (legacy)
+- `POST /api/v1/auth/refresh` - Token refresh
+- `GET /docs` - API documentation
+- `GET /redoc` - Alternative API documentation
+
+## API Overview
+
+### Core Features
+
+The Yayska backend provides the following main features:
+
+#### 🔐 Authentication System
+
+- **OAuth 2.0** with Google (extensible to other providers)
+- **JWT-based** authentication with access and refresh tokens
+- **Token blacklisting** for secure logout
+- **Multi-session** management
+
+#### 🤖 AI-Powered Chat
+
+- **Interactive conversations** with AI tutors about educational concepts
+- **Context-aware responses** based on curriculum data
+- **Streaming responses** for real-time chat experience
+- **Message feedback** system for continuous improvement
+- **Rate limiting** (50 requests per day per user, configurable)
+
+#### 📚 Educational Content Management
+
+- **Curriculum structure** (education levels, school years, subjects, concepts)
+- **Concept metadata** with detailed guidance for parents
+- **Monthly curriculum planning** with academic calendar support
+- **Learning path recommendations**
+
+#### 📊 User Interaction Tracking
+
+- **Event logging** for user activities
+- **Progress tracking** and analytics
+- **User interaction history**
+
+### API Endpoints Overview
+
+| Endpoint Category     | Description              | Key Endpoints                                                     |
+| --------------------- | ------------------------ | ----------------------------------------------------------------- |
+| **Health**            | System health monitoring | `GET /health`                                                     |
+| **Auth**              | User authentication      | `POST /auth/oauth/callback`, `GET /auth/me`                       |
+| **Chats**             | AI-powered conversations | `POST /chats/find-or-create`, `POST /chats/{id}/messages`         |
+| **Concepts**          | Educational concepts     | `GET /concepts/monthly-curriculum`, `GET /concepts/{id}/metadata` |
+| **Curriculum**        | Curriculum management    | `GET /curriculum/subjects/{year_id}/learning-paths`               |
+| **Education**         | Education levels         | `GET /education/education-levels`                                 |
+| **Events**            | User activity tracking   | `POST /events`                                                    |
+| **User Interactions** | User interaction logging | `POST /user-interactions`                                         |
+
+### Rate Limiting
+
+The API implements rate limiting for AI chat requests:
+
+- **Default limit**: 50 AI requests per day per user
+- **Whitelist support**: Specific email addresses can be exempted from rate limiting
+- **Configurable**: Set via `AI_REQUESTS_PER_DAY_LIMIT` environment variable
+- **Daily reset**: Counters reset at midnight
+
+### AI Chat Features
+
+The chat system provides:
+
+- **Context-aware conversations** about educational concepts
+- **Multiple AI models** supported (Claude, Gemini)
+- **Streaming responses** for real-time interaction
+- **Session management** with conversation history
+- **Feedback system** for message quality
+- **Educational prompts** tailored to Irish curriculum
 
 ## Database Schema Structure
 
@@ -239,13 +363,6 @@ users
 - Subjects are associated with curriculum_areas and have an introduction year
 - Each concept can have detailed metadata (concept_metadata)
 - User actions are tracked through the events table
-
-### Notable Changes from Previous Schema
-
-- Removed strands, strand_units, and learning_outcomes tables
-- Added events table for user activity tracking
-- Concepts now link directly to subjects and school years
-- Added comprehensive user management structure
 
 ## Concept Metadata
 
@@ -294,7 +411,34 @@ The concept metadata helps parents understand educational topics by covering:
    - Common educational phrases
    - Help with pronunciation
 
-## TODO
+## License
 
-- [ ] Generate assessments for concepts
-- [ ] Create DB structure for events
+MIT License
+
+Copyright (c) 2024 Yayska
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+## Contact
+
+For questions or support, please [create an issue](https://github.com/alchemication/yayska-frontend/issues).
+
+---
+
+Built with ❤️ for parents in Ireland
