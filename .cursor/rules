@@ -1,0 +1,60 @@
+# General
+
+- This is the yayska-backend project, an AI-powered educational platform for Irish primary school children.
+- The backend is built using FastAPI and communicates with a PostgreSQL database.
+
+# Package Management
+
+- Use `uv` for all Python package management.
+- To add a new dependency, run `uv add <package>`.
+- All dependencies are tracked in `pyproject.toml` and pinned in `uv.lock` for reproducible builds.
+
+# Coding Standards
+
+- Adhere strictly to `ruff` for code formatting and linting.
+- Use type hints for all function signatures (parameters and return values).
+- Employ modern Python type hinting (e.g., `list[str]` instead of `from typing import List`).
+- Write clear, descriptive docstrings for all public modules and functions.
+
+# Endpoint Creation Workflow
+
+1.  **Schema Definition**: Create Pydantic models for request bodies and response payloads in a new or existing file within `app/schemas/`.
+2.  **Service Logic**: Implement the core business logic in a function within a corresponding service file in `app/services/`. This is where all database interaction occurs.
+3.  **Endpoint Definition**:
+    - Create a new file in `app/api/v1/endpoints/` (e.g., `new_feature.py`).
+    - Inside this file, create a `router = APIRouter()`.
+    - Define `async` functions for each route (e.g., `@router.post(...)`).
+    - Use `Depends()` to inject dependencies like the database session (`AsyncSession`) and the current user (`CurrentUser`).
+    - Delegate all business logic to the service layer function.
+4.  **Router Registration**:
+    - Import your new router in `app/api/v1/router.py`.
+    - Register it using `api_router.include_router(new_feature.router, prefix="/new-feature", tags=["New Feature"])`.
+
+# Service Layer Conventions
+
+- Service files contain all business logic and must not be bypassed.
+- All functions that perform I/O (especially database calls) must be `async def`.
+- **Use Raw SQL Only**: For database queries, use raw, parameterized SQL strings with `sqlalchemy.text()`. The ORM is not used for querying.
+- **Prevent SQL Injection**: Always use named parameters in SQL strings (e.g., `WHERE id = :user_id`) and pass values in the `db.execute()` call. Do not use f-strings to format values into queries.
+
+# Database and Migrations
+
+- **Naming**: Database tables must be named in plural form (e.g., `users`, `chat_sessions`).
+- **Primary Keys**: Tables must have an auto-incrementing primary key, defined as `id BIGSERIAL PRIMARY KEY`.
+- **Timestamps**: Use `TIMESTAMP WITH TIME ZONE` for all datetime columns, and set `DEFAULT CURRENT_TIMESTAMP` where applicable.
+- **Indexes**: Create indexes on foreign keys and any columns that are frequently used in `WHERE` clauses.
+- **Migrations**:
+  - Migrations are managed by Alembic and are located in `alembic/versions/`.
+  - Migrations must be written using raw SQL strings inside `op.execute()` for both `upgrade()` and `downgrade()` functions.
+
+# Security
+
+- Store all secrets and environment-specific configurations in environment variables, accessed via the `app.config.py` module.
+- Input validation is enforced by Pydantic schemas at the endpoint layer.
+- Follow parameterized query patterns in the service layer to prevent SQL injection.
+
+# Cursor-Specific Rules
+
+- Only add or modify code directly related to the assigned task. Do not refactor or alter unrelated code sections.
+- Do not praise my statements, but rather criticise if you observe glaring issues or areas to improve significantly
+- Do not add comments simply stating what has been changed (e.g. # changed this line)
