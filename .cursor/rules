@@ -53,6 +53,19 @@
 - Input validation is enforced by Pydantic schemas at the endpoint layer.
 - Follow parameterized query patterns in the service layer to prevent SQL injection.
 
+# LLM Usage Standards
+
+- **Single Source of Truth**: All LLM interactions must use the utilities in `app/utils/llm.py`. Do not create alternative LLM clients or wrappers.
+- **Model Selection**: Use the `AIModel` enum for consistent model references. Prefer `AIModel.GEMINI_FLASH_2_0` for general use and `AIModel.CLAUDE_SONNET_3_7` for complex reasoning tasks.
+- **Message Format**: Always use the `LLMMessage` Pydantic model for structuring conversation messages with proper `role` and `content` fields.
+- **Structured Output**: For structured responses, define Pydantic models and pass them as `response_type` to `get_completion()`. This ensures type safety and automatic validation.
+- **Streaming Responses**: Use `get_completion_stream()` for real-time user interactions where immediate feedback is important (e.g., chat features).
+- **Batch Processing**: For bulk operations, use `get_batch_completions()` with appropriate `max_concurrency` limits to avoid rate limiting.
+- **Error Handling**: The LLM utilities include built-in retry logic with exponential backoff. Do not implement additional retry mechanisms.
+- **Logging**: All LLM calls are automatically logged. Include relevant context (user_id, session_id) in your service layer logs for debugging.
+- **Token Usage**: The `LLMResponse` wrapper provides usage metadata for monitoring costs and performance. Log this data for production monitoring.
+- **System Prompts**: Keep system prompts in the `app/prompts/` directory as structured Pydantic models, not as raw strings in service files.
+
 # Cursor-Specific Rules
 
 - Only add or modify code directly related to the assigned task. Do not refactor or alter unrelated code sections.
