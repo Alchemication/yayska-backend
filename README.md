@@ -415,7 +415,7 @@ The concept metadata helps parents understand educational topics by covering:
 
 MIT License
 
-Copyright (c) 2024 Yayska
+Copyright (c) 2025 Yayska
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -437,7 +437,7 @@ SOFTWARE.
 
 ## Contact
 
-For questions or support, please [create an issue](https://github.com/alchemication/yayska-frontend/issues).
+For questions or support, please [create an issue](https://github.com/alchemication/yayska-backend/issues).
 
 ---
 
