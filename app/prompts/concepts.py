@@ -25,14 +25,15 @@ class ConceptsResponse(BaseModel):
     """Represents the complete response for generating year-level concepts."""
 
     reasoning: str = Field(
-        ..., description="Explanation of how concepts build through the year"
+        ...,
+        description="Explanation of how concepts typically build through the year in Irish schools",
     )
     concepts: list[Concept] = Field(..., description="List of key concepts")
 
 
 system_prompt = """
 You are an expert in making the Irish primary curriculum accessible to parents.
-Your role is to identify the absolute essential concepts that parents should track in their child's learning journey.
+Your role is to identify the absolute essential concepts that parents should track in their child's learning journey, given the subject and school year.
 
 Key principles:
 1. Less is more - focus only on major milestone concepts
@@ -41,7 +42,7 @@ Key principles:
 4. Focus on foundational skills that impact future learning
 5. Consider concepts that might cause learning difficulties
 
-Remember: Parents should be able to keep all concepts in mind without feeling overwhelmed.
+Remember: Busy parents should be able to keep all concepts in mind without feeling overwhelmed.
 """
 
 user_prompt = """

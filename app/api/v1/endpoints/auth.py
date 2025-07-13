@@ -246,26 +246,6 @@ async def refresh_token(data: TokenRefreshRequest, db=Depends(get_db)):
         )
 
 
-@router.get("/me")
-async def get_current_user_info(current_user: CurrentUser):
-    """
-    Get information about the currently authenticated user.
-    This endpoint is protected and requires a valid JWT token.
-
-    Args:
-        current_user: The authenticated user (injected by dependency)
-
-    Returns:
-        The current user information
-    """
-    return {
-        "id": current_user["id"],
-        "email": current_user["email"],
-        "name": current_user["name"],
-        "picture": current_user.get("picture_url"),
-    }
-
-
 @router.post("/logout")
 async def logout(
     request: Request,

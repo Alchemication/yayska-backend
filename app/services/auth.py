@@ -162,7 +162,7 @@ async def create_or_update_user(
                         picture_url = :picture_url,
                         updated_at = :updated_at
                     WHERE email = :email
-                    RETURNING id, email, first_name, last_name, picture_url
+                    RETURNING id, email, first_name, last_name, picture_url, memory
                 """
 
                 # Convert user info to JSON for provider_data
@@ -204,7 +204,7 @@ async def create_or_update_user(
                         :provider, :provider_user_id, :platform, :provider_data,
                         true, :current_time, :current_time, :current_time
                     )
-                    RETURNING id, email, first_name, last_name, picture_url
+                    RETURNING id, email, first_name, last_name, picture_url, memory
                 """
                 result = await db.execute(
                     text(query),
@@ -234,8 +234,17 @@ async def create_or_update_user(
             {"last_login_at": datetime.now(timezone.utc), "id": result["id"]},
         )
 
+        # Re-fetch the full user object to ensure all fields are present, including memory
+        query = """
+            SELECT id, email, first_name, last_name, picture_url, memory
+            FROM users
+            WHERE id = :id
+        """
+        refreshed_result = await db.execute(text(query), {"id": result["id"]})
+        user_row = refreshed_result.mappings().first()
+
         # Convert to dict and add full name
-        user_dict = dict(result)
+        user_dict = dict(user_row)
         user_dict["name"] = (
             f"{user_dict['first_name']} {user_dict['last_name']}".strip()
         )
@@ -353,26 +362,26 @@ async def get_current_user(
     db, credentials: HTTPAuthorizationCredentials = Depends(security)
 ) -> Dict[str, Any]:
     """
-    Dependency to get the current authenticated user.
+    Get the currently authenticated user from the database.
+    This function is used as a dependency for protected routes.
 
     Args:
         db: Database connection
-        credentials: HTTP Authorization credentials with Bearer token
+        credentials: HTTP Authorization credentials
 
     Returns:
-        Dict containing user information
+        User data as a dictionary
 
     Raises:
-        HTTPException: If user authentication fails
+        HTTPException: If authentication fails
     """
     try:
-        token = credentials.credentials
-        payload = await decode_token(token, db)
+        payload = await decode_token(credentials.credentials, db)
 
-        # Check if token is access token
         if payload.get("type") != "access":
             raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token type"
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid token type for getting user",
             )
 
         user_id = payload.get("sub")
@@ -381,28 +390,22 @@ async def get_current_user(
                 status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token payload"
             )
 
-        # Get user from database
+        # Fetch full user object from database
         query = """
-            SELECT id, email, first_name, last_name, picture_url
+            SELECT id, email, first_name, last_name, picture_url, memory,
+                   created_at, updated_at, last_login_at
             FROM users
             WHERE id = :user_id AND deleted_at IS NULL
         """
         result = await db.execute(text(query), {"user_id": int(user_id)})
-        result = result.mappings().first()
+        user = result.mappings().first()
 
-        if not result:
+        if not user:
             raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="User not found or deleted",
+                status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found"
             )
 
-        # Convert to dict and add full name
-        user_dict = dict(result)
-        user_dict["name"] = (
-            f"{user_dict['first_name']} {user_dict['last_name']}".strip()
-        )
-
-        return user_dict
+        return user
 
     except HTTPException:
         raise

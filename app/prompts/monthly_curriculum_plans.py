@@ -8,20 +8,17 @@ class PriorityConcepts(BaseModel):
         ..., description="3-5 highest-impact concepts parents should focus on"
     )
     important: List[int] = Field(
-        ..., description="5-8 additional concepts for parents with more time"
-    )
-    supplementary: List[int] = Field(
-        ..., description="All other concepts taught this month"
+        ..., description="3-5 additional concepts for parents with more time"
     )
 
 
 class MonthlyPlan(BaseModel):
     month: str = Field(..., description="Month name")
-    focus: str = Field(
-        ..., description="Brief description of the educational focus for this month"
-    )
     rationale: str = Field(
         ..., description="Educational reasoning for this month's concept selection"
+    )
+    focus: str = Field(
+        ..., description="Brief description of the educational focus for this month"
     )
     concepts: PriorityConcepts = Field(
         ..., description="Concepts organized by priority level"

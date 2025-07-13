@@ -1,3 +1,5 @@
+import json
+
 import structlog
 from fastapi import APIRouter, Depends
 from sqlalchemy import text
@@ -78,8 +80,8 @@ async def create_child(
 ):
     """Create a new child"""
     query = text("""
-        INSERT INTO children (user_id, name, school_year_id)
-        VALUES (:user_id, :name, :school_year_id)
+        INSERT INTO children (user_id, name, school_year_id, memory)
+        VALUES (:user_id, :name, :school_year_id, :memory)
         RETURNING id, user_id, name, school_year_id, memory, created_at, updated_at
     """)
 
@@ -90,6 +92,7 @@ async def create_child(
                 "user_id": current_user["id"],
                 "name": child_data.name,
                 "school_year_id": child_data.school_year_id,
+                "memory": json.dumps(child_data.memory),
             },
         )
         await db.commit()
@@ -174,6 +177,10 @@ async def update_child(
         if child_data.school_year_id is not None:
             update_fields.append("school_year_id = :school_year_id")
             params["school_year_id"] = child_data.school_year_id
+
+        if child_data.memory is not None:
+            update_fields.append("memory = :memory")
+            params["memory"] = json.dumps(child_data.memory)
 
         if not update_fields:
             raise ValidationError("No fields to update")
