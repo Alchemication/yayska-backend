@@ -22,6 +22,11 @@ from app.utils.llm import AIModel, LLMMessage, get_completion, get_completion_st
 
 logger = structlog.get_logger()
 
+# --- Chat Service Constants ---
+DEFAULT_CHAT_MODEL = AIModel.GEMINI_FLASH_2_0
+DEFAULT_TEMPERATURE = 0.7
+DEFAULT_MAX_TOKENS = 4096
+
 
 async def check_and_update_user_ai_request_count(db: AsyncSession, user_id: int):
     """
@@ -293,17 +298,66 @@ async def _save_user_message(
     )
 
 
+def _process_memory_to_instructions(
+    parent_memory: dict, child_memory: dict, current_subject: str, child_name: str
+) -> tuple[list[str], list[str]]:
+    """Convert structured memory into pedagogically sound instruction strings."""
+
+    parent_instructions = []
+    child_instructions = []
+
+    # Process parent challenge subjects
+    challenge_subjects = parent_memory.get("learning_context", {}).get(
+        "challenge_subjects", []
+    )
+    if challenge_subjects:
+        if current_subject.lower() in [s.lower() for s in challenge_subjects]:
+            parent_instructions.append(
+                f"IMPORTANT: This parent needs extra support with {current_subject}. "
+                "Provide clearer step-by-step explanations, more encouragement, and practical examples."
+            )
+        else:
+            subjects_str = ", ".join(challenge_subjects)
+            parent_instructions.append(
+                f"Note: This parent has indicated they need help with {subjects_str}."
+            )
+
+    # Process child interests with pedagogical balance
+    child_interests = child_memory.get("interests", [])
+    if child_interests:
+        interests_str = ", ".join(child_interests)
+        child_instructions.append(
+            f"LEARNING BRIDGE: {child_name} is interested in {interests_str}. "
+            "Use these as a starting point or bridge to introduce new concepts, but also gently "
+            "expand into related areas to broaden their horizons. Balance familiar contexts with "
+            "new discoveries - use their interests as a foundation, not a limitation."
+        )
+
+    return parent_instructions, child_instructions
+
+
+def _calculate_request_word_count(llm_request_payload: dict) -> int:
+    """Calculates the total word count of all messages in an LLM request payload."""
+    word_count = 0
+    if llm_request_payload and "messages" in llm_request_payload:
+        for msg in llm_request_payload["messages"]:
+            word_count += len(str(msg.get("content", "")).split())
+    return word_count
+
+
 async def _build_system_prompt(
     db: AsyncSession, user_id: int, session_data: dict[str, Any]
 ) -> str:
     """Constructs the detailed system prompt for the LLM."""
     prompt_generator = prompt_models.ConceptCoachPrompt()
 
-    # Get all children for context
+    # Get all children for context AND their memory
     children_query = text(
         """
         SELECT
+            c.id,
             c.name,
+            c.memory,
             sy.year_name as school_year
         FROM children c
         LEFT JOIN school_years sy ON c.school_year_id = sy.id
@@ -312,17 +366,50 @@ async def _build_system_prompt(
     """
     )
     children_result = await db.execute(children_query, {"user_id": user_id})
+    children_rows = children_result.mappings().all()
+
     children_summary_list = [
         prompt_models.ChildSummary(name=row["name"], school_year=row["school_year"])
-        for row in children_result.mappings().all()
+        for row in children_rows
     ]
 
+    # Get parent memory
+    parent_query = text("SELECT memory FROM users WHERE id = :user_id")
+    parent_result = await db.execute(parent_query, {"user_id": user_id})
+    parent_memory = parent_result.scalar_one_or_none() or {}
+
+    # Find current child's memory from the children we already retrieved
+    current_child_memory = {}
+    for child_row in children_rows:
+        if child_row["id"] == session_data["child_id"]:
+            current_child_memory = child_row["memory"] or {}
+            break
+
+    # Get current subject for context
+    current_subject = ""
+    if session_data["entry_point_type"] == EntryPointType.CONCEPT_COACH.value:
+        concept_id = session_data["entry_point_context"].get("concept_id")
+        if concept_id:
+            subject_query = text(
+                "SELECT s.subject_name FROM concepts c JOIN subjects s ON c.subject_id = s.id WHERE c.id = :concept_id"
+            )
+            subject_result = await db.execute(subject_query, {"concept_id": concept_id})
+            current_subject = subject_result.scalar_one_or_none() or ""
+
+    # Process memory into instructions
+    parent_instructions, child_instructions = _process_memory_to_instructions(
+        parent_memory, current_child_memory, current_subject, session_data["child_name"]
+    )
+
     parent_context = prompt_models.ParentContext(
-        name=session_data["user_name"], children=children_summary_list
+        name=session_data["user_name"],
+        children=children_summary_list,
+        parent_notes_from_memory=parent_instructions,
     )
     child_context = prompt_models.ChildContext(
         name=session_data["child_name"],
         class_level=session_data["school_year"],
+        notes_from_memory=child_instructions,
     )
 
     interaction_history_query = text(
@@ -414,22 +501,42 @@ async def _save_assistant_message(
     session_id: UUID,
     assistant_content: str,
     llm_usage_data: dict | None,
+    context_snapshot: dict | None = None,
 ) -> dict[str, Any]:
     """Saves the assistant's response and updates the session timestamp."""
     assistant_insert_query = text(
         """
-        INSERT INTO chat_messages (session_id, role, content, llm_usage)
-        VALUES (:session_id, :role, :content, :llm_usage)
+        INSERT INTO chat_messages (session_id, role, content, llm_usage, context_snapshot)
+        VALUES (:session_id, :role, :content, :llm_usage, :context_snapshot)
         RETURNING *;
     """
     )
+
+    # Enhance llm_usage_data with consistent fields for analytics
+    # This now only contains metadata from the LLM response, not the request.
+    enhanced_usage_data = llm_usage_data.copy() if llm_usage_data else {}
+    enhanced_usage_data["response_length"] = len(assistant_content)
+    enhanced_usage_data["response_word_count"] = len(assistant_content.split())
+
+    # Calculate request word count from the snapshot for consistency
+    if context_snapshot and "llm_request" in context_snapshot:
+        enhanced_usage_data["request_word_count"] = _calculate_request_word_count(
+            context_snapshot["llm_request"]
+        )
+
+    # TODO: Implement cost calculation based on model and token counts.
+    enhanced_usage_data["cost"] = None
+
     result = await db.execute(
         assistant_insert_query,
         {
             "session_id": session_id,
             "role": ChatMessageRole.ASSISTANT.value,
             "content": assistant_content,
-            "llm_usage": json.dumps(llm_usage_data) if llm_usage_data else None,
+            "llm_usage": json.dumps(enhanced_usage_data),
+            "context_snapshot": json.dumps(context_snapshot)
+            if context_snapshot
+            else None,
         },
     )
     assistant_message = result.mappings().first()
@@ -499,11 +606,26 @@ async def create_message_and_get_bot_response(
     ]
 
     # 5. Call the LLM
+    # Create the full request payload for the snapshot
+    api_messages = [msg.model_dump() for msg in messages]
+    if system_prompt:
+        api_messages.insert(0, {"role": "system", "content": system_prompt})
+
+    llm_request_payload = {
+        "model": DEFAULT_CHAT_MODEL.value,
+        "messages": api_messages,
+        "temperature": DEFAULT_TEMPERATURE,
+        "max_tokens": DEFAULT_MAX_TOKENS,
+    }
+    context_snapshot = {"llm_request": llm_request_payload}
+
     llm_response = await get_completion(
-        ai_model=AIModel.GEMINI_FLASH_2_0,
+        ai_model=DEFAULT_CHAT_MODEL,
         system_prompt=system_prompt,
         messages=messages,
         response_type=None,  # We want a plain string response
+        temperature=DEFAULT_TEMPERATURE,
+        max_tokens=DEFAULT_MAX_TOKENS,
     )
     assistant_content = llm_response.content
     if not isinstance(assistant_content, str):
@@ -512,7 +634,11 @@ async def create_message_and_get_bot_response(
 
     # 6. Save the assistant's response
     assistant_message = await _save_assistant_message(
-        db, session_id, assistant_content, llm_response.usage_metadata
+        db,
+        session_id,
+        assistant_content,
+        llm_response.usage_metadata,
+        context_snapshot,
     )
 
     if not assistant_message:
@@ -552,12 +678,27 @@ async def create_message_and_stream_bot_response(
     ]
 
     # 5. Stream the LLM response and save it afterwards
+    # Create the full request payload for the snapshot
+    api_messages = [msg.model_dump() for msg in messages]
+    if system_prompt:
+        api_messages.insert(0, {"role": "system", "content": system_prompt})
+
+    llm_request_payload = {
+        "model": DEFAULT_CHAT_MODEL.value,
+        "messages": api_messages,
+        "temperature": DEFAULT_TEMPERATURE,
+        "max_tokens": DEFAULT_MAX_TOKENS,
+        "stream": True,
+    }
+    context_snapshot = {"llm_request": llm_request_payload}
     full_response = ""
     try:
         stream = get_completion_stream(
-            ai_model=AIModel.GEMINI_FLASH_2_0,
+            ai_model=DEFAULT_CHAT_MODEL,
             system_prompt=system_prompt,
             messages=messages,
+            temperature=DEFAULT_TEMPERATURE,
+            max_tokens=DEFAULT_MAX_TOKENS,
         )
         async for chunk in stream:
             yield chunk
@@ -574,10 +715,21 @@ async def create_message_and_stream_bot_response(
 
                     # We call a simplified save operation here because we don't get
                     # token usage data from the streaming endpoint.
+                    # For streaming, we only know the final response length.
+                    llm_usage_data = {
+                        "response_length": len(full_response),
+                        "response_word_count": len(full_response.split()),
+                        "request_word_count": _calculate_request_word_count(
+                            llm_request_payload
+                        ),
+                        # TODO: Implement cost calculation for streaming if possible,
+                        # or estimate based on response length.
+                        "cost": None,
+                    }
                     assistant_insert_query = text(
                         """
-                        INSERT INTO chat_messages (session_id, role, content, llm_usage)
-                        VALUES (:session_id, :role, :content, :llm_usage)
+                        INSERT INTO chat_messages (session_id, role, content, llm_usage, context_snapshot)
+                        VALUES (:session_id, :role, :content, :llm_usage, :context_snapshot)
                         RETURNING id;
                     """
                     )
@@ -587,7 +739,8 @@ async def create_message_and_stream_bot_response(
                             "session_id": session_id,
                             "role": ChatMessageRole.ASSISTANT.value,
                             "content": full_response,
-                            "llm_usage": None,
+                            "llm_usage": json.dumps(llm_usage_data),
+                            "context_snapshot": json.dumps(context_snapshot),
                         },
                     )
                     update_session_query = text(
