@@ -39,3 +39,4 @@ wheels/
 !vercel.json
 !.vscode/*.json
 .vercel
+cache/

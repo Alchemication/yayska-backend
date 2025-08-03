@@ -50,6 +50,7 @@ class Settings(BaseSettings):
     # Third Party Services
     ANTHROPIC_API_KEY: str
     GEMINI_API_KEY: str
+    OPENAI_API_KEY: str
 
     # AI Chat Rate Limiting
     AI_REQUESTS_PER_DAY_LIMIT: int = 50

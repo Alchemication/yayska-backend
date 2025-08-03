@@ -62,6 +62,7 @@ GOOGLE_REDIRECT_URI=http://localhost:8081/auth/google/callback
 # AI Services (Required for chat functionality)
 ANTHROPIC_API_KEY=your-anthropic-api-key
 GEMINI_API_KEY=your-gemini-api-key
+OPENAI_API_KEY=your-openai-api-key
 
 # Optional: AI Chat Rate Limiting
 AI_REQUESTS_PER_DAY_LIMIT=50

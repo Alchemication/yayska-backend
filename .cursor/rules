@@ -7,6 +7,7 @@
 
 - Use `uv` for all Python package management.
 - To add a new dependency, run `uv add <package>`.
+- To run any script, use `uv run <script-name>`.
 - All dependencies are tracked in `pyproject.toml` and pinned in `uv.lock` for reproducible builds.
 
 # Coding Standards

@@ -637,7 +637,7 @@ async def create_message_and_get_bot_response(
         db,
         session_id,
         assistant_content,
-        llm_response.usage_metadata,
+        llm_response.usage,
         context_snapshot,
     )
 
