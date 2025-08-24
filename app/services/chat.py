@@ -357,7 +357,8 @@ def _process_memory_to_instructions(
         )
         if notes_str:
             child_instructions.append(
-                f"CONTEXT NOTES: Consider {child_name}'s context ({notes_str}). Adapt explanations, examples, pacing, and sensory load accordingly."
+                f"CONTEXT NOTES: Parent-provided notes about {child_name}: {notes_str}. Tailor explanations, "
+                "examples, pacing, and sensory load while respecting this context."
             )
 
     return parent_instructions, child_instructions
