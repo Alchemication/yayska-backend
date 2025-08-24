@@ -50,6 +50,9 @@ class AIModel(str, Enum):
     GPT_4O_MINI = "openai/gpt-4o-mini"
     GPT_O3_MINI = "openai/o3-mini"  # Supports reasoning_effort
     GPT_O4_MINI = "openai/o4-mini"  # Supports reasoning_effort
+    GPT_5 = "openai/gpt-5"  # Supports reasoning_effort
+    GPT_5_MINI = "openai/gpt-5-mini"  # Supports reasoning_effort
+    GPT_5_NANO = "openai/gpt-5-nano"  # Supports reasoning_effort
 
 
 class ReasoningEffort(str, Enum):

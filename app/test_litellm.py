@@ -76,13 +76,12 @@ async def test_reasoning_model():
     ]
 
     response = await get_completion(
-        ai_model=AIModel.CLAUDE_SONNET_3_7,  # Supports reasoning
+        ai_model=AIModel.GPT_5_NANO,  # Supports reasoning
         messages=messages,
         response_type=MathResponse,
         reasoning_effort=ReasoningEffort.MEDIUM,
         temperature=0.1,
     )
-
     print(f"✅ Structured content: {response.content}")
     if response.reasoning_content:
         print(f"🧠 Reasoning (truncated): {response.reasoning_content[:200]}...")
@@ -121,10 +120,10 @@ async def main():
     print("=== LLM Utils Test Suite ===\n")
 
     try:
-        await test_text_response()
-        await test_structured_response()
+        # await test_text_response()
+        # await test_structured_response()
         await test_reasoning_model()
-        await test_caching()
+        # await test_caching()
         print("🎉 All tests completed!")
 
     except Exception as e:

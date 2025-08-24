@@ -24,7 +24,15 @@ async def create_event(
     """Create a new event"""
 
     # Extract metadata from request
-    ip_address = request.client.host if request.client else None
+    # Prefer proxy/CDN headers when present; fallback to direct client IP
+    xff = request.headers.get("x-forwarded-for")
+    ip_address = (
+        xff.split(",")[0].strip()
+        if xff
+        else request.headers.get("cf-connecting-ip")
+        or request.headers.get("x-real-ip")
+        or (request.client.host if request.client else None)
+    )
     user_agent = request.headers.get("user-agent")
 
     # Convert payload to JSON string for PostgreSQL JSONB

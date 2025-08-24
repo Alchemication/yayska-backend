@@ -18,7 +18,13 @@ from app.schemas.chat import (
     EntryPointType,
     UserMessageCreate,
 )
-from app.utils.llm import AIModel, LLMMessage, get_completion, get_completion_stream
+from app.utils.llm import (
+    AIModel,
+    LLMMessage,
+    ReasoningEffort,
+    get_completion,
+    get_completion_stream,
+)
 
 logger = structlog.get_logger()
 
@@ -26,6 +32,14 @@ logger = structlog.get_logger()
 DEFAULT_CHAT_MODEL = AIModel.GEMINI_FLASH_2_0
 DEFAULT_TEMPERATURE = 0.7
 DEFAULT_MAX_TOKENS = 4096
+
+
+def select_default_chat_model() -> AIModel:
+    """Selects randomly between GPT_5_MINI and GEMINI_FLASH_2_5"""
+    # if random.random() < 0.5:
+    #     return AIModel.GPT_5
+    # else:
+    return AIModel.GEMINI_FLASH_2_5
 
 
 async def check_and_update_user_ai_request_count(db: AsyncSession, user_id: int):
@@ -333,6 +347,19 @@ def _process_memory_to_instructions(
             "new discoveries - use their interests as a foundation, not a limitation."
         )
 
+    # Process child context notes (e.g., bilingual, learning differences, therapies, attention style, sensory preferences)
+    raw_context_notes = child_memory.get("context_notes")
+    if raw_context_notes is not None:
+        notes_str = (
+            raw_context_notes.strip()
+            if isinstance(raw_context_notes, str)
+            else str(raw_context_notes).strip()
+        )
+        if notes_str:
+            child_instructions.append(
+                f"CONTEXT NOTES: Consider {child_name}'s context ({notes_str}). Adapt explanations, examples, pacing, and sensory load accordingly."
+            )
+
     return parent_instructions, child_instructions
 
 
@@ -611,8 +638,10 @@ async def create_message_and_get_bot_response(
     if system_prompt:
         api_messages.insert(0, {"role": "system", "content": system_prompt})
 
+    # Select the model based on the logic
+    selected_model = select_default_chat_model()
     llm_request_payload = {
-        "model": DEFAULT_CHAT_MODEL.value,
+        "model": selected_model.value,
         "messages": api_messages,
         "temperature": DEFAULT_TEMPERATURE,
         "max_tokens": DEFAULT_MAX_TOKENS,
@@ -620,12 +649,13 @@ async def create_message_and_get_bot_response(
     context_snapshot = {"llm_request": llm_request_payload}
 
     llm_response = await get_completion(
-        ai_model=DEFAULT_CHAT_MODEL,
+        ai_model=selected_model,
         system_prompt=system_prompt,
         messages=messages,
         response_type=None,  # We want a plain string response
         temperature=DEFAULT_TEMPERATURE,
         max_tokens=DEFAULT_MAX_TOKENS,
+        reasoning_effort=ReasoningEffort.LOW,
     )
     assistant_content = llm_response.content
     if not isinstance(assistant_content, str):
@@ -683,8 +713,9 @@ async def create_message_and_stream_bot_response(
     if system_prompt:
         api_messages.insert(0, {"role": "system", "content": system_prompt})
 
+    selected_model = select_default_chat_model()
     llm_request_payload = {
-        "model": DEFAULT_CHAT_MODEL.value,
+        "model": selected_model.value,
         "messages": api_messages,
         "temperature": DEFAULT_TEMPERATURE,
         "max_tokens": DEFAULT_MAX_TOKENS,
@@ -694,11 +725,12 @@ async def create_message_and_stream_bot_response(
     full_response = ""
     try:
         stream = get_completion_stream(
-            ai_model=DEFAULT_CHAT_MODEL,
+            ai_model=selected_model,
             system_prompt=system_prompt,
             messages=messages,
             temperature=DEFAULT_TEMPERATURE,
             max_tokens=DEFAULT_MAX_TOKENS,
+            reasoning_effort=ReasoningEffort.MEDIUM,
         )
         async for chunk in stream:
             yield chunk
